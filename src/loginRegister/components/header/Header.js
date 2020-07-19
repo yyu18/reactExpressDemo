@@ -1,5 +1,8 @@
 import React from 'react';
+import {openSearch,closeSearch,openNav,closeNav} from './MenuFunctionController';
+import {Login} from './LoginRegister';
 const Header=(props)=>{
+
     return( 
         <header>
             <div className="mobile-fix-option"></div>
@@ -19,7 +22,7 @@ const Header=(props)=>{
                         <li className="mobile-wishlist"><a href=" ">1<i className="fa fa-heart" aria-hidden="true"></i></a></li>
                         <li className="onhover-dropdown mobile-account"> <i className="fa fa-user" aria-hidden="true"></i> My Account
                             <ul className="onhover-show-div">
-                                <li><button onClick={props.click}>Login</button></li>
+                                <li><Login /></li>
                                 <li><button>Logout</button></li>
                             </ul>
                         </li>
@@ -35,13 +38,13 @@ const Header=(props)=>{
                 <div className="main-menu">
                     <div className="menu-left">
                         <div className="navbar">
-                            <a href=" " onclick="openNav()">
+                            <a href=" " onClick={openNav}>
                                 <div className="bar-style"><i className="fa fa-bars sidebar-bar" aria-hidden="true"></i></div>
                             </a>
                             <div id="mySidenav" className="sidenav">
-                                <a href=" " className="sidebar-overlay" onclick="closeNav()"> </a>
+                                <a href=" " className="sidebar-overlay" onClick={closeNav}> </a>
                                 <nav>
-                                    <div onclick="closeNav()">
+                                    <div onClick={closeNav}>
                                         <div className="sidebar-back text-left"><i className="fa fa-angle-left pr-2" aria-hidden="true"></i> Back</div>
                                     </div>
                                     <ul id="sub-menu" className="sm pixelstrap sm-vertical">
@@ -425,9 +428,9 @@ const Header=(props)=>{
                             <div className="icon-nav">
                                 <ul>
                                     <li className="onhover-div mobile-search">
-                                        <div><img src="/assets/images/icon/search.png" onclick="openSearch()" className="img-fluid blur-up lazyload" alt="" /> <i className="ti-search" onclick="openSearch()"></i></div>
+                                        <div><img src="/assets/images/icon/search.png" onClick={openSearch} className="img-fluid blur-up lazyload" alt="" /> <i className="ti-search" onClick={openSearch}></i></div>
                                         <div id="search-overlay" className="search-overlay">
-                                            <div> <span className="closebtn" onclick="closeSearch()" title="Close Overlay">×</span>
+                                            <div> <span className="closebtn" onClick={closeSearch} title="Close Overlay">×</span>
                                                 <div className="overlay-content">
                                                     <div className="container">
                                                         <div className="row">
