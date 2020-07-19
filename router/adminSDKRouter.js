@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { sendMessage,subscribeToTopic,unsubscribeFromTopic,sendMulticast } =require('../tools/tools_adminSDK.js');
-//export GOOGLE_APPLICATION_CREDENTIALS="/home/hubertyu/Code/FirebaseCloudMessagePush/fcm_react_node/pushnotification-124c9-firebase-adminsdk-yjb00-ac805d66b8.json"
+
 router.post('/send',(req,res,next)=>{
   sendMessage(req,res,(err,data)=>{
     if(err) {

@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import { Route, BrowserRouter as Router,Switch } from 'react-router-dom'
-import CodeChallenge from './codeChallenge/App';
-
+//import CodeChallenge from './codeChallenge/App';
+import LoginRegister from './loginRegister/App';
 const routing = (
     <Router>
         <Switch>
-            <Route path="/codeChallenge" component={CodeChallenge}/>
+            <Route path="/order-system" component={LoginRegister}/>
         </Switch>
     </Router>
   )
