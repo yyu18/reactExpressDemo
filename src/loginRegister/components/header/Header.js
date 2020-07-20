@@ -1,7 +1,33 @@
-import React from 'react';
+import React,{useCallback,useMemo,useReducer} from 'react';
 import {openSearch,closeSearch,openNav,closeNav} from './MenuFunctionController';
 import {Login} from './LoginRegister';
+import {FormContext} from '../../context';
+import reducer from '../../reducer';
+
 const Header=(props)=>{
+    const [LoginUserInfo, DispatchUserInfo]  = useReducer(reducer,{
+        email:'',
+        password:'',
+        isLoading:false
+    });
+    const UserInfoChange = useCallback(
+        (event)=>
+        {
+            console.log(event.currentTarget.value)
+            DispatchUserInfo({
+                type:'changeUserInfo',
+                payload:event.currentTarget
+            })
+        },[DispatchUserInfo]
+    )
+        
+    const value = useMemo(()=> {
+        return {
+            state:LoginUserInfo,
+            setLoginUserInfo:UserInfoChange,
+            dispatch:DispatchUserInfo
+        }
+    },[LoginUserInfo,UserInfoChange,DispatchUserInfo])
 
     return( 
         <header>
@@ -22,8 +48,10 @@ const Header=(props)=>{
                         <li className="mobile-wishlist"><a href=" ">1<i className="fa fa-heart" aria-hidden="true"></i></a></li>
                         <li className="onhover-dropdown mobile-account"> <i className="fa fa-user" aria-hidden="true"></i> My Account
                             <ul className="onhover-show-div">
-                                <li><Login /></li>
-                                <li><button>Logout</button></li>
+                                <FormContext.Provider value = {value}>
+                                    <li><Login /></li>
+                                    <li><button>Logout</button></li>
+                                </FormContext.Provider>
                             </ul>
                         </li>
                     </ul>

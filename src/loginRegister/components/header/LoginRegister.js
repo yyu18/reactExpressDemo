@@ -12,7 +12,7 @@ export const Login = () => {
     const handleSubmit = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      console.log(formContext.state);
+      formContext.dispatch({type:'login',payload:formContext.state})
     }
 
     return (
@@ -35,7 +35,9 @@ export const Login = () => {
 
                 <Form.Group controlId="formBasicEmail">
                   <Form.Label>User Account</Form.Label>
-                  <Form.Control type="email" name="email" placeholder="Enter Email" onChange={(event)=>formContext.setLoginUserInfo( {...formContext.state,[event.currentTarget.name]:event.currentTarget.value})}/>
+                  <Form.Control type="email" name="email" placeholder="Enter Email" onChange={
+                    formContext.setLoginUserInfo
+                    }/>
                   <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
                   </Form.Text>
@@ -43,7 +45,9 @@ export const Login = () => {
 
                 <Form.Group controlId="formBasicPassword">
                   <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" name="password" placeholder="Password" onChange={(event)=>formContext.setLoginUserInfo( {...formContext.state,[event.currentTarget.name]:event.currentTarget.value})}/>
+                  <Form.Control type="password" name="password" placeholder="Password" onChange={
+                    formContext.setLoginUserInfo
+                    }/>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicCheckbox">
