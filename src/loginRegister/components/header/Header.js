@@ -1,16 +1,20 @@
-import React,{useCallback,useMemo,useReducer} from 'react';
+import React,{useMemo,useReducer} from 'react';
 import {openSearch,closeSearch,openNav,closeNav} from './MenuFunctionController';
-import {Login} from './LoginRegister';
+import {Login} from './Login';
+import {Register} from './Register';
 import {FormContext} from '../../context';
 import reducer from '../../reducer';
 
 const Header=(props)=>{
     const [LoginUserInfo, DispatchUserInfo]  = useReducer(reducer,{
+        username:'',
+        confirmPassword:'',
         email:'',
         password:'',
         isLoading:false
     });
-    const UserInfoChange = useCallback(
+    //useCallback example
+    /*const UserInfoChange = useCallback(
         (event)=>
         {
             console.log(event.currentTarget.value)
@@ -19,15 +23,15 @@ const Header=(props)=>{
                 payload:event.currentTarget
             })
         },[DispatchUserInfo]
-    )
+    )*/
         
     const value = useMemo(()=> {
         return {
             state:LoginUserInfo,
-            setLoginUserInfo:UserInfoChange,
+            //setLoginUserInfo:UserInfoChange,
             dispatch:DispatchUserInfo
         }
-    },[LoginUserInfo,UserInfoChange,DispatchUserInfo])
+    },[LoginUserInfo,DispatchUserInfo])
 
     return( 
         <header>
@@ -50,7 +54,7 @@ const Header=(props)=>{
                             <ul className="onhover-show-div">
                                 <FormContext.Provider value = {value}>
                                     <li><Login /></li>
-                                    <li><button>Logout</button></li>
+                                    <li><Register /></li>
                                 </FormContext.Provider>
                             </ul>
                         </li>

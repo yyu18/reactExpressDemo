@@ -16,6 +16,7 @@
     "firebase-admin": "^8.8.0",
     "googleapis": "^45.0.0",
     "https": "^1.0.0",
+    "password-hash": "^1.2.2",
     "react": "^16.13.1",
     "react-bootstrap": "^1.2.2",
     "react-dom": "^16.13.1",

@@ -1,5 +1,6 @@
 var express = require('express');
 var admin = require("firebase-admin");
+var passwordHash = require('password-hash');
 //firebase admin initialize
 admin.initializeApp({
     credential: admin.credential.applicationDefault(),
@@ -26,6 +27,7 @@ function register(req,res,next) {
 
 function login(req,res,next) {
   console.log(req.body);
+  var hashedPassword = passwordHash.generate(req.body.password);
   res.json({
     success:'connected'
   })
