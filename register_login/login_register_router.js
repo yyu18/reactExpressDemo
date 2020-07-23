@@ -1,14 +1,25 @@
 var express = require('express');
-var admin = require("firebase-admin");
 var passwordHash = require('password-hash');
-//firebase admin initialize
-admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
-    databaseURL: "https://pushnotification-124c9.firebaseio.com"
+
+var jwt = require('jsonwebtoken');
+var fs = require('fs');
+
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/usersInfo', {useNewUrlParser: true});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('mongo connected');
+});
+const userSchema = new mongoose.Schema({
+    username:String,
+    email:String,
+    password:String
   });
 
-var db = admin.database();
-var ref = db.ref("restricted_access/secret_document");
+const Users = mongoose.model('Users', userSchema);
+
+
 ref.once("value", function(snapshot) {
   console.log("snapshot is:"+snapshot.val());
 });
@@ -23,11 +34,26 @@ module.exports = router;
 
 function register(req,res,next) {
     console.log(req.body);
+    var hashedPassword = passwordHash.generate(req.body.password);
+    Users.create(
+      {
+         username:req.body.username,
+         email:req.body.email,
+         password: hashedPassword 
+      }, 
+      function (err, small) {
+      if (err) {
+        console.log(err);
+      } else {
+
+      }
+      // saved!
+    });
 }
 
 function login(req,res,next) {
   console.log(req.body);
-  var hashedPassword = passwordHash.generate(req.body.password);
+
   res.json({
     success:'connected'
   })
