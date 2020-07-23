@@ -1,13 +1,8 @@
 export const Validate = (userInfo)=>{
-    let errors = {
-        username:'',
-        email:'',
-        password:'',
-        confirmPassword:''
-    }
+    let errors = {}
 
     if(userInfo.email.length>0){
-      if (!/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(userInfo.email))
+      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userInfo.email))
       {
         errors.email = 'Email Is Invalidated';
       } 
@@ -16,9 +11,22 @@ export const Validate = (userInfo)=>{
     }
     if(userInfo.password.length===0){
       errors.password = 'Password Is Required';
-    } else if(userInfo.password.length<=6){
+    } else if(userInfo.password.length<6){
       errors.password = 'Password Length Must Be Greater Than 6';
     } 
+
+    if(userInfo.username.length === 0) {
+      errors.username = "Username Is Required";
+    }
+
+    if(userInfo.confirmPassword.length===0){
+      errors.confirmPassword = 'Password Is Required';
+    } else {
+      if(userInfo.confirmPassword!==userInfo.password) {
+        errors.confirmPassword = "Password Is Not Compared";
+      } 
+    }
+   
     return errors;
   }
 

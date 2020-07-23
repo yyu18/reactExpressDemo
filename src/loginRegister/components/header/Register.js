@@ -5,29 +5,24 @@ import {Validate} from '../../formValidator';
 
 export const Register = () => {
     const [show, setShow] = useState(false);
-    const [formErrors,setErrors] = useState({
-        username:'',
-        email:'',
-        password:'',
-        confirmPassword:''
-    })
+    const [formErrors,setErrors] = useState({})
 
     const formContext = useContext(FormContext);
 
-
     const handleClose = () => {
       setShow(false);
-
     };
     const handleShow = () => setShow(true);
     
     const handleSubmit = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      setErrors(Validate(formContext.state));
+      const errors = Validate(formContext.state);
+      setErrors(errors);
+      if(Object.keys(errors).length === 0 ){
+        formContext.dispatch({type:'register',payload:formContext.state})
+      }
     }
-    console.log(formErrors);
-    console.log(formErrors.password.length);
     return (
       <>
         <Button variant="primary" onClick={handleShow}>
@@ -57,10 +52,14 @@ export const Register = () => {
                             payload:event.currentTarget
                           })
                         }
-                      }    />      
+                      }    />   
+                  {
+                    formErrors.username&&
                     <Form.Text style={{color:'red'}}>
                     {formErrors.username}
                     </Form.Text>
+                  }   
+                  
                 </Form.Group>
 
                   <Form.Group controlId="formBasicEmail">
@@ -73,10 +72,13 @@ export const Register = () => {
                             payload:event.currentTarget
                           })
                         }
-                      }    />      
-                    <Form.Text style={{color:'red'}}>
-                    {formErrors.email}
-                    </Form.Text>
+                      }    />   
+                      {formErrors.email && 
+                          <Form.Text style={{color:'red'}}>
+                          {formErrors.email}
+                          </Form.Text>
+                          }   
+                
                   </Form.Group>
 
                   <Form.Group controlId="formBasicPassword">
@@ -90,9 +92,13 @@ export const Register = () => {
                           })
                         }
                       } />
-                    <Form.Text style={{color:'red'}}>
-                    {formErrors.password}
-                    </Form.Text>
+                      {
+                        formErrors.password &&
+                          <Form.Text style={{color:'red'}}>
+                          {formErrors.password}
+                          </Form.Text>
+                       }
+                   
                   </Form.Group>
 
                   <Form.Group controlId="formBasicPassword">
@@ -106,9 +112,13 @@ export const Register = () => {
                           })
                         }
                       } />
-                    <Form.Text style={{color:'red'}}>
-                    {formErrors.confirmPassword}
-                    </Form.Text>
+                      {
+                            formErrors.confirmPassword && 
+                             <Form.Text style={{color:'red'}}>
+                             {formErrors.confirmPassword}
+                             </Form.Text>
+                      }
+             
                   </Form.Group>
 
 

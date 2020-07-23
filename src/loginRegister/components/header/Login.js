@@ -6,10 +6,7 @@ import {Validate} from '../../formValidator';
 export const Login = () => {
     const [show, setShow] = useState(false);
 
-    const [formErrors,setErrors] = useState({
-      email:'',
-      password:''
-    })
+    const [formErrors,setErrors] = useState({})
 
     const formContext = useContext(FormContext);
 
@@ -56,13 +53,12 @@ export const Login = () => {
                           })
                         }
                       }    />      
-          
-                <Form.Text style={{color:'red'}}>
-                  {formErrors.email}
-                </Form.Text>
-            
-      
-                
+          {
+            formErrors.email&&
+              <Form.Text style={{color:'red'}}>
+                {formErrors.email}
+              </Form.Text>
+          } 
                   </Form.Group>
 
                   <Form.Group controlId="formBasicPassword">
@@ -76,11 +72,13 @@ export const Login = () => {
                           })
                         }
                       } />
+              {
+                formErrors.password &&
+                  <Form.Text style={{color:'red'}}>
+                    {formErrors.password}
+                  </Form.Text>
+                }
         
-
-        <Form.Text style={{color:'red'}}>
-                  {formErrors.password}
-                </Form.Text>
             
 
                   </Form.Group>
