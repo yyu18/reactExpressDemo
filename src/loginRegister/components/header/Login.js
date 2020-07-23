@@ -45,13 +45,13 @@ export const Login = () => {
                   <Form.Group controlId="formBasicEmail">
                     <Form.Label>User Account</Form.Label>
                     <Form.Control required type="email" name="email" placeholder="Enter Email" onChange={
-                      (event)=>
-                        {
-                          formContext.dispatch({
-                            type:'changeUserInfo',
-                            payload:event.currentTarget
-                          })
-                        }
+                       (event)=>
+                       {
+                         formContext.setFormInfo({
+                           ...formContext.state,
+                           [event.name]:event.value
+                         })
+                       }
                       }    />      
           {
             formErrors.email&&
@@ -65,12 +65,12 @@ export const Login = () => {
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" name="password" placeholder="Password" onChange={
                       (event)=>
-                        {
-                          formContext.dispatch({
-                            type:'changeUserInfo',
-                            payload:event.currentTarget
-                          })
-                        }
+                      {
+                        formContext.setFormInfo({
+                          ...formContext.state,
+                          [event.name]:event.value
+                        })
+                      }
                       } />
               {
                 formErrors.password &&

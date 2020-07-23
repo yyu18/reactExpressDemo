@@ -1,4 +1,4 @@
-import React,{useMemo,useReducer} from 'react';
+import React,{useMemo,useReducer,useState} from 'react';
 import {openSearch,closeSearch,openNav,closeNav} from './MenuFunctionController';
 import {Login} from './Login';
 import {Register} from './Register';
@@ -6,13 +6,13 @@ import {FormContext} from '../../context';
 import reducer from '../../reducer';
 
 const Header=(props)=>{
-    const [LoginUserInfo, DispatchUserInfo]  = useReducer(reducer,{
+    const [FormInfo,setFormInfo] = useState({
         username:'',
         confirmPassword:'',
         email:'',
         password:'',
-        status:''
     });
+    const [LoginUserInfo, DispatchUserInfo]  = useReducer(reducer,{});
     //useCallback example
     /*const UserInfoChange = useCallback(
         (event)=>
@@ -27,7 +27,8 @@ const Header=(props)=>{
         
     const value = useMemo(()=> {
         return {
-            state:LoginUserInfo,
+            state:FormInfo,
+            setFormInfo:setFormInfo,
             //setLoginUserInfo:UserInfoChange,
             dispatch:DispatchUserInfo
         }

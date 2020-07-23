@@ -71,9 +71,9 @@ export const Register = () => {
                     <Form.Control required type="text" name="username" placeholder="Enter Username" onChange={
                       (event)=>
                         {
-                          formContext.dispatch({
-                            type:'changeUserInfo',
-                            payload:event.currentTarget
+                          formContext.setFormInfo({
+                            ...formContext.state,
+                            [event.name]:event.value
                           })
                         }
                       }    />   
@@ -89,13 +89,13 @@ export const Register = () => {
                   <Form.Group controlId="formBasicEmail">
                     <Form.Label>User Account</Form.Label>
                     <Form.Control required type="email" name="email" placeholder="Enter Email" onChange={
-                      (event)=>
-                        {
-                          formContext.dispatch({
-                            type:'changeUserInfo',
-                            payload:event.currentTarget
-                          })
-                        }
+                         (event)=>
+                         {
+                           formContext.setFormInfo({
+                             ...formContext.state,
+                             [event.name]:event.value
+                           })
+                         }
                       }    />   
                       {formErrors.email && 
                           <Form.Text style={{color:'red'}}>
@@ -108,13 +108,13 @@ export const Register = () => {
                   <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" name="password" placeholder="Password" onChange={
-                      (event)=>
-                        {
-                          formContext.dispatch({
-                            type:'changeUserInfo',
-                            payload:event.currentTarget
-                          })
-                        }
+                         (event)=>
+                         {
+                           formContext.setFormInfo({
+                             ...formContext.state,
+                             [event.name]:event.value
+                           })
+                         }
                       } />
                       {
                         formErrors.password &&
@@ -128,13 +128,13 @@ export const Register = () => {
                   <Form.Group controlId="formConfirmPassword">
                     <Form.Label>Confirm Password</Form.Label>
                     <Form.Control type="password" name="confirmPassword" placeholder="Password" onChange={
-                      (event)=>
-                        {
-                          formContext.dispatch({
-                            type:'changeUserInfo',
-                            payload:event.currentTarget
-                          })
-                        }
+                         (event)=>
+                         {
+                           formContext.setFormInfo({
+                             ...formContext.state,
+                             [event.name]:event.value
+                           })
+                         }
                       } />
                       {
                             formErrors.confirmPassword && 
