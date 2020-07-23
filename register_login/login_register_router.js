@@ -4,8 +4,14 @@ var passwordHash = require('password-hash');
 var jwt = require('jsonwebtoken');
 var fs = require('fs');
 
+const privateKey = fs.readFileSync(__dirname+'/private.key');
+//mongodb connection
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/usersInfo', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost/usersInfo', 
+{
+  useNewUrlParser: true,
+  useUnifiedTopology: true 
+});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -14,17 +20,16 @@ db.once('open', function() {
 const userSchema = new mongoose.Schema({
     username:String,
     email:String,
-    password:String
+    password:String,
+    token:String
   });
 
 const Users = mongoose.model('Users', userSchema);
 
-
-ref.once("value", function(snapshot) {
-  console.log("snapshot is:"+snapshot.val());
-});
 //router created
 var router = express.Router();
+
+router.post('/checkEmail',checkEmail);
 
 router.post('/register',register);
 
@@ -32,22 +37,67 @@ router.post('/login',login);
 
 module.exports = router;
 
-function register(req,res,next) {
-    console.log(req.body);
-    var hashedPassword = passwordHash.generate(req.body.password);
-    Users.create(
-      {
-         username:req.body.username,
-         email:req.body.email,
-         password: hashedPassword 
-      }, 
-      function (err, small) {
-      if (err) {
-        console.log(err);
+function checkEmail (req,res,next) {
+  if(req.body.email) {
+    Users.findOne({ email: req.body.email }, function (err, user) {
+      if(err){
+        next(err);
+        res.json({
+          error:err
+        })
       } else {
-
+        if(user){
+          res.json({
+            status:'Email Already Be Used'
+          })
+        } else {
+          res.json({
+            status:'success'
+          })
+        }
       }
-      // saved!
+    })
+  }
+}
+
+function register(req,res,next) {
+    var hashedPassword = passwordHash.generate(req.body.password);
+    //jet token
+    var token = jwt.sign(
+      { 
+        username:req.body.username,
+        email:req.body.email,
+        password:hashedPassword,
+      }, 
+      privateKey, { algorithm: 'HS256'});
+
+    Users.findOne({ email: req.body.email }, function (err, user) {
+      if(err) {
+        next(err);
+      } else {
+        if (!user) {
+          Users.create(
+            {
+               username:req.body.username,
+               email:req.body.email,
+               password: hashedPassword,
+               token:token 
+            }, 
+            function (err, user) {
+            if (err) {
+              next(err);
+            } else {
+              console.log('user created');
+              res.json({
+                status:'success',
+                token:user.token,
+                username:user.username,
+                email:user.email
+              })
+            }
+          });
+        }
+      }
     });
 }
 

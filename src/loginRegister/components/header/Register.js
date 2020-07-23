@@ -1,7 +1,9 @@
-import React, {useState,useContext} from 'react';
+import React, {useState,useContext, useEffect} from 'react';
 import { Modal,Button,Form } from 'react-bootstrap';
 import {FormContext} from '../../context';
 import {Validate} from '../../formValidator';
+import {setCookie} from './MenuFunctionController';
+var registerURL = 'http://192.168.2.24:4000/register';
 
 export const Register = () => {
     const [show, setShow] = useState(false);
@@ -17,12 +19,34 @@ export const Register = () => {
     const handleSubmit = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      const errors = Validate(formContext.state);
-      setErrors(errors);
-      if(Object.keys(errors).length === 0 ){
-        formContext.dispatch({type:'register',payload:formContext.state})
-      }
+      Validate(formContext.state).then(errors=>{
+        setErrors(errors);
+        if(Object.keys(errors).length === 0 ){
+            fetch(registerURL, {
+              method: 'POST', // or 'PUT'
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(formContext.state),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status==='success'){
+                    setCookie('token',data.token);
+                    setCookie('username',data.username);
+                    setCookie('email',data.email);
+                    formContext.dispatch({type:'register',payload:data})
+                }
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+      });
     }
+
+    useEffect(() => {
+
+    });
     return (
       <>
         <Button variant="primary" onClick={handleShow}>
@@ -36,13 +60,13 @@ export const Register = () => {
           keyboard={false}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Login The Account</Modal.Title>
+            <Modal.Title>Register The Account</Modal.Title>
           </Modal.Header>
 
             <Form noValidate onSubmit={handleSubmit}>
               <Modal.Body>
 
-                <Form.Group controlId="formBasicEmail">
+                <Form.Group controlId="formUsername">
                     <Form.Label>User Name</Form.Label>
                     <Form.Control required type="text" name="username" placeholder="Enter Username" onChange={
                       (event)=>
@@ -101,7 +125,7 @@ export const Register = () => {
                    
                   </Form.Group>
 
-                  <Form.Group controlId="formBasicPassword">
+                  <Form.Group controlId="formConfirmPassword">
                     <Form.Label>Confirm Password</Form.Label>
                     <Form.Control type="password" name="confirmPassword" placeholder="Password" onChange={
                       (event)=>

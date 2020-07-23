@@ -11,7 +11,7 @@ const Header=(props)=>{
         confirmPassword:'',
         email:'',
         password:'',
-        isLoading:false
+        status:''
     });
     //useCallback example
     /*const UserInfoChange = useCallback(
