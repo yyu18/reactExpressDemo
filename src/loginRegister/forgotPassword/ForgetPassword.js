@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import { Button,Form,Container,Row,Col } from 'react-bootstrap';
-var resetPassword = 'http://192.168.2.24:4000/resetPassword';
-const App = ()=>{
-        const [ResetEmail,setResetEmail] = useState({
+var forgotPassword = 'http://192.168.2.24:4000/forgotPassword';
+const ForgetPassword = ()=>{
+        const [ForgotEmail,setForgotEmail] = useState({
                 email:'',
             });
         const [errors,setErrors] = useState({});
@@ -10,15 +10,15 @@ const App = ()=>{
         const handleSubmit = (event) => {
                 event.preventDefault();
                 event.stopPropagation();
-                var errors = validator(ResetEmail);
+                var errors = validator(ForgotEmail);
                 setErrors(errors);
                 if(Object.keys(errors).length === 0 ){
-                        fetch(resetPassword, {
+                        fetch(forgotPassword, {
                                 method: 'POST', // or 'PUT'
                                 headers: {
                                     'Content-Type': 'application/json',
                                 },
-                                body: JSON.stringify(ResetEmail),
+                                body: JSON.stringify(ForgotEmail),
                               })
                               .then(response => response.json())
                               .then(data => {
@@ -48,8 +48,8 @@ const App = ()=>{
                                         <Form.Label>Email address</Form.Label>
                                         <Form.Control type="email" name = "email" placeholder="Enter email" onChange={(event)=>{
                                                 
-                                                setResetEmail({
-                                                ...ResetEmail,
+                                                setForgotEmail({
+                                                ...ForgotEmail,
                                                 [event.currentTarget.name]:event.currentTarget.value
                                                 })
                                                 
@@ -73,4 +73,4 @@ const App = ()=>{
         )
 }
 
-export default App;
+export default ForgetPassword;

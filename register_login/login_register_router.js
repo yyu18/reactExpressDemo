@@ -30,7 +30,10 @@ const Users = mongoose.model('Users', userSchema);
 
 //router created
 var router = express.Router();
+
 router.post('/resetPassword',resetPassword);
+
+router.post('/forgotPassword',forgotPassword);
 
 router.post('/checkEmail',checkEmail);
 
@@ -39,8 +42,31 @@ router.post('/register',register);
 router.post('/login',login);
 
 module.exports = router;
-
 function resetPassword(req,res,next){
+  console.log(req.body.token);
+  Users.findOne({
+    where:{
+      resetPasswordToken:req.body.token,
+      resetPasswordExpire:{
+        $gt:Date.now()
+      }
+    }
+  },(err,user)=>{
+    if(user){
+      res.status(200).send({
+        status:true,
+        info:'Link Is Valid'
+      })
+    } else {
+      res.status(404).send({
+        status:false,
+        info:'Link Is Invalid'
+      })
+    }
+  })
+}
+
+function forgotPassword(req,res,next){
   console.log(req.body);
   if(req.body.email!==undefined&&req.body.email!==''){
     Users.findOne({ email: req.body.email }, function (err, user) {

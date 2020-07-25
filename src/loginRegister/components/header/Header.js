@@ -59,6 +59,7 @@ const Header=(props)=>{
         },[RegisterFormInfo,setRegisterForm,LoginFormInfo,setLoginForm,DispatchUser])
   
    const token = useMemo(()=>{
+       console.log(UserInfo);
        return getCookie('token');
    },[UserInfo])
     return( 
