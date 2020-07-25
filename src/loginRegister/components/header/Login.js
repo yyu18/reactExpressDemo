@@ -70,7 +70,6 @@ export const Login = () => {
         >
           <Modal.Header closeButton>
             <Modal.Title>Login The Account</Modal.Title>
-          
           </Modal.Header>
 
             <Form noValidate onSubmit={handleSubmit}>
@@ -115,7 +114,12 @@ export const Login = () => {
                   </Form.Group>
 
                   <Form.Group controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" name="checkbox" label="Remember Me" />
+          
+             
+                        <Form.Check type="checkbox" name="checkbox" label="Remember Me" />
+                  
+                        <a href="http://192.168.2.24:3000/order-system/forgot-password">Forgot The Password</a>
+               
                   </Form.Group>
 
                   {

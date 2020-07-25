@@ -31,7 +31,6 @@ const Header=(props)=>{
     )*/
     
     const logout = ()=>{
-        console.log('loutout');
         delCookie('token');
         delCookie('username');
         delCookie('email');
@@ -60,7 +59,6 @@ const Header=(props)=>{
         },[RegisterFormInfo,setRegisterForm,LoginFormInfo,setLoginForm,DispatchUser])
   
    const token = useMemo(()=>{
-       console.log(UserInfo);
        return getCookie('token');
    },[UserInfo])
     return( 

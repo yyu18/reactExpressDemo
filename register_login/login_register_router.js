@@ -1,6 +1,6 @@
 var express = require('express');
 var passwordHash = require('password-hash');
-
+var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 var fs = require('fs');
 
@@ -21,13 +21,16 @@ const userSchema = new mongoose.Schema({
     username:String,
     email:String,
     password:String,
-    token:String
+    token:String,
+    resetPasswordToken:String,
+    resetPasswordExpire:Number
   });
 
 const Users = mongoose.model('Users', userSchema);
 
 //router created
 var router = express.Router();
+router.post('/resetPassword',resetPassword);
 
 router.post('/checkEmail',checkEmail);
 
@@ -36,6 +39,33 @@ router.post('/register',register);
 router.post('/login',login);
 
 module.exports = router;
+
+function resetPassword(req,res,next){
+  console.log(req.body);
+  if(req.body.email!==undefined&&req.body.email!==''){
+    Users.findOne({ email: req.body.email }, function (err, user) {
+      if(err) next(err);
+      if(user) {
+        const resetToken = crypto.randomBytes(20).toString('hex');
+        user.update({
+          resetPasswordToken:resetToken,
+          resetPasswordExpire:Date.now()+360000
+        })
+        
+      } else {
+        res.end({
+          status:false,
+          info:'email is invalid'
+        })
+      }
+    })
+  } else {
+    res.end({
+      status:false,
+      info:'email is invalid'
+    })
+  }
+}
 
 function checkEmail (req,res,next) {
   if(req.body.email) {
@@ -102,9 +132,6 @@ function register(req,res,next) {
 }
 
 function login(req,res,next) {
-  console.log(req.body);
-
-
   Users.findOne({ email: req.body.email }, function (err, user) {
     if(err) {
       next(err);
