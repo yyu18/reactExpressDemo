@@ -104,7 +104,30 @@ function register(req,res,next) {
 function login(req,res,next) {
   console.log(req.body);
 
-  res.json({
-    success:'connected'
+
+  Users.findOne({ email: req.body.email }, function (err, user) {
+    if(err) {
+      next(err);
+    } else if(user){
+      var passwordVerify = passwordHash.verify(req.body.password, user.password)
+      if(passwordVerify) {
+        res.json({
+          status:'success',
+          token:user.token,
+          username:user.username,
+          email:user.email
+        })
+      } else {
+        res.json({
+          status:'failed',
+          info:'password is wrong'
+        })
+      }
+    } else {
+      res.json({
+        status:'failed',
+        info:'username is not existed'
+      })
+    }
   })
 }

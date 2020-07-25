@@ -1,18 +1,23 @@
 import React,{useMemo,useReducer,useState} from 'react';
-import {openSearch,closeSearch,openNav,closeNav} from './MenuFunctionController';
+import {openSearch,closeSearch,openNav,closeNav,getCookie,delCookie} from './MenuFunctionController';
 import {Login} from './Login';
+import { Button } from 'react-bootstrap';
 import {Register} from './Register';
 import {FormContext} from '../../context';
 import reducer from '../../reducer';
 
 const Header=(props)=>{
-    const [FormInfo,setFormInfo] = useState({
+    const [RegisterFormInfo,setRegisterForm] = useState({
         username:'',
-        confirmPassword:'',
+        email:'',
+        password:'',
+        confirmPassword:''
+    });
+    const [LoginFormInfo,setLoginForm] = useState({
         email:'',
         password:'',
     });
-    const [LoginUserInfo, DispatchUserInfo]  = useReducer(reducer,{});
+    const [UserInfo, DispatchUser]  = useReducer(reducer,{});
     //useCallback example
     /*const UserInfoChange = useCallback(
         (event)=>
@@ -24,16 +29,40 @@ const Header=(props)=>{
             })
         },[DispatchUserInfo]
     )*/
-        
+    
+    const logout = ()=>{
+        console.log('loutout');
+        delCookie('token');
+        delCookie('username');
+        delCookie('email');
+        DispatchUser({type:'login',payload:{}});
+        setLoginForm({   
+            email:'',
+            password:''
+        });
+        setRegisterForm({
+            username:'',
+            email:'',
+            password:'',
+            confirmPassword:''
+        })
+    }
+
     const value = useMemo(()=> {
         return {
-            state:FormInfo,
-            setFormInfo:setFormInfo,
+            RegisterFormInfo:RegisterFormInfo,
+            setRegisterForm:setRegisterForm,
+            LoginFormInfo:LoginFormInfo,
+            setLoginForm:setLoginForm,
             //setLoginUserInfo:UserInfoChange,
-            dispatch:DispatchUserInfo
+            dispatch:DispatchUser
         }
-    },[LoginUserInfo,DispatchUserInfo])
-
+        },[RegisterFormInfo,setRegisterForm,LoginFormInfo,setLoginForm,DispatchUser])
+  
+   const token = useMemo(()=>{
+       console.log(UserInfo);
+       return getCookie('token');
+   },[UserInfo])
     return( 
         <header>
             <div className="mobile-fix-option"></div>
@@ -49,17 +78,31 @@ const Header=(props)=>{
                     </div>
                 </div>
                 <div className="col-lg-6 text-right">
-                    <ul className="header-dropdown">
-                        <li className="mobile-wishlist"><a href=" ">1<i className="fa fa-heart" aria-hidden="true"></i></a></li>
-                        <li className="onhover-dropdown mobile-account"> <i className="fa fa-user" aria-hidden="true"></i> My Account
+                  
+                        {
+                            token ? 
+                            <ul className="header-dropdown">
+                            <li className="mobile-wishlist"><a href=" ">1<i className="fa fa-heart" aria-hidden="true"></i></a></li>
+                            <li className="onhover-dropdown mobile-account"> <i className="fa fa-user" aria-hidden="true"></i> My Account
                             <ul className="onhover-show-div">
+                                <FormContext.Provider value = {value}>
+                                    <li>    
+                                        <Button variant="primary" onClick={logout}>
+                                        Logout
+                                        </Button>
+                                    </li>
+                                </FormContext.Provider>
+                            </ul>
+                            </li>
+                            </ul>
+                            :
+                            <ul className="header-dropdown">
                                 <FormContext.Provider value = {value}>
                                     <li><Login /></li>
                                     <li><Register /></li>
                                 </FormContext.Provider>
-                            </ul>
-                        </li>
-                    </ul>
+                        </ul>
+                        }
                 </div>
             </div>
         </div>

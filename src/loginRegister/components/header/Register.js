@@ -1,4 +1,4 @@
-import React, {useState,useContext, useEffect} from 'react';
+import React, {useState,useContext} from 'react';
 import { Modal,Button,Form } from 'react-bootstrap';
 import {FormContext} from '../../context';
 import {Validate} from '../../formValidator';
@@ -13,13 +13,21 @@ export const Register = () => {
 
     const handleClose = () => {
       setShow(false);
+      setErrors({});
+      formContext.setRegisterForm({
+        username:'',
+        email:'',
+        password:'',
+        confirmPassword:''
+      })
     };
     const handleShow = () => setShow(true);
     
     const handleSubmit = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      Validate(formContext.state).then(errors=>{
+      console.log(formContext.RegisterFormInfo);
+      Validate(formContext.RegisterFormInfo).then(errors=>{
         setErrors(errors);
         if(Object.keys(errors).length === 0 ){
             fetch(registerURL, {
@@ -27,7 +35,7 @@ export const Register = () => {
               headers: {
                   'Content-Type': 'application/json',
               },
-              body: JSON.stringify(formContext.state),
+              body: JSON.stringify(formContext.RegisterFormInfo),
             })
             .then(response => response.json())
             .then(data => {
@@ -44,9 +52,6 @@ export const Register = () => {
       });
     }
 
-    useEffect(() => {
-
-    });
     return (
       <>
         <Button variant="primary" onClick={handleShow}>
@@ -71,9 +76,9 @@ export const Register = () => {
                     <Form.Control required type="text" name="username" placeholder="Enter Username" onChange={
                       (event)=>
                         {
-                          formContext.setFormInfo({
-                            ...formContext.state,
-                            [event.name]:event.value
+                          formContext.setRegisterForm({
+                            ...formContext.RegisterFormInfo,
+                            [event.currentTarget.name]:event.currentTarget.value
                           })
                         }
                       }    />   
@@ -91,9 +96,9 @@ export const Register = () => {
                     <Form.Control required type="email" name="email" placeholder="Enter Email" onChange={
                          (event)=>
                          {
-                           formContext.setFormInfo({
-                             ...formContext.state,
-                             [event.name]:event.value
+                           formContext.setRegisterForm({
+                             ...formContext.RegisterFormInfo,
+                             [event.currentTarget.name]:event.currentTarget.value
                            })
                          }
                       }    />   
@@ -110,9 +115,9 @@ export const Register = () => {
                     <Form.Control type="password" name="password" placeholder="Password" onChange={
                          (event)=>
                          {
-                           formContext.setFormInfo({
-                             ...formContext.state,
-                             [event.name]:event.value
+                           formContext.setRegisterForm({
+                             ...formContext.RegisterFormInfo,
+                             [event.currentTarget.name]:event.currentTarget.value
                            })
                          }
                       } />
@@ -130,9 +135,9 @@ export const Register = () => {
                     <Form.Control type="password" name="confirmPassword" placeholder="Password" onChange={
                          (event)=>
                          {
-                           formContext.setFormInfo({
-                             ...formContext.state,
-                             [event.name]:event.value
+                           formContext.setRegisterForm({
+                             ...formContext.RegisterFormInfo,
+                             [event.currentTarget.name]:event.currentTarget.value
                            })
                          }
                       } />
