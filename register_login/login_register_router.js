@@ -77,7 +77,7 @@ function forgotPassword(req,res,next){
           resetPasswordToken:resetToken,
           resetPasswordExpire:Date.now()+360000
         })
-        
+        //nodemailer begin
       } else {
         res.end({
           status:false,
