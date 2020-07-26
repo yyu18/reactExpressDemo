@@ -1,7 +1,7 @@
 import React, { useState,useMemo } from 'react';
 import { useLocation} from 'react-router-dom'
 import { Button,Form,Container,Row,Col } from 'react-bootstrap';
-var resetPassword = 'http://192.168.2.24:4000/resetPassword';
+var resetPassword = 'http://192.168.2.24:4000/checkResetLink';
 function useQuery() {
     return new URLSearchParams(useLocation().search);
   }
@@ -10,11 +10,14 @@ const ResetPassword = ()=>{
     let query = useQuery();
     const [errors,setErrors] = useState({});
 
-    const [password,setPassword] = useState({});
+    const [password,setPassword] = useState({
+        password:'',
+        confirmPassword:''
+    });
 
     useMemo(()=>{
-        console.log(errors);
-        if(errors.status===undefined && query.get('token')){
+        console.log(errors.status);
+        if(errors.status===undefined){
                 fetch(resetPassword, {
                     method: 'POST',
                     headers: {
@@ -38,13 +41,57 @@ const ResetPassword = ()=>{
     const handleSubmit = (event) => {
         event.preventDefault();
         event.stopPropagation();
-        console.log('hello world')
+        var errors = validator(password);
+        setErrors(errors);
+        if(Object.keys(errors).length === 0 ){
+            fetch(resetPassword, {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    password:password.password,
+                    token:query.get('token')
+                }),
+              })
+              .then(response => response.json())
+              .then(data => {
+                console.log(data);
+              }).catch((error) => {
+                  console.error('Error:', error);
+              }); 
+        }
     }
+
+
+    const validator = (userInfo) => {
+        let errors = {};
+        
+        if(userInfo.password!==undefined){
+          if(userInfo.password.length===0){
+                errors.password = 'Password Is Required'
+          }
+        } else {
+            errors.password = 'Password Is Required'
+        }
+
+        if(userInfo.confirmPassword!==undefined){
+            if(userInfo.confirmPassword.length===0){
+                errors.confirmPassword = 'Password Is Required'
+                } else if(userInfo.confirmPassword!==userInfo.password) {
+                        errors.confirmPassword = "Password Is Not Compared";
+                    } 
+        } else {
+            errors.password = 'Password Is Required'
+        }
+        return errors;
+}
 
     return(
         <div>
-        {//errors.status!==undefined
-            errors.status ? 
+        {
+            //errors.status 
+        errors.status!==undefined ? 
             <h1>{errors.info}</h1>
             :
             <Container>
@@ -71,8 +118,8 @@ const ResetPassword = ()=>{
                                 </Form.Group>
 
                                 <Form.Group controlId="formConfirmPassword">
-                                        <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" name = "confirmPassword" placeholder="Enter Password" onChange={(event)=>{
+                                        <Form.Label>Confirm Password</Form.Label>
+                                        <Form.Control type="password" name = "confirmPassword" placeholder="Confirm Password" onChange={(event)=>{
                                                 
                                                 setPassword({
                                                     ...password,

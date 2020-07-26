@@ -31,7 +31,7 @@ const Users = mongoose.model('Users', userSchema);
 //router created
 var router = express.Router();
 
-router.post('/resetPassword',resetPassword);
+router.post('/checkResetLink',checkResetLink);
 
 router.post('/forgotPassword',forgotPassword);
 
@@ -42,7 +42,8 @@ router.post('/register',register);
 router.post('/login',login);
 
 module.exports = router;
-function resetPassword(req,res,next){
+
+function checkResetLink(req,res,next){
   console.log(req.body.token);
   Users.findOne({
     where:{
@@ -53,10 +54,34 @@ function resetPassword(req,res,next){
     }
   },(err,user)=>{
     if(user){
-      res.status(200).send({
-        status:true,
-        info:'Link Is Valid'
-      })
+      if(req.body.password!==undefined){
+        var hashedPassword = passwordHash.generate(req.body.password);
+        var token = jwt.sign(
+          { 
+            username:user.username,
+            email:user.email,
+            password:hashedPassword,
+          }, 
+          privateKey, { algorithm: 'HS256'});
+  
+        user.update({
+          password:hashedPassword,
+          token:token
+        },(err)=>{
+          next(err);
+        })
+        res.status(200).end({
+          error:false,
+          info:'Password Updated'
+        })
+      } else {
+        res.status(200).send({
+          error:false,
+          info:'Link Is Valid'
+        })
+      }
+   
+
     } else {
       res.status(404).send({
         status:false,
