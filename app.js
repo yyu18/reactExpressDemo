@@ -50,6 +50,7 @@ const errorHandler = function(err,req,res,next) {
         error:true,
         info:JSON.stringify(err)
     });
+    return false;
 }
 
 app.response.sendStatus = function (statusCode, type, message) {

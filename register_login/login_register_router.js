@@ -99,43 +99,33 @@ function checkResetLink(req,res,next){
 }
 
 function forgotPassword(req,res,next){
-  console.log(req.body);
-  if(req.body.email!==undefined&&req.body.email!==''){
-    Users.findOne({ email: req.body.email }, function (err, user) {
+  //req.body.email!==undefined && req.body.email!==null && req.body.email!==''
+  //req.body.email && req.body.email!==''
+  if(!req.body.email||req.body.email==='') {next('Email Is Invalid');}
+  Users.findOne({ email: req.body.email }, function (err, user) {
       if(err) next(err);
-      if(user) {
-        const resetToken = crypto.randomBytes(20).toString('hex');
-        user.resetPasswordToken = resetToken;
-        user.resetPasswordExpire = Date.now()+360000;
-        user.save((err,result)=>{
-          if(err) next(err);
-          if(result){
-            console.log(result);
-          }
-        });
-        
-        //nodemailer begin
-        nodeMailer(req.body.email,resetToken)
-        .catch((err)=>{
-          next(err)
-        })
-        .then((e)=>{
-          console.log(e);
-          res.send(e);
-        });
-      } else {
-        res.send({
-          error:true,
-          info:'Email is invalid'
-        })
+      if(!user) next('Email Is Invalid');
+      const resetToken = crypto.randomBytes(20).toString('hex');
+      user.resetPasswordToken = resetToken;
+      user.resetPasswordExpire = Date.now()+360000;
+      user.save((err,result)=>{
+      if(err) next(err);
+      if(result){
+          console.log(result);
       }
+      });
+      
+      //nodemailer begin
+      nodeMailer(req.body.email,resetToken)
+      .catch((err)=>{
+      next(err)
+      })
+      .then((e)=>{
+      console.log(e);
+      res.send(e);
+      return true;
+      });
     })
-  } else {
-    res.send({
-      error:true,
-      info:'Email is invalid'
-    })
-  }
 }
 
 function checkEmail (req,res,next) {
@@ -203,7 +193,7 @@ function register(req,res,next) {
 }
 
 function login(req,res,next) {
-    if(req.body.email===undefined || req.body.email==='' || req.body.email===null || req.body.password===undefined || req.body.password==='' || req.body.password ===null) {res.json({ error:true, info:'email or password is wrong' });return false}
+    if(!req.body.email || req.body.email==='' || !req.body.password || req.body.password==='') {res.json({ error:true, info:'email or password is wrong' });return false}
 
     Users.findOne({ email: req.body.email }, function (err, user) {
         if(err) next(err);
