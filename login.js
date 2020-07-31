@@ -8,7 +8,10 @@ const login_register_router = require('./register_login/login_register_router.js
 const errorHandler = function(err,req,res,next) {
     //res.status(404).end();
     console.log('err:'+err);
-    res.sendStatus(404,'application/json',{"error":err});
+    res.sendStatus(404,'application/json',{
+        error:true,
+        info:JSON.stringify(err)
+    });
 }
 
 app.response.sendStatus = function (statusCode, type, message) {

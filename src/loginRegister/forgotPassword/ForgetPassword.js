@@ -1,67 +1,81 @@
-import React, {useState} from 'react';
+import React, { useState,useRef } from 'react';
 import { Button,Form,Container,Row,Col } from 'react-bootstrap';
-var forgotPassword = 'http://192.168.2.24:4000/forgotPassword';
+let forgotPassword = 'http://192.168.2.24:4000/forgotPassword';
 const ForgetPassword = ()=>{
-        const [ForgotEmail,setForgotEmail] = useState({
-                email:'',
-            });
+        const formRef = useRef(null);
         const [errors,setErrors] = useState({});
+        const btnRef = useRef(null);
 
-        const handleSubmit = (event) => {
+        const handleSubmit = async (event) => {
                 event.preventDefault();
                 event.stopPropagation();
-                var errors = validator(ForgotEmail);
+                let value = {
+                        email:formRef.current['email'].value
+                }
+                var errors = validator(value);
                 setErrors(errors);
                 if(Object.keys(errors).length === 0 ){
-                        fetch(forgotPassword, {
-                                method: 'POST', // or 'PUT'
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify(ForgotEmail),
-                              })
-                              .then(response => response.json())
-                              .then(data => {
-                                console.log(data);
-                              }).catch((error) => {
-                                  console.error('Error:', error);
-                              });
+                        btnRef.current.setAttribute("disabled", true);
+                        try{
+                                console.log('fetch send')
+                                let response = await fetch(forgotPassword, {
+                                        method: 'POST', // or 'PUT'
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify(value),
+                                      })
+                                let data = await response.json();
+                                setErrors(data)
+                                if(data.error){
+                                        btnRef.current.removeAttribute("disabled");
+                                }
+                        } catch(err) {
+                                btnRef.current.removeAttribute("disabled");
+                                setErrors({
+                                        error:true,
+                                        info:'Something Wrong, Hubert Is Digging Out'
+                                    })
+                                console.log(err);
+                        }
                 }
         }
 
         const validator = (userInfo) => {
                 let errors = {};
                 if(userInfo.email!==undefined){
-                  if(userInfo.email.length===0){
-                        errors.email = 'Email Address Is Required'
-                  }
+                        if(userInfo.email.length===0){
+                                errors.email = 'Email Is Invalid'
+                        } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userInfo.email)){
+                                errors.email = 'Email Is Invalid';
+                                }
                 }
                 return errors;
         }
         return(
-                <Container>
+                <Container >
                         <Row  xs={2} md={4} lg={6}>
                         <Col></Col>
                         <Col lg={4}>
-                                <Form noValidate onSubmit={handleSubmit}>
+                                <Form ref={formRef} noValidate onSubmit={handleSubmit} >
                                 <Form.Group controlId="formBasicEmail">
                                         <Form.Label>Email address</Form.Label>
-                                        <Form.Control type="email" name = "email" placeholder="Enter email" onChange={(event)=>{
-                                                
-                                                setForgotEmail({
-                                                ...ForgotEmail,
-                                                [event.currentTarget.name]:event.currentTarget.value
-                                                })
-                                                
-                                        }} />
-                                          {
+                                        <Form.Control  type="email" name = "email" placeholder="Enter email" />
+
+                                        {
                                                 errors.email&&
                                                 <Form.Text style={{color:'red'}}>
                                                         {errors.email}
                                                 </Form.Text>
-                                         } 
+                                        } 
+                                        {
+                                                errors.error!==undefined&&
+                                                <Form.Text style={{color:'red'}}>
+                                                        {errors.info}
+                                                </Form.Text>
+                                        } 
                                 </Form.Group>
-                                <Button variant="primary" type="submit">
+                                <Button ref={btnRef} variant="primary" type="submit">
                                         Submit
                                 </Button>  
                                 </Form>

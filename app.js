@@ -34,7 +34,7 @@ app.use(cors());
 //app.listen(5000, "0.0.0.0",function() { console.log('Example app listening on port 5000!'); });
 //end app listen to the external ip
 
-app.listen(5000,function() { console.log('Example app listening on port 5000!');});
+app.listen(5000,'0.0.0.0',function() { console.log('Example app listening on port 5000!');});
 
 //app.use('/mongo',mongo);
 //adminSDK test 
@@ -45,7 +45,11 @@ app.listen(5000,function() { console.log('Example app listening on port 5000!');
 */
 const errorHandler = function(err,req,res,next) {
     //res.status(404).end();
-    res.sendStatus(404,'application/json',{"error":err});
+    console.log('err:'+err)
+    res.sendStatus(404,'application/json',{
+        error:true,
+        info:JSON.stringify(err)
+    });
 }
 
 app.response.sendStatus = function (statusCode, type, message) {
@@ -53,7 +57,12 @@ app.response.sendStatus = function (statusCode, type, message) {
       .status(statusCode)
       .send(message)
 }
-
+app.use((req,res,next)=>{
+    if(!req.headers || !req.headers.authorization){
+        next('You need to login first');
+        return false;
+    }
+})
 app.use('/adminSDK',(req,res,next)=>{
     if(req.body.token){
         next();

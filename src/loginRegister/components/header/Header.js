@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap';
 import {Register} from './Register';
 import {FormContext} from '../../context';
 import reducer from '../../reducer';
+import {Profile} from './profile';
 
 const Header=(props)=>{
     const [RegisterFormInfo,setRegisterForm] = useState({
@@ -85,11 +86,14 @@ const Header=(props)=>{
                             <li className="onhover-dropdown mobile-account"> <i className="fa fa-user" aria-hidden="true"></i> My Account
                             <ul className="onhover-show-div">
                                 <FormContext.Provider value = {value}>
-                                    <li>    
-                                        <Button variant="primary" onClick={logout}>
-                                        Logout
-                                        </Button>
-                                    </li>
+                                        <li> 
+                                            <Profile />
+                                        </li>
+                                        <li>    
+                                            <Button variant="primary" onClick={logout}>
+                                                Logout
+                                            </Button>
+                                        </li>
                                 </FormContext.Provider>
                             </ul>
                             </li>

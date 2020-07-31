@@ -1,64 +1,71 @@
-import React, {useState,useContext} from 'react';
+import React, {useState,useContext,useRef} from 'react';
 import { Modal,Button,Form } from 'react-bootstrap';
 import {FormContext} from '../../context';
 import {loginValidate} from '../../formValidator';
 import {setCookie} from './MenuFunctionController';
 var loginUrl = 'http://192.168.2.24:4000/login';
+let resetPasswordUrl = 'http://192.168.2.24:3000/order-system/forgot-password';
 export const Login = () => {
     const [show, setShow] = useState(false);
-
     const [formErrors,setErrors] = useState({})
-
+    const formRef = useRef(null);
+    const btnRef = useRef(null);
     const formContext = useContext(FormContext);
 
     const handleClose = () => {
       setShow(false);
       setErrors({});
-      formContext.setLoginForm({
-        email:'',
-        password:'',
-      })
     };
     const handleShow = () => setShow(true);
     
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       event.preventDefault();
       event.stopPropagation();
-      loginValidate(formContext.LoginFormInfo).then(errors=>{
-        setErrors(errors);
-        if(Object.keys(errors).length === 0 ){
-          fetch(loginUrl, {
-            method: 'POST', // or 'PUT'
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formContext.LoginFormInfo),
-          })
-          .then(response => response.json())
-          .then(data => {
-            console.log(data)
-            if(data.status==='failed'){
-              setErrors({
-                info:data.info       
-              })
-            }
-              if(data.status==='success'){
-                  setCookie('token',data.token);
-                  setCookie('username',data.username);
-                  setCookie('email',data.email);
-                  setShow(false);
-                  formContext.dispatch({type:'login',payload:data})
-              }
-          }).catch((error) => {
-              console.error('Error:', error);
-          });
+      let value = {
+        email:formRef.current['email'].value,
+        password:formRef.current['password'].value,
       }
-      })
+      console.log(value)
+      let errors = await loginValidate(value);
+      setErrors(errors);
+      if(Object.keys(errors).length!==0) return false;
+
+      btnRef.current.setAttribute("disabled", true);
+try{
+  const response = await fetch(loginUrl, {
+    method: 'POST', // or 'PUT'
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(value),
+  })
+
+    let data = await response.json();
+    console.log(data)
+
+    btnRef.current.removeAttribute("disabled");
+    if(data.error){ setErrors(data); return false;}
+
+    if(data.error===false){
+        setCookie('token',data.token);
+        setCookie('username',data.username);
+        setCookie('email',data.email);
+        setShow(false);
+        formContext.dispatch({type:'login',payload:data})
+        return true;
+    }    
+} catch(err) {
+  console.log(err);
+  setErrors({
+    error:true,
+    info:'Something is wrong.'
+  })
+}
     }
 
     return (
       <>
-        <Button variant="primary" onClick={handleShow}>
+        <Button ref={btnRef} variant="primary" onClick={handleShow}>
           Login
         </Button>
   
@@ -72,39 +79,23 @@ export const Login = () => {
             <Modal.Title>Login The Account</Modal.Title>
           </Modal.Header>
 
-            <Form noValidate onSubmit={handleSubmit}>
+            <Form ref={formRef} noValidate onSubmit={handleSubmit}>
               <Modal.Body>
           
                   <Form.Group controlId="formBasicEmail">
                     <Form.Label>User Account</Form.Label>
-                    <Form.Control required type="email" name="email" placeholder="Enter Email" onChange={
-                       (event)=>
-                       {
-                         formContext.setLoginForm({
-                           ...formContext.LoginFormInfo,
-                           [event.currentTarget.name]:event.currentTarget.value
-                         })
-                       }
-                      }    />      
-          {
-            formErrors.email&&
-              <Form.Text style={{color:'red'}}>
-                {formErrors.email}
-              </Form.Text>
-          } 
+                    <Form.Control required type="email" name="email" placeholder="Enter Email" />      
+              {
+                formErrors.email&&
+                  <Form.Text style={{color:'red'}}>
+                    {formErrors.email}
+                  </Form.Text>
+              } 
                   </Form.Group>
 
                   <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" name="password" placeholder="Password" onChange={
-                      (event)=>
-                      {
-                        formContext.setLoginForm({
-                          ...formContext.LoginFormInfo,
-                          [event.currentTarget.name]:event.currentTarget.value
-                        })
-                      }
-                      } />
+                    <Form.Control type="password" name="password" placeholder="Password" />
               {
                 formErrors.password &&
                   <Form.Text style={{color:'red'}}>
@@ -114,14 +105,9 @@ export const Login = () => {
                   </Form.Group>
 
                   <Form.Group controlId="formBasicCheckbox">
-          
-             
                         <Form.Check type="checkbox" name="checkbox" label="Remember Me" />
-                  
-                        <a href="http://192.168.2.24:3000/order-system/forgot-password">Forgot The Password</a>
-               
+                        <a href={resetPasswordUrl}>Forgot The Password</a>
                   </Form.Group>
-
                   {
                 formErrors.info &&
                   <Form.Text style={{color:'red'}}>

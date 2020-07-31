@@ -10,9 +10,7 @@ export const loginValidate =async (userInfo)=>{
   if(userInfo.password!==undefined){    
     if(userInfo.password.length===0){
     errors.password = 'Password Is Required';
-  } else if(userInfo.password.length<6){
-    errors.password = 'Password Length Must Be Greater Than 6';
-  } 
+    }
   }
 
   return errors;

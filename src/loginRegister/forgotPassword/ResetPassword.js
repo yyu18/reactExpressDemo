@@ -1,4 +1,4 @@
-import React, { useState,useMemo } from 'react';
+import React, { useState,useMemo,useRef } from 'react';
 import { useLocation} from 'react-router-dom'
 import { Button,Form,Container,Row,Col } from 'react-bootstrap';
 var resetPassword = 'http://192.168.2.24:4000/checkResetLink';
@@ -8,16 +8,15 @@ function useQuery() {
 
 const ResetPassword = ()=>{
     let query = useQuery();
-    const [errors,setErrors] = useState({});
-
-    const [password,setPassword] = useState({
-        password:'',
-        confirmPassword:''
-    });
+    const [validLink,checkValidLink] = useState({});
+    const inputRef = useRef(null);
+    const btnRef = useRef(null);
+    const [errors,setErrors] = useState({})
 
     useMemo(()=>{
-        console.log(errors.status);
-        if(errors.status===undefined){
+        if(validLink.error===undefined){
+            if(query.get('token')!==undefined && query.get('token')!==null && query.get('token')!==''){
+                console.log('usememo triggered')
                 fetch(resetPassword, {
                     method: 'POST',
                     headers: {
@@ -30,47 +29,68 @@ const ResetPassword = ()=>{
                   .then(response => response.json())
                   .then(data => {
                     console.log(data);
-                    if(data.status===false){
-                        setErrors(data);
-                    }
+                    checkValidLink(data);
                   }).catch((error) => {
+                    checkValidLink({
+                        error:true,
+                        info:'Something wrong'
+                    });
                       console.error('Error:', error);
                   });  
+            } else {
+                checkValidLink({
+                    error:true,
+                    info:'Link Is Invalid'
+                })
+            }
                 }
-            },[errors,query])
-    const handleSubmit = (event) => {
+            },[validLink,query])
+    const handleSubmit = async (event) => {
         event.preventDefault();
         event.stopPropagation();
-        var errors = validator(password);
+        let value = {
+            password:inputRef.current['password'].value,
+            confirmPassword:inputRef.current['confirmPassword'].value
+        }
+        let errors = validator(value);
         setErrors(errors);
         if(Object.keys(errors).length === 0 ){
-            fetch(resetPassword, {
-                method: 'POST', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    password:password.password,
-                    token:query.get('token')
-                }),
-              })
-              .then(response => response.json())
-              .then(data => {
-                console.log(data);
-              }).catch((error) => {
-                  console.error('Error:', error);
-              }); 
+            btnRef.current.setAttribute("disabled", true);
+            try{
+                let response = await fetch(resetPassword, {
+                    method: 'POST', 
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        password:value.password,
+                        token:query.get('token')
+                    }),
+                  })
+                  let data = await response.json();
+                  setErrors(data);
+                  if(data.error){
+                    btnRef.current.removeAttribute("disabled");
+                  }
+            } catch(err) {
+                    btnRef.current.removeAttribute("disabled");
+                    setErrors({
+                        error:true,
+                        info:'Something Wrong, Hubert Is Digging Out'
+                    })
+                    console.log(err);
+            }
         }
     }
-
-
     const validator = (userInfo) => {
         let errors = {};
         
         if(userInfo.password!==undefined){
           if(userInfo.password.length===0){
                 errors.password = 'Password Is Required'
-          }
+          } else if(userInfo.password.length<6){
+            errors.password = 'Password Length Must Be Greater Than 6';
+          } 
         } else {
             errors.password = 'Password Is Required'
         }
@@ -88,27 +108,20 @@ const ResetPassword = ()=>{
 }
 
     return(
-        <div>
+        <>
         {
             //errors.status 
-        errors.status!==undefined ? 
-            <h1>{errors.info}</h1>
+        validLink.error ? 
+            <h1>{validLink.info}</h1>
             :
             <Container>
                         <Row  xs={2} md={4} lg={6}>
                         <Col></Col>
                         <Col lg={4}>
-                                <Form noValidate onSubmit={handleSubmit}>
+                                <Form ref={inputRef} noValidate onSubmit={handleSubmit}>
                                 <Form.Group controlId="formPassword">
                                         <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" name = "password" placeholder="Enter Password" onChange={(event)=>{
-                                                
-                                                setPassword({
-                                                ...password,
-                                                [event.currentTarget.name]:event.currentTarget.value
-                                                })
-                                                
-                                        }} />
+                                        <Form.Control type="password" name = "password" placeholder="Enter Password"/>
                                           {
                                                 errors.password&&
                                                 <Form.Text style={{color:'red'}}>
@@ -119,14 +132,7 @@ const ResetPassword = ()=>{
 
                                 <Form.Group controlId="formConfirmPassword">
                                         <Form.Label>Confirm Password</Form.Label>
-                                        <Form.Control type="password" name = "confirmPassword" placeholder="Confirm Password" onChange={(event)=>{
-                                                
-                                                setPassword({
-                                                    ...password,
-                                                    [event.currentTarget.name]:event.currentTarget.value
-                                                })
-                                                
-                                        }} />
+                                        <Form.Control type="password" name = "confirmPassword" placeholder="Confirm Password"/>
                                           {
                                                 errors.confirmPassword&&
                                                 <Form.Text style={{color:'red'}}>
@@ -134,9 +140,15 @@ const ResetPassword = ()=>{
                                                 </Form.Text>
                                          } 
                                 </Form.Group>
-                                <Button variant="primary" type="submit">
+                                <Button ref={btnRef} variant="primary" type="submit">
                                         Submit
                                 </Button>  
+                                        {
+                                                errors.error!==undefined&&
+                                                <Form.Text style={{color:'red'}}>
+                                                        {errors.info}
+                                                </Form.Text>
+                                         } 
                                 </Form>
                         </Col>
                         <Col></Col>
@@ -145,7 +157,7 @@ const ResetPassword = ()=>{
                 </Container>
        
         }
-        </div> 
+        </> 
     )
 } 
 export default ResetPassword; 
