@@ -1,19 +1,11 @@
 var checkEmail = 'http://192.168.2.24:4000/checkEmail';
-export const loginValidate =async (userInfo)=>{
-  let errors = {};
-  if(userInfo.email!==undefined){
-    if(userInfo.email.length===0){
-      errors.email = 'Email Address Is Required'
-    }
-  }
-
-  if(userInfo.password!==undefined){    
-    if(userInfo.password.length===0){
-    errors.password = 'Password Is Required';
-    }
-  }
-
-  return errors;
+export const loginValidate = (value)=>{
+  let keys = Object.keys(value);
+  if(keys.length===0) return {};
+  return keys.reduce((acc,cur)=>{
+      if(!value[cur]) acc[cur] = cur+' is required';
+        return acc
+  },{})
 }
 export const Validate = async (userInfo)=>{
   console.log(userInfo)
@@ -34,8 +26,8 @@ if(userInfo.email!==undefined){
         })
       })
       const data = await response.json();
-      if(data.status!=='success'){
-        errors.email = data.status;
+      if(data.error){
+        errors.email = data.info;
       }
     }
   } else {

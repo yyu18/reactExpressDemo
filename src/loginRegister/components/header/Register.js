@@ -1,8 +1,8 @@
 import React, {useState,useContext} from 'react';
 import { Modal,Button,Form } from 'react-bootstrap';
-import {FormContext} from '../../context';
+import {FormContext} from '../../../context';
 import {Validate} from '../../formValidator';
-import {setCookie} from './MenuFunctionController';
+import Cookies from 'js-cookie';
 var registerURL = 'http://192.168.2.24:4000/register';
 
 export const Register = () => {
@@ -40,9 +40,9 @@ export const Register = () => {
             .then(response => response.json())
             .then(data => {
                 if(data.status==='success'){
-                    setCookie('token',data.token);
-                    setCookie('username',data.username);
-                    setCookie('email',data.email);
+                    Cookies.set('token',data.token);
+                    Cookies.set('username',data.username);
+                    Cookies.set('email',data.email);
                     formContext.dispatch({type:'register',payload:data})
                 }
             }).catch((error) => {

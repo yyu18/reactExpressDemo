@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import {  useHistory  } from 'react-router-dom'
 export const Profile = (props) => {
-
+    const history = useHistory();
     const handleClick = () => {
-        window.open("http://192.168.2.24:3000/order-system/myProfile");
+        history.push('/order-system/myProfile');
     }
 
     return (

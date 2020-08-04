@@ -4,7 +4,7 @@ var https = require("https");
 var cors = require('cors');
 var bodyParser = require('body-parser');
 //var mongo = require('./router/mongodb_connect.js');
-
+/*
 require('./tools/send_fcm_message.js')();
 require('./tools/get_access_token.js')();
 require('./tools/subscribe_topic.js')();
@@ -12,8 +12,10 @@ require('./tools/send_fcm_topic.js')();
 require('./tools/unsubscribe_topic.js')();
 require('./tools/check_topics.js')();
 require('./tools/valid_url.js')();
-var adminSDKRouter = require('./router/adminSDKRouter.js');
-const { endianness } = require('os');
+*/
+//const adminSDKRouter = require('./router/adminSDKRouter.js');
+const myProfileRouter = require('./myProfile/my-profile-router.js');
+const {Users_findOne} = require('./mongoHandler/dbConnect')
 //var token = 'fg1Low5vUOVNJHrKNCOgwP:APA91bGVLWsGZnIOOoffeBcs1_UeVGvkfBwRwHGToi5M8PbA9SG7o23dwlu63xiG4SsRFs62jkG-ie2UY2AWD-nHIAjud1KvBNkD4UhpIY5uUsUB4izZw_jnck9kWDllofw2xYbVnTfH';
 //var topic = 'notifyTest';
 
@@ -46,9 +48,16 @@ app.listen(5000,'0.0.0.0',function() { console.log('Example app listening on por
 const errorHandler = function(err,req,res,next) {
     //res.status(404).end();
     console.log('err:'+err)
+    if(typeof err ==='object')  {
+        res.sendStatus(404,'application/json',{
+            error:true,
+            info:JSON.stringify(err)
+        });
+        return false;
+    }
     res.sendStatus(404,'application/json',{
         error:true,
-        info:JSON.stringify(err)
+        info:err
     });
     return false;
 }
@@ -59,20 +68,21 @@ app.response.sendStatus = function (statusCode, type, message) {
       .send(message)
 }
 app.use((req,res,next)=>{
-    if(!req.headers || !req.headers.authorization){
-        next('You need to login first');
-        return false;
-    }
-})
-app.use('/adminSDK',(req,res,next)=>{
-    if(req.body.token){
+    if(!(req.headers && req.headers.authorization)) return next('You need to login first');
+
+    let token = req.headers.authorization.split(' ')[1];
+    Users_findOne(token,(err,user)=>{
+        if(err) {
+            return next(err);
+        }
+        if(!user) return next('You need to login first');
+        console.log('middleware check')
         next();
-    } else {
-        res.sendStatus(404,'application/json','{"error":"user is not logged"}');    
-    }
+    })
 })
 
-app.use('/adminSDK',adminSDKRouter);
+app.use('/my-profile',myProfileRouter);
+//app.use('/adminSDK',adminSDKRouter);
 app.use(errorHandler);
 /*
 //begin router level middleware

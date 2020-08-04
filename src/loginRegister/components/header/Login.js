@@ -1,8 +1,8 @@
 import React, {useState,useContext,useRef} from 'react';
 import { Modal,Button,Form } from 'react-bootstrap';
-import {FormContext} from '../../context';
+import {FormContext} from '../../../context';
 import {loginValidate} from '../../formValidator';
-import {setCookie} from './MenuFunctionController';
+import Cookies from 'js-cookie';
 var loginUrl = 'http://192.168.2.24:4000/login';
 let resetPasswordUrl = 'http://192.168.2.24:3000/order-system/forgot-password';
 export const Login = () => {
@@ -26,7 +26,8 @@ export const Login = () => {
         password:formRef.current['password'].value,
       }
       console.log(value)
-      let errors = await loginValidate(value);
+      let errors = loginValidate(value);
+      console.log(errors)
       setErrors(errors);
       if(Object.keys(errors).length!==0) return false;
 
@@ -41,24 +42,25 @@ try{
   })
 
     let data = await response.json();
-    console.log(data)
 
-    btnRef.current.removeAttribute("disabled");
-    if(data.error){ setErrors(data); return false;}
+    if(data.error){
+        btnRef.current.removeAttribute("disabled");
+        setErrors(data); return false;}
 
     if(data.error===false){
-        setCookie('token',data.token);
-        setCookie('username',data.username);
-        setCookie('email',data.email);
+        Cookies.set('token', data.token);
+        Cookies.set('username',data.username);
+        Cookies.set('email',data.email);
         setShow(false);
         formContext.dispatch({type:'login',payload:data})
         return true;
     }    
 } catch(err) {
+  btnRef.current.removeAttribute("disabled");
   console.log(err);
   setErrors({
     error:true,
-    info:'Something is wrong.'
+    info:'Connection Error.'
   })
 }
     }

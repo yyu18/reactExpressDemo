@@ -1,11 +1,12 @@
 import React,{useMemo,useReducer,useState} from 'react';
-import {openSearch,closeSearch,openNav,closeNav,getCookie,delCookie} from './MenuFunctionController';
+import {openSearch,closeSearch,openNav,closeNav} from './MenuFunctionController';
 import {Login} from './Login';
 import { Button } from 'react-bootstrap';
 import {Register} from './Register';
-import {FormContext} from '../../context';
+import {FormContext} from '../../../context';
 import reducer from '../../reducer';
 import {Profile} from './profile';
+import Cookies from 'js-cookie';
 
 const Header=(props)=>{
     const [RegisterFormInfo,setRegisterForm] = useState({
@@ -13,10 +14,6 @@ const Header=(props)=>{
         email:'',
         password:'',
         confirmPassword:''
-    });
-    const [LoginFormInfo,setLoginForm] = useState({
-        email:'',
-        password:'',
     });
     const [UserInfo, DispatchUser]  = useReducer(reducer,{});
     //useCallback example
@@ -32,14 +29,10 @@ const Header=(props)=>{
     )*/
     
     const logout = ()=>{
-        delCookie('token');
-        delCookie('username');
-        delCookie('email');
+        Cookies.remove('token');
+        Cookies.remove('username');
+        Cookies.remove('email');
         DispatchUser({type:'login',payload:{}});
-        setLoginForm({   
-            email:'',
-            password:''
-        });
         setRegisterForm({
             username:'',
             email:'',
@@ -52,16 +45,15 @@ const Header=(props)=>{
         return {
             RegisterFormInfo:RegisterFormInfo,
             setRegisterForm:setRegisterForm,
-            LoginFormInfo:LoginFormInfo,
-            setLoginForm:setLoginForm,
             //setLoginUserInfo:UserInfoChange,
             dispatch:DispatchUser
         }
-        },[RegisterFormInfo,setRegisterForm,LoginFormInfo,setLoginForm,DispatchUser])
+        },[RegisterFormInfo,setRegisterForm,DispatchUser])
   
    const token = useMemo(()=>{
+  //''=>false,
        console.log(UserInfo);
-       return getCookie('token');
+       return Cookies.get('token');
    },[UserInfo])
     return( 
         <header>

@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost/usersInfo',
 {
   useNewUrlParser: true,
   useUnifiedTopology: true 
-});
+}).catch(err=>console.log(err));
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -99,17 +99,19 @@ function checkResetLink(req,res,next){
 }
 
 function forgotPassword(req,res,next){
-  //req.body.email!==undefined && req.body.email!==null && req.body.email!==''
-  //req.body.email && req.body.email!==''
-  if(!req.body.email||req.body.email==='') {next('Email Is Invalid');}
+  //req.body.email!==undefined && req.body.email!==null && req.body.email.length!==0
+  //req.body.email
+  //req.body.email===undefined||req.body.email===null||req.body.email.length===0
+  //!req.body.email
+  if(!req.body.email) return next('Email Is Invalid');
   Users.findOne({ email: req.body.email }, function (err, user) {
-      if(err) next(err);
-      if(!user) next('Email Is Invalid');
+      if(err) return next(err);
+      if(!user) return next('Email Is Invalid');
       const resetToken = crypto.randomBytes(20).toString('hex');
       user.resetPasswordToken = resetToken;
       user.resetPasswordExpire = Date.now()+360000;
       user.save((err,result)=>{
-      if(err) next(err);
+      if(err) return next(err);
       if(result){
           console.log(result);
       }
@@ -118,7 +120,7 @@ function forgotPassword(req,res,next){
       //nodemailer begin
       nodeMailer(req.body.email,resetToken)
       .catch((err)=>{
-      next(err)
+      return next(err)
       })
       .then((e)=>{
       console.log(e);
@@ -128,27 +130,20 @@ function forgotPassword(req,res,next){
     })
 }
 
-function checkEmail (req,res,next) {
-  if(req.body.email) {
-    Users.findOne({ email: req.body.email }, function (err, user) {
-      if(err){
-        next(err);
-        res.json({
-          error:err
-        })
-      } else {
-        if(user){
-          res.json({
-            status:'Email Already Be Used'
-          })
-        } else {
-          res.json({
-            status:'success'
-          })
-        }
+function checkEmail(req,res,next){
+  //undefined, null, '', all return true
+  if(!req.body.email) return next('Email Is Empty');
+  Users.findOne({ email: req.body.email }, function (err, user) {
+      if(err) return next(err);
+      if(!user) {
+        res.send({
+          error:false,
+          info:'Email Is Valid'
+        });
+        return true;
       }
-    })
-  }
+      return next('Email Already Be Used')
+  })
 }
 
 function register(req,res,next) {
@@ -196,7 +191,7 @@ function login(req,res,next) {
     if(!req.body.email || req.body.email==='' || !req.body.password || req.body.password==='') {res.json({ error:true, info:'email or password is wrong' });return false}
 
     Users.findOne({ email: req.body.email }, function (err, user) {
-        if(err) next(err);
+        if(err) return next(err);
         if(!user)  {res.json({ error:true, info:'email or password is wrong'}); return false}
         console.log(user.password)
         var passwordVerify = passwordHash.verify(req.body.password, user.password)
