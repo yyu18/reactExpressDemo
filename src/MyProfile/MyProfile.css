@@ -174,7 +174,14 @@ textarea {
 }
 
 .addBtn {
-	width:8%;
+	width:6%;
+	display:inline-block;
+	float:right;
+	cursor: pointer;
+}
+
+.editNameBtn {
+	width:12%;
 	display:inline-block;
 	float:right;
 	cursor: pointer;
@@ -306,3 +313,14 @@ textarea {
     animation-duration: 0.5s;
     animation-timing-function: ease-in;
 } 
+
+.profile-p {
+	box-sizing:border-box;
+    width: 90%;
+	white-space: pre-wrap
+}
+
+.profile-delbtn{
+	float:right;
+	cursor:pointer
+}

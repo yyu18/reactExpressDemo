@@ -53,6 +53,7 @@ try{
         Cookies.set('email',data.email);
         setShow(false);
         formContext.dispatch({type:'login',payload:data})
+        window.location.reload(false);
         return true;
     }    
 } catch(err) {

@@ -1,6 +1,7 @@
 import React,{ useContext } from 'react';
 import { MyProfileContext } from '../context';
-import TextArea from './components/TextArea'
+import TextArea from './components/TextArea';
+import InputArea, {CheckBoxArea} from './components/InputArea';
 //map, reduce, filter
 const TextEditor = () => {
     const myProfile = useContext(MyProfileContext);
@@ -10,17 +11,22 @@ const TextEditor = () => {
     sections.map((section,index)=>{
         switch(section) {
             case 'textarea':
-                console.log('textarea');
                 state[section].map((info,index)=>{
                     rows.push(<TextArea key={index} info={info} />);
                     return true;
                 })
                 break;
-            case "input":
-                console.log('input')
+            case "inputList":
+                state[section].map((info,index)=>{
+                    rows.push(<InputArea key={index+info.type} info={info} />);
+                    return true;
+                })
                 break;
             case "checkbox":
-                console.log('checkbox')
+                state[section].map((info,index)=>{
+                    rows.push(<CheckBoxArea key={index+info.type} info={info} />);
+                    return true;
+                })
                 break;
             default:
                 console.log('no type found');

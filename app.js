@@ -15,7 +15,8 @@ require('./tools/valid_url.js')();
 */
 //const adminSDKRouter = require('./router/adminSDKRouter.js');
 const myProfileRouter = require('./myProfile/my-profile-router.js');
-const {Users_findOne} = require('./mongoHandler/dbConnect')
+
+const { AuthUser } = require('./myProfile/auth');
 //var token = 'fg1Low5vUOVNJHrKNCOgwP:APA91bGVLWsGZnIOOoffeBcs1_UeVGvkfBwRwHGToi5M8PbA9SG7o23dwlu63xiG4SsRFs62jkG-ie2UY2AWD-nHIAjud1KvBNkD4UhpIY5uUsUB4izZw_jnck9kWDllofw2xYbVnTfH';
 //var topic = 'notifyTest';
 
@@ -48,7 +49,8 @@ app.listen(5000,'0.0.0.0',function() { console.log('Example app listening on por
 const errorHandler = function(err,req,res,next) {
     //res.status(404).end();
     console.log('err:'+err)
-    if(typeof err ==='object')  {
+
+    if( err instanceof Object )  {
         res.sendStatus(404,'application/json',{
             error:true,
             info:JSON.stringify(err)
@@ -67,21 +69,8 @@ app.response.sendStatus = function (statusCode, type, message) {
       .status(statusCode)
       .send(message)
 }
-app.use((req,res,next)=>{
-    if(!(req.headers && req.headers.authorization)) return next('You need to login first');
 
-    let token = req.headers.authorization.split(' ')[1];
-    Users_findOne(token,(err,user)=>{
-        if(err) {
-            return next(err);
-        }
-        if(!user) return next('You need to login first');
-        console.log('middleware check')
-        next();
-    })
-})
-
-app.use('/my-profile',myProfileRouter);
+app.use('/my-profile',AuthUser,myProfileRouter);
 //app.use('/adminSDK',adminSDKRouter);
 app.use(errorHandler);
 /*

@@ -39,6 +39,7 @@ const Header=(props)=>{
             password:'',
             confirmPassword:''
         })
+        window.location.reload(false);
     }
 
     const value = useMemo(()=> {
