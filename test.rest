@@ -1,0 +1,6 @@
+POST localhost:5000/my-profile
+Content-Type: application/json
+
+{
+    "body":"sfd"
+}

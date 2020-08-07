@@ -4,40 +4,36 @@ import EditBtn from './editBtn.jpg';
 import AddBtn from './addBtn.jpg';
 import { Validator } from '../validator';
 import { InputGroup,FormControl,ListGroup } from 'react-bootstrap';
-import { deleteContentByIndex, changeContentByID, deleteContentByID } from './CURDFunc';
+import { deleteContentByIndex, changeContentByID, deleteContentByID, changeNameByID } from './CURDFunc';
 
-const ListInputArea = (props) => {
+const InputAreaList = (props) => {
     const myProfile = useContext(MyProfileContext);
-    const handleDelete = (value) => {
-        console.log(value)
-        let listValue = deleteContentByIndex(value,props.info.content);
-
-        myProfile.setState({
-            ...myProfile.state,
-            [props.info.type]:changeContentByID(props.info.id,myProfile.state[props.info.type],listValue)
-        })
+    const handleDelete = (i) => {
+        let listValue = deleteContentByIndex(i,props.info.content);
+        props.info.content = listValue;
+        myProfile.setState(
+            changeContentByID(props.info.id, myProfile.state,props.info.content)
+        )
     }
 
 
     let rows = [];
     props.info.content.map((list,index)=>{
-    rows.push(<ListGroup.Item key = {index+props.info.type}>{list}<i className = "fa fa-trash" onClick = {()=>handleDelete(index)} ></i></ListGroup.Item>)
+        rows.push(<ListGroup.Item key = {index+props.info.type}>{list}<i className = "fa fa-trash" onClick = {()=>handleDelete(index)} ></i></ListGroup.Item>)
+        return true;
     })
     return (<>{rows}</>)
 }
 
 
-const InputArea = (props) => {
+export const InputArea = (props) => {
     const [errors, setErrors] = useState({});
     const myProfile = useContext(MyProfileContext);
 
     const handleDelete = () => {
-        console.log(props.info.type)
-        let newState = deleteContentByID(props.info.id,myProfile.state[props.info.type]);
-        myProfile.setState({
-            ...myProfile.state,
-            [props.info.type]:newState
-        })
+        myProfile.setState(
+            deleteContentByID(props.info.id,myProfile.state)
+        )
     }
 
     const handleClick  = () => {
@@ -52,7 +48,7 @@ const InputArea = (props) => {
         const error = Validator(content);
         setErrors(error);
         if(!error.error){ 
-            let listValue = props.info.content.push(content);
+            props.info.content.push(content);
             let textarea = document.getElementById(props.info.id);
             textarea.classList.toggle("hide");
         }
@@ -68,7 +64,7 @@ const InputArea = (props) => {
             <div>
                 <div className = "profile-p">
                 <ListGroup variant="flush">
-                    <ListInputArea info={props.info}/>
+                    <InputAreaList info={props.info}/>
                 </ListGroup>
                 </div>
                 <i className = "profile-delbtn fa fa-trash" onClick = {handleDelete}></i>
@@ -92,16 +88,14 @@ const InputArea = (props) => {
     )
 }
 
-export const CheckBoxList = (props)=>{
+export const CheckBoxAreaList = (props)=>{
     const myProfile = useContext(MyProfileContext);
-    const handleDelete = (value) => {
-        let newContent = deleteContentByIndex(value,props.info.content);
-        let newState = changeContentByID(props.info.id,myProfile.state[props.info.type],newContent)
-
-       myProfile.setState({
-           ...myProfile.state,
-           [props.info.type]:newState
-       })
+    const handleDelete = (i) => {
+        let listValue = deleteContentByIndex(i,props.info.content);
+        props.info.content = listValue;
+        myProfile.setState(
+            changeContentByID(props.info.id, myProfile.state,props.info.content)
+        )
     }
 
     let rows = [];
@@ -114,7 +108,8 @@ export const CheckBoxList = (props)=>{
             <ListGroup.Item >{e.info}</ListGroup.Item>
             <i className = "profile-delbtn fa fa-trash" onClick = {()=>handleDelete(index)}></i>
         </InputGroup>
-        )
+        );
+        return true;
     })
     return (
         <>
@@ -128,12 +123,9 @@ export const CheckBoxArea = (props) =>{
     const myProfile = useContext(MyProfileContext);
 
     const handleDelete = () => {
-        console.log(props.info.type)
-        let newState =deleteContentByID(props.info.id,myProfile.state[props.info.type]);
-        myProfile.setState({
-            ...myProfile.state,
-            [props.info.type]:newState
-        })
+        myProfile.setState(
+            deleteContentByID(props.info.id,myProfile.state)
+        )
     }
 
     const handleClick  = () => {
@@ -180,7 +172,7 @@ export const CheckBoxArea = (props) =>{
             <img src={AddBtn} className="addBtn" alt="btn" onClick = {handleClick}/>
             <div>
                 <div className = "profile-p">
-                    <CheckBoxList info={props.info} />
+                    <CheckBoxAreaList info={props.info} />
                 </div>
                 <i className = "profile-delbtn fa fa-trash" onClick = {handleDelete}></i>
             </div>
@@ -202,4 +194,85 @@ export const CheckBoxArea = (props) =>{
         )
 }
 
-export default InputArea;
+
+export const TextArea = (props) => {
+    const [errors, setErrors] = useState({});
+    const myProfile = useContext(MyProfileContext);
+
+    const handleDelete = () => {
+        myProfile.setState(
+            deleteContentByID(props.info.id,myProfile.state)
+        )
+    }
+
+    const handleClick  = (id) => {
+        let textarea = document.getElementById(id);
+		textarea.classList.toggle("hide");
+    }
+    const handleEdit = (event) =>{
+        event.preventDefault();
+        event.stopPropagation();
+        let content = document.getElementById(props.info.id).children[0].value;
+        const error = Validator(content);
+        setErrors(error);
+        if(!error.error){ 
+            let newState = changeContentByID(props.info.id, myProfile.state, content)
+            myProfile.setState(newState)
+            let textarea = document.getElementById(props.info.id);
+            textarea.classList.toggle("hide");         
+        }
+    }
+    const EditName = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        let name = document.getElementById(props.info.id+props.info.name).children[0].children[0].value;
+        const error = Validator(name);
+        setErrors(error);
+        if(!error.error){ 
+            let newState = changeNameByID(props.info.id, myProfile.state, name)
+            console.log(newState)
+            //myProfile.setState(newState)
+            let textarea = document.getElementById(props.info.id+props.info.name);
+            console.log(textarea)       
+        }
+    }
+    return(
+        <section>
+        <div className="sectionTitle">
+            <h1>{props.info.name}</h1>
+            <img src={EditBtn} className="editNameBtn" alt="btn" onClick={() => handleClick(props.info.id+props.info.name)}/>
+            <div id={props.info.id+props.info.name} className="textarea quickFade">
+                <InputGroup className="mb-3">
+                    <FormControl defaultValue={props.info.name}/>
+                </InputGroup>
+                <input type="submit" className="submitBtn" value="Edit" onClick = {EditName}/>
+                {
+                    errors.error &&
+                    <p>{errors.info}</p>
+                }
+            </div>
+        </div>
+        <div className="sectionContent">
+        <img src={AddBtn} className="addBtn" alt="btn" onClick = {() => handleClick(props.info.id)}/>
+            <div>
+                <p className = "profile-p">{props.info.content}</p>
+                <i style={delbtn} className="fa fa-trash" onClick = {handleDelete}></i>
+            </div>
+            <div id={props.info.id} className="textarea quickFade">
+                <textarea placeholder="Introduce Yourself" defaultValue={props.info.content}></textarea>
+                <input type="submit" className="submitBtn" value="Edit" onClick = {handleEdit}/>
+                {
+                    errors.error &&
+                    <p>{errors.info}</p>
+                }
+            </div>
+
+        </div>
+        <div className="clear"></div>
+    </section>
+        )
+}
+const delbtn={
+	float:"right",
+	cursor:"pointer"
+}

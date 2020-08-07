@@ -4,8 +4,7 @@ import TextEditor from './TextEditor';
 import { makeid } from '../uniqueID';
 
 const CheckToken = (props)=>{
-    const [state,setState] = useState({	  
-        inputList:[
+    const [state,setState] = useState([
             {
                 id:makeid(20),
                 name:'username',
@@ -21,9 +20,7 @@ const CheckToken = (props)=>{
                     'aawd','qwdsad','sadfewfew','wefsdf'
                 ],
                 type:'inputList'
-            }
-        ],
-        textarea:[
+            },
             {   
                 id:makeid(20),
                 name:'profile',
@@ -35,10 +32,7 @@ const CheckToken = (props)=>{
                 name:'experience',
                 content:'sdf',
                 type:'textarea'
-            }
-        ],
-    
-        checkbox:[
+            },
             {
                 id:makeid(20),
                 name:'Computer Skills',
@@ -66,8 +60,7 @@ const CheckToken = (props)=>{
                 ],
                 type:'checkbox'
             }
-        ]
-        });
+        ]);
     const value = useMemo(()=> {
         return {
             state:state,
