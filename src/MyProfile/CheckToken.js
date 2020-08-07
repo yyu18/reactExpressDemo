@@ -5,20 +5,6 @@ import { makeid } from '../uniqueID';
 
 const CheckToken = (props)=>{
     const [state,setState] = useState({	  
-        textarea:[
-            {   
-                id:makeid(20),
-                name:'profile',
-                content:'sdf',
-                type:'textarea'
-            },
-            {
-                id:makeid(20),
-                name:'experience',
-                content:'sdf',
-                type:'textarea'
-            }
-        ],
         inputList:[
             {
                 id:makeid(20),
@@ -37,24 +23,43 @@ const CheckToken = (props)=>{
                 type:'inputList'
             }
         ],
+        textarea:[
+            {   
+                id:makeid(20),
+                name:'profile',
+                content:'sdf',
+                type:'textarea'
+            },
+            {
+                id:makeid(20),
+                name:'experience',
+                content:'sdf',
+                type:'textarea'
+            }
+        ],
+    
         checkbox:[
             {
                 id:makeid(20),
                 name:'Computer Skills',
                 content:[
                     {
+                        id:1,
                         checked:false,
                         info:'aawd'
                     },
                     {
+                        id:2,
                         checked:false,
                         info:'aawd'
                     },
                     {
+                        id:3,
                         checked:false,
                         info:'aawd'
                     },
                     {
+                        id:4,
                         checked:false,
                         info:'aawd'
                     }
