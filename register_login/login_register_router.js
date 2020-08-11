@@ -1,6 +1,5 @@
 const express = require('express');
 const passwordHash = require('password-hash');
-const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const { nodeMailer } = require('./nodeMailer');
@@ -19,6 +18,7 @@ db.once('open', function() {
   console.log('mongo connected');
 });
 const userSchema = new mongoose.Schema({
+    userId:String,  
     username:String,
     email:String,
     password:String,
@@ -97,7 +97,15 @@ function checkResetLink(req,res,next){
     })
   }
 }
-
+const makeid = (length) => {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 function forgotPassword(req,res,next){
   //req.body.email!==undefined && req.body.email!==null && req.body.email.length!==0
   //req.body.email
@@ -107,7 +115,7 @@ function forgotPassword(req,res,next){
   Users.findOne({ email: req.body.email }, function (err, user) {
       if(err) return next(err);
       if(!user) return next('Email Is Invalid');
-      const resetToken = crypto.randomBytes(20).toString('hex');
+      const resetToken = makeid(20);
       user.resetPasswordToken = resetToken;
       user.resetPasswordExpire = Date.now()+360000;
       user.save((err,result)=>{
@@ -146,10 +154,17 @@ function checkEmail(req,res,next){
   })
 }
 
-function register(req,res,next) {
-    var hashedPassword = passwordHash.generate(req.body.password);
-    //jet token
-    var token = jwt.sign(
+const register = (req,res,next) => {
+  if(!(req.body.username&&req.body.eamil&&req.body.password)) {
+      return res.sendStatus(400,'application/json',{
+          error:true,
+          info:'Username Or Password Is Unavailable'
+      })
+  }
+
+  let hashedPassword = passwordHash.generate(req.body.password);
+  
+  let token = jwt.sign(
       { 
         username:req.body.username,
         email:req.body.email,
@@ -157,35 +172,23 @@ function register(req,res,next) {
       }, 
       privateKey, { algorithm: 'HS256'});
 
-    Users.findOne({ email: req.body.email }, function (err, user) {
-      if(err) {
-        next(err);
-      } else {
-        if (!user) {
-          Users.create(
-            {
-               username:req.body.username,
-               email:req.body.email,
-               password: hashedPassword,
-               token:token 
-            }, 
-            function (err, user) {
-            if (err) {
-              next(err);
-            } else {
-              console.log('user created');
-              res.json({
-                status:'success',
-                token:user.token,
-                username:user.username,
-                email:user.email
-              })
-            }
-          });
-        }
-      }
-    });
+  Users.create({
+      userId:req.username +'-'+makeid(20),
+      username:req.body.username,
+      email:req.body.email,
+      password: hashedPassword,
+      token:token,
+      resetPasswordExpire:'',
+      resetPasswordToken:0
+  },(err,user)=>{
+      if(err) return next(err);
+      return res.sendStatue(200,'application/json',{
+          error:false,
+          info:user
+      })
+  })
 }
+
 
 function login(req,res,next) {
     if(!req.body.email || req.body.email==='' || !req.body.password || req.body.password==='') {res.json({ error:true, info:'email or password is wrong' });return false}

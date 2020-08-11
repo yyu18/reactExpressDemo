@@ -1,6 +1,7 @@
 import React,{ useContext } from 'react';
 import { MyProfileContext } from '../context';
-import {InputArea, CheckBoxArea, TextArea} from './components/TextEditorArea';
+import {InputArea, CheckBoxArea, TextArea, DropDownForAddArea} from './components/TextEditorArea';
+
 //map, reduce, filter
 const TextEditor = () => {
     const myProfile = useContext(MyProfileContext);
@@ -24,6 +25,7 @@ const TextEditor = () => {
     })
     return(
         <>
+            <DropDownForAddArea />
             {rows}
         </>
     )

@@ -75,8 +75,8 @@ const CheckToken = (props)=>{
     return (
         <div id="cv" className="quickFade">
             <div id="mainArea">
-                <MyProfileContext.Provider value = {value}>
-                    <TextEditor />
+                <MyProfileContext.Provider value = {value}>       
+                        <TextEditor />
                 </MyProfileContext.Provider>
             </div>
         </div>

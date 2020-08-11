@@ -1,6 +1,8 @@
-POST localhost:5000/my-profile
+POST http://localhost:5000/profiles/users-profile/qwfewfewrf
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndlZndlZiIsImVtYWlsIjoiaHVudC55dXloQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoic2hhMSRjMjJlODc0MiQxJDM3MDcyZDYzY2FlM2YzZTcxN2M2N2I0MGUyZmQ5MjhmNjQxYTRhNmYiLCJpYXQiOjE1OTY4Mjk1MzN9.351hH1lN5r_o0bOElKTg0AzDXksZ5VTUULgyeapRbcs
 
 {
-    "body":"sfd"
+    "name": "sample",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
 }

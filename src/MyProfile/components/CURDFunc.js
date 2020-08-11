@@ -1,3 +1,6 @@
+//no side effects: no change on input, and any other things outside the function
+//no super long if function
+//params no more than 3
 export const deleteContentByID = (id,array) =>{
     if(!(array&&id!==undefined)) return []
     return array.filter((e)=>{
@@ -6,13 +9,15 @@ export const deleteContentByID = (id,array) =>{
 }
 
 export const changeContentByID = (id, array, newContent) => {
-    if(!(array&&id!==undefined)) return [];
-    return array.map((e)=>{
+    let newArray = [...array];
+    if(!(newArray&&id!==undefined)) return [];
+    return newArray.map((e)=>{
         if(e.id!==id) return e;
         e.content = newContent;
         return e
     })
 }
+
 export const changeNameByID = (id, array, newName) => {
     if(!(array&&id!==undefined)) return [];
     return array.map((e)=>{

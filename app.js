@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var https = require("https");
 var cors = require('cors');
-var bodyParser = require('body-parser');
+
 //var mongo = require('./router/mongodb_connect.js');
 /*
 require('./tools/send_fcm_message.js')();
@@ -15,12 +15,10 @@ require('./tools/valid_url.js')();
 */
 //const adminSDKRouter = require('./router/adminSDKRouter.js');
 const myProfileRouter = require('./myProfile/my-profile-router.js');
-
-const { AuthUser } = require('./myProfile/auth');
 //var token = 'fg1Low5vUOVNJHrKNCOgwP:APA91bGVLWsGZnIOOoffeBcs1_UeVGvkfBwRwHGToi5M8PbA9SG7o23dwlu63xiG4SsRFs62jkG-ie2UY2AWD-nHIAjud1KvBNkD4UhpIY5uUsUB4izZw_jnck9kWDllofw2xYbVnTfH';
 //var topic = 'notifyTest';
 
-app.use(bodyParser.json());
+app.use(express.json());
 //app.use(bodyParser.urlencoded({extended:false}));//can receive x-www-form-urlencoded
 app.use(cors());
 //begin https with credential key
@@ -46,18 +44,18 @@ app.listen(5000,'0.0.0.0',function() { console.log('Example app listening on por
 2. Send messages to topics and condition statements that match one or more topics.
 3. Subscribe and unsubscribe devices to and from topics
 */
+
 const errorHandler = function(err,req,res,next) {
-    //res.status(404).end();
     console.log('err:'+err)
 
     if( err instanceof Object )  {
-        res.sendStatus(404,'application/json',{
+        res.sendStatus(500,'application/json',{
             error:true,
             info:JSON.stringify(err)
         });
         return false;
     }
-    res.sendStatus(404,'application/json',{
+    res.sendStatus(500,'application/json',{
         error:true,
         info:err
     });
@@ -70,7 +68,7 @@ app.response.sendStatus = function (statusCode, type, message) {
       .send(message)
 }
 
-app.use('/my-profile',AuthUser,myProfileRouter);
+app.use('/profiles',myProfileRouter);
 //app.use('/adminSDK',adminSDKRouter);
 app.use(errorHandler);
 /*
