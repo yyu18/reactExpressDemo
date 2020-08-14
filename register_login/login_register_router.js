@@ -1,4 +1,3 @@
-require('dotenv').config()
 const express = require('express');
 const passwordHash = require('password-hash');
 const jwt = require('jsonwebtoken');
@@ -125,12 +124,12 @@ function register (req,res,next)  {
       })
   }
 
+    let userId = req.body.username.split(' ').join('') + '-' + makeid(20)
     let hashedPassword = passwordHash.generate(req.body.password)
-  
-    let refreshToken = generateRefreshToken({ username:req.body.username, email:req.body.email})
+    let refreshToken = generateRefreshToken({ username:req.body.username, email:req.body.email, userId:userId})
 
     let info = {
-      userId:req.body.username +'-'+makeid(20),
+      userId:userId,
       username:req.body.username,
       email:req.body.email,
       password: hashedPassword,
@@ -158,7 +157,7 @@ function login(req,res,next) {
       jwt.verify(user.token,process.env.REFRESH_SECRET_KEY,(err,usr)=>{
         if(err) return res.sendStatus(403,'application/json',{error:true,info:'Email Or Password Is Wrong'})
         if(!usr) return res.sendStatus(403,'application/json',{error:true,info:'Email Or Password Is Wrong'})
-        const accessToken = generateAccessToken({username:usr.username,email:usr.email})
+        const accessToken = generateAccessToken({username:usr.username,email:usr.email,userId:usr.userId})
         return res.sendStatus(200,'application/json',{error:false, info:{
           accessToken:accessToken,
           userId:user.userId

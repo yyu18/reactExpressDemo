@@ -6,9 +6,11 @@ const AuthUser =  (req,res,next) =>{
         });
     
         let accessToken = req.headers.authorization.split(' ')[1];
-        jwt.verify(accessToken,process.env.REFRESH_SECRET_KEY,(err,value)=>{
+        jwt.verify(accessToken,process.env.ACCESS_SECRET_KEY,{algorithm: 'HS256'},(err,value)=>{
+            console.log(value)
             if(err) return res.sendStatus(403, 'applcation/json',{error:true,info:'Login In First'})
             if(!value) return res.sendStatus(403, 'applcation/json',{error:true,info:'Login In First'})
+            req.user = value
             return next()
         })
 }
