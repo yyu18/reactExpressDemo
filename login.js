@@ -31,5 +31,5 @@ app.use(bodyParser.json());
 
 app.listen(4000,'0.0.0.0',function() { console.log('Example app listening on port 4000!');});
 
-app.use('/',login_register_router);
+app.use('',login_register_router);
 app.use(errorHandler);

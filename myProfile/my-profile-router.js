@@ -22,6 +22,7 @@ router.get('/users-profile/:id',(req,res,next)=>{
     }
     retrieveProfile(info,( err, profile) => {
         if(err) next(err);
+        if(!profile) return res.sendStatus(204,'application/json',{error:true,info:'User Profile Not Found'})
         return res.sendStatus(200,'application/json',{
             error:false,
             info:profile

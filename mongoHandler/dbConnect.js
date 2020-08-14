@@ -42,7 +42,7 @@ const createUser = (info, callback)=> {
 
 const retrieveUser = (info, callback)=>{
     Users.findOne(info,(err,user)=>{
-        if(err) { return callback(err); }
+        if(err) return callback(err)
         return callback(null,user);
     })
 }

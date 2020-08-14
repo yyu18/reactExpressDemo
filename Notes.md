@@ -49,3 +49,10 @@ c=2//not work, the value change is not allow
 const c = [1,2];
 
 c.push(3) //worked, because memory address did not change, the value on the address changed, const variable do not allow the value change
+
+# Try Catch Throw error
+try{
+    throw new Error('someting wrong')
+} catch(err) {
+    console.log(err)
+}

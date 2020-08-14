@@ -1,12 +1,12 @@
+require('dotenv').config()
 const express = require('express');
 const passwordHash = require('password-hash');
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
 const { nodeMailer } = require('./nodeMailer');
 
-const privateKey = fs.readFileSync(__dirname+'/private.key');
+const privateKey = process.env.ACCESS_SECRET_KEY
 
-const { Users,updateUser,createUser, retrieveUser } = require('../mongoHandler/dbConnect');
+const { updateUser,createUser, retrieveUser } = require('../mongoHandler/dbConnect');
 
 //router created
 const router = express.Router();
@@ -17,7 +17,7 @@ router.patch('/password-management/:token',ResetPassword)
 
 router.post('/checkEmail',checkEmail);
 
-router.post('/register',register);
+router.post('/users-account',register)
 
 router.post('/login',login);
 
@@ -117,54 +117,60 @@ function checkEmail(req,res,next){
 }
 
 function register (req,res,next)  {
-  if(!(req.body.username&&req.body.eamil&&req.body.password)) {
+  console.log(req.body)
+  if(!(req.body.username&&req.body.email&&req.body.password)) {
       return res.sendStatus(400,'application/json',{
           error:true,
           info:'Username Or Password Is Unavailable'
       })
   }
 
-  let hashedPassword = passwordHash.generate(req.body.password);
+    let hashedPassword = passwordHash.generate(req.body.password)
   
-  let token = jwt.sign(
-      { 
-        username:req.body.username,
-        email:req.body.email,
-        password:hashedPassword,
-      }, 
-      privateKey, { algorithm: 'HS256'});
+    let refreshToken = generateRefreshToken({ username:req.body.username, email:req.body.email})
 
     let info = {
       userId:req.body.username +'-'+makeid(20),
       username:req.body.username,
       email:req.body.email,
       password: hashedPassword,
-      token:token,
+      token:refreshToken,
       resetPasswordExpire:'',
       resetPasswordToken:0
     }
 
-    createUser(info,(err,user)=>{
+    createUser(info,(err,user) => {
       if(err) return next(err)
       return res.sendStatus(201,'application/json',{
         error:false,
-        info:user
+        info:'User Created'
       })
     })
 }
 
-
 function login(req,res,next) {
-    if(!req.body.email || req.body.email==='' || !req.body.password || req.body.password==='') {res.json({ error:true, info:'email or password is wrong' });return false}
-
-    Users.findOne({ email: req.body.email }, function (err, user) {
-        if(err) return next(err);
-        if(!user)  {res.json({ error:true, info:'email or password is wrong'}); return false}
-        console.log(user.password)
-        var passwordVerify = passwordHash.verify(req.body.password, user.password)
-        console.log(passwordVerify);
-        if(!passwordVerify) {res.json({ error:true, info:'email or password is wrong'});return false}
-        res.json({ error:false, token:user.token, username:user.username, email:user.email });
-        return true
+  console.log(req.body.email)
+    if(!(req.body.email&&req.body.password)) return res.sendStatus(404,'application/json',{error:true,info:'Email Or Password Is Wrong'})
+    retrieveUser({ email: req.body.email },(err,user)=>{
+      if(err) return next(err)
+      if(!user) return res.sendStatus(404,'application.json',{error:true,info:'Email Or Password Is Wrong'})
+      if(!passwordHash.verify(req.body.password, user.password)) return res.sendStatus(403,'application/json',{error:true,info:'Email Or Password Is Wrong'})
+      jwt.verify(user.token,process.env.REFRESH_SECRET_KEY,(err,usr)=>{
+        if(err) return res.sendStatus(403,'application/json',{error:true,info:'Email Or Password Is Wrong'})
+        if(!usr) return res.sendStatus(403,'application/json',{error:true,info:'Email Or Password Is Wrong'})
+        const accessToken = generateAccessToken({username:usr.username,email:usr.email})
+        return res.sendStatus(200,'application/json',{error:false, info:{
+          accessToken:accessToken,
+          userId:user.userId
+        }})
       })
+    })
+}
+
+function generateAccessToken(user){
+  return jwt.sign(user,process.env.ACCESS_SECRET_KEY,{expiresIn:'6h',algorithm: 'HS256'})
+}
+
+function generateRefreshToken(user){
+  return jwt.sign(user,process.env.REFRESH_SECRET_KEY, {algorithm: 'HS256'})
 }
