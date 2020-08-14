@@ -32,28 +32,39 @@ const profileSchema = new mongoose.Schema({
 
 const Users = mongoose.model('Users', userSchema);
 const Profiles = mongoose.model('Profiles', profileSchema);
-const findUserByToken = (token, callback)=>{
-    Users.findOne({
-        token:token,
-    },(err,user)=>{
+
+const createUser = (info, callback)=> {
+  Users.create(info,(err,user)=>{
+    if(err) return callback(err)
+    return callback(null,user)
+})
+}
+
+const retrieveUser = (info, callback)=>{
+    Users.findOne(info,(err,user)=>{
         if(err) { return callback(err); }
         return callback(null,user);
     })
 }
 
+const updateUser = (id,info,callback)=>{
+  Users.updateOne(id,{
+    $set : info
+  },(err,user)=>{
+    if(err) return callback(err);
+    return callback(null,user)
+  });
+}
+
 const createProfile = (info,callback) => {
-  Profiles.create({
-    userId:info.userId,
-    myProfile:info
-  },(err,profile) => {
+  Profiles.create(info,(err,profile) => {
     if(err) return callback(err);
     return callback(null,profile)
   })
 }
 
 const updateProfile = (info,callback) => {
-  Profiles.update({userId:info.userId},
-  {
+  Profiles.update(info,{
     $set : info
   },(err,profile)=>{
     if(err) return callback(err);
@@ -62,9 +73,7 @@ const updateProfile = (info,callback) => {
 }
 
 const retrieveProfile = (info,callback) =>{
-  Profiles.findOne({
-    userId:info.id
-},(err,user)=>{
+  Profiles.findOne(info,(err,user)=>{
     if(err) { return callback(err); }
     return callback(null,user);
 })
@@ -73,4 +82,4 @@ const retrieveProfile = (info,callback) =>{
 const deleteProfile = (info,callback) =>{
   
 }
-module.exports = { findUserByToken,createProfile,updateProfile,retrieveProfile }
+module.exports = { Users,updateUser,createUser,retrieveUser,createProfile,updateProfile,retrieveProfile }

@@ -2,11 +2,11 @@ import React, {useState,useMemo} from 'react';
 import Cookies from 'js-cookie';
 import './MyProfile.css';
 import CheckToken from './CheckToken';
-const checkToken = 'http://192.168.2.24:5000/my-profile/save';
+const checkToken = 'http://192.168.2.24:5000/profiles/users-profile/123';
 
 const MyProfile = (props) => {
     const [errors,setErrors] = useState({});
-    useMemo(()=>{
+    /*useMemo(()=>{
         if(errors.error===undefined){
             const token = Cookies.get('token');
         
@@ -27,7 +27,7 @@ const MyProfile = (props) => {
                   setErrors({ error:true, info:'Connection Errors' }); return false;
               });
         }
-    },[errors,setErrors])
+    },[errors,setErrors])*/
 
     return(
            <CheckToken errors = {errors} />

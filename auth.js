@@ -9,17 +9,15 @@ const errorHandler = function(err,req,res,next) {
     console.log('err:'+err)
 
     if( err instanceof Object )  {
-        res.sendStatus(500,'application/json',{
+        return res.sendStatus(500,'application/json',{
             error:true,
             info:JSON.stringify(err)
         });
-        return false;
     }
-    res.sendStatus(500,'application/json',{
+    return res.sendStatus(500,'application/json',{
         error:true,
         info:err
     });
-    return false;
 }
 
 app.response.sendStatus = function (statusCode, type, message) {

@@ -1,4 +1,4 @@
-const {findUserByToken} = require('../mongoHandler/dbConnect')
+const { retrieveUser } = require('../mongoHandler/dbConnect')
 const AuthUser =  (req,res,next) =>{
         if(!(req.headers && req.headers.authorization)) return res.sendStatus(403,'application/json',{
             error:true,
@@ -6,10 +6,10 @@ const AuthUser =  (req,res,next) =>{
         });
     
         let token = req.headers.authorization.split(' ')[1];
-        findUserByToken(token,(err,user)=>{
+        retrieveUser(token,(err,user)=>{
             if(err) { return next(err); }
             if(!user) return res.sendStatus(403, 'application/json', { error:true, info:'You Need To Sign In' })
-            req.token = token;
+            req.user = user;
             next();
         })
 }

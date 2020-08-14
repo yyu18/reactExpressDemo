@@ -9,11 +9,10 @@ import { deleteContentByIndex, changeContentByID, deleteContentByID, changeNameB
 const InputAreaList = (props) => {
     const myProfile = useContext(MyProfileContext);
     const handleDelete = (i) => {
-        let listValue = deleteContentByIndex(i,props.info.content);
-        props.info.content = listValue;
-        myProfile.setState(
-            changeContentByID(props.info.id, myProfile.state,props.info.content)
-        )
+
+        let listValue = deleteContentByIndex(i,props.info.content)
+        let newState = changeContentByID(props.info.id, myProfile.state, listValue)
+        if(newState) myProfile.setState(newState)
     }
 
     let rows = [];
@@ -30,9 +29,8 @@ export const InputArea = (props) => {
     const myProfile = useContext(MyProfileContext);
 
     const handleDelete = () => {
-        myProfile.setState(
-            deleteContentByID(props.info.id,myProfile.state)
-        )
+        let newState = deleteContentByID(props.info.id,myProfile.state)
+        if(newState) myProfile.setState(newState)
     }
     const handleClick  = (id) => {
         let textarea = document.getElementById(id);
@@ -44,8 +42,7 @@ export const InputArea = (props) => {
         setErrors(error);
         if(!error.error){ 
             let newState = changeNameByID(props.info.id, myProfile.state, name)
-            console.log(newState)
-            //myProfile.setState(newState)
+            if(newState) myProfile.setState(newState)
             let textarea = document.getElementById(props.info.id+props.info.type);
             textarea.classList.toggle("hide");     
         }
@@ -113,10 +110,8 @@ export const CheckBoxAreaList = (props)=>{
     const myProfile = useContext(MyProfileContext);
     const handleDelete = (i) => {
         let listValue = deleteContentByIndex(i,props.info.content);
-        props.info.content = listValue;
-        myProfile.setState(
-            changeContentByID(props.info.id, myProfile.state,props.info.content)
-        )
+        let newState = changeContentByID(props.info.id, myProfile.state, listValue);
+        if(newState) myProfile.setState(newState)
     }
 
     let rows = [];
@@ -152,8 +147,7 @@ export const CheckBoxArea = (props) =>{
         setErrors(error);
         if(!error.error){ 
             let newState = changeNameByID(props.info.id, myProfile.state, name)
-            console.log(newState)
-            //myProfile.setState(newState)
+            if(newState) myProfile.setState(newState)
             let textarea = document.getElementById(props.info.id+props.info.type);
             textarea.classList.toggle("hide");     
         }
@@ -259,7 +253,7 @@ export const TextArea = (props) => {
         setErrors(error);
         if(!error.error){ 
             let newState = changeContentByID(props.info.id, myProfile.state, content)
-            myProfile.setState(newState)
+            if(newState) myProfile.setState(newState)
             let textarea = document.getElementById(props.info.id);
             textarea.classList.toggle("hide");         
         }
@@ -270,8 +264,7 @@ export const TextArea = (props) => {
         setErrors(error);
         if(!error.error){ 
             let newState = changeNameByID(props.info.id, myProfile.state, name)
-            console.log(newState)
-            //myProfile.setState(newState)
+            if(newState) myProfile.setState(newState)
             let textarea = document.getElementById(props.info.id+props.info.type);
             textarea.classList.toggle("hide");     
         }

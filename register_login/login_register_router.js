@@ -5,36 +5,15 @@ const fs = require('fs');
 const { nodeMailer } = require('./nodeMailer');
 
 const privateKey = fs.readFileSync(__dirname+'/private.key');
-//mongodb connection
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/usersInfo', 
-{
-  useNewUrlParser: true,
-  useUnifiedTopology: true 
-}).catch(err=>console.log(err));
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log('mongo connected');
-});
-const userSchema = new mongoose.Schema({
-    userId:String,  
-    username:String,
-    email:String,
-    password:String,
-    token:String,
-    resetPasswordToken:String,
-    resetPasswordExpire:Number
-  });
 
-const Users = mongoose.model('Users', userSchema);
+const { Users,updateUser,createUser, retrieveUser } = require('../mongoHandler/dbConnect');
 
 //router created
-var router = express.Router();
+const router = express.Router();
 
-router.post('/checkResetLink',checkResetLink);
+router.get('/password-management/:email',ResetPasswordLink)
 
-router.post('/forgotPassword',forgotPassword);
+router.patch('/password-management/:token',ResetPassword)
 
 router.post('/checkEmail',checkEmail);
 
@@ -44,58 +23,41 @@ router.post('/login',login);
 
 module.exports = router;
 
-function checkResetLink(req,res,next){
-  console.log(req.body.token);
-  if(req.body.token!==undefined&&req.body.token!==''){
-    Users.findOne({
-      resetPasswordToken:req.body.token,
-      resetPasswordExpire:{
-        $gt:Date.now()
-      }
-  },(err,user)=>{
-    if(err) next(err);
-     if(user){
-      if(req.body.password!==undefined){
-        var hashedPassword = passwordHash.generate(req.body.password);
-        var token = jwt.sign(
-          { 
-            username:user.username,
-            email:user.email,
-            password:hashedPassword,
-          }, 
-          privateKey, { algorithm: 'HS256'});
+function ResetPassword (req,res,next) {
+  let token = req.params.token
+  retrieveUser({
+      resetPasswordToken:token,
+      resetPasswordExpire:{ $gt:Date.now() }
+  },(err,user) => {
+      if(err) return next(err)
 
-          user.password=hashedPassword;
-          user.token=token;
-          user.save((err,result)=>{
-            if(err) {
-              next(err)
-            } else {
-              res.status(200).send({
-                error:false,
-                info:'Password Updated!'
-              })
-            }  
-          })
-      } else {
-        res.status(200).send({
-          error:false,
-          info:'Link Is Valid'
-        })
-      }
-    } else {
-      res.status(404).send({
-        error:true,
-        info:'Link Is Invalid'
+      if(!user) return res.sendStatus(404,'application/json',{
+          error:true,
+          info:'Link Invalid'
       })
-    }
-  })
-  } else {
-    res.status(404).send({
-      error:true,
-      info:'Link Is Invalid'
-    })
-  }
+
+      if(!req.body.password) return res.sendStatus(404,'application/json',{
+          error:true,
+          info:'Password Invalid'
+      })
+      let hashedPassword = passwordHash.generate(req.body.password)
+      let token = jwt.sign(
+        { 
+          username:user.username,
+          email:user.email,
+          password: hashedPassword
+        }, 
+        privateKey, { algorithm: 'HS256' });
+
+        user.password = hashedPassword
+        user.token=token;
+        user.save((err,re)=>{
+            if(err) next(err)
+            res.sendStatus(201,'application/json',{
+                error:false,info:'Password Updated'
+            })
+        })
+      })
 }
 const makeid = (length) => {
   var result           = '';
@@ -106,55 +68,55 @@ const makeid = (length) => {
   }
   return result;
 }
-function forgotPassword(req,res,next){
-  //req.body.email!==undefined && req.body.email!==null && req.body.email.length!==0
-  //req.body.email
-  //req.body.email===undefined||req.body.email===null||req.body.email.length===0
-  //!req.body.email
-  if(!req.body.email) return next('Email Is Invalid');
-  Users.findOne({ email: req.body.email }, function (err, user) {
-      if(err) return next(err);
-      if(!user) return next('Email Is Invalid');
-      const resetToken = makeid(20);
-      user.resetPasswordToken = resetToken;
-      user.resetPasswordExpire = Date.now()+360000;
-      user.save((err,result)=>{
-      if(err) return next(err);
-      if(result){
-          console.log(result);
-      }
-      });
-      
-      //nodemailer begin
-      nodeMailer(req.body.email,resetToken)
-      .catch((err)=>{
-      return next(err)
+
+function ResetPasswordLink (req,res,next) {
+  let email = req.params.email;
+  retrieveUser({email:email},(err,info)=>{
+      if(err) return next(err)
+      if(!info) return res.sendStatus(404,'application/json',{
+          error:true,
+          info:'email is invalid'
       })
-      .then((e)=>{
-      console.log(e);
-      res.send(e);
-      return true;
-      });
-    })
+      const resetToken = makeid(20)
+      updateUser({email:email},{
+          resetPasswordToken:resetToken,
+          resetPasswordExpire:Date.now()+360000
+      },(err,user)=>{
+          if(err) return next(err)
+          if(!user) return next('something wrong')
+          nodeMailer(email,resetToken)
+          .catch((err)=>{
+          return next(err)
+          })
+          .then((e)=>{
+          console.log(e)
+          return res.sendStatus(200,'application/json',{
+              error:false,
+              info:'email sent'
+          })
+          });
+      })
+  })
 }
 
 function checkEmail(req,res,next){
   //undefined, null, '', all return true
   if(!req.body.email) return next('Email Is Empty');
-  Users.findOne({ email: req.body.email }, function (err, user) {
-      if(err) return next(err);
-      if(!user) {
-        res.send({
-          error:false,
-          info:'Email Is Valid'
-        });
-        return true;
-      }
-      return next('Email Already Be Used')
+  let info = { email: req.body.email }
+  retrieveUserByEmail(info,(err,user)=>{
+    if(err) return next(err)
+    if(user) return res.sendStatus(200,'application/json',{
+      error:true,
+      info:'Email Is Used'
+    })
+    return res.sendStatus(200,'application/json',{
+      error:false,
+      info:'Email Can Use'
+    })
   })
 }
 
-const register = (req,res,next) => {
+function register (req,res,next)  {
   if(!(req.body.username&&req.body.eamil&&req.body.password)) {
       return res.sendStatus(400,'application/json',{
           error:true,
@@ -172,21 +134,23 @@ const register = (req,res,next) => {
       }, 
       privateKey, { algorithm: 'HS256'});
 
-  Users.create({
-      userId:req.username +'-'+makeid(20),
+    let info = {
+      userId:req.body.username +'-'+makeid(20),
       username:req.body.username,
       email:req.body.email,
       password: hashedPassword,
       token:token,
       resetPasswordExpire:'',
       resetPasswordToken:0
-  },(err,user)=>{
-      if(err) return next(err);
-      return res.sendStatue(200,'application/json',{
-          error:false,
-          info:user
+    }
+
+    createUser(info,(err,user)=>{
+      if(err) return next(err)
+      return res.sendStatus(201,'application/json',{
+        error:false,
+        info:user
       })
-  })
+    })
 }
 
 

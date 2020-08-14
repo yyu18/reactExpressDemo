@@ -25,3 +25,27 @@ get, put, delete(idempotency)  / post patch
 pure function, no side effects, no change on params,no change to outside variable, same param return same result.
 
 do not use too long if function, return early
+
+# Reference VS Value
+
+[] and {} are reference, pass the memory address reference to the declared variable
+
+let c = [1,2] // variable c have the memory address reference e.g. 0x01
+
+let a = c;
+
+a.push(3)
+
+//result : a=[1,2,3] c=[1,2,3] variable a saved the memory address reference, 
+
+when a changed, the value on the memory address reference changed. so c also changed.
+
+
+
+const c =1;
+
+c=2//not work, the value change is not allow
+
+const c = [1,2];
+
+c.push(3) //worked, because memory address did not change, the value on the address changed, const variable do not allow the value change
