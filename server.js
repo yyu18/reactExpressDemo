@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 //var https = require("https");
 var cors = require('cors');
-
+const { errorHandler } = require('./utils/error');
 //var mongo = require('./router/mongodb_connect.js');
 /*
 require('./tools/send_fcm_message.js')();
@@ -45,23 +45,6 @@ app.listen(5000,'0.0.0.0',function() { console.log('Example app listening on por
 2. Send messages to topics and condition statements that match one or more topics.
 3. Subscribe and unsubscribe devices to and from topics
 */
-
-const errorHandler = function(err,req,res,next) {
-    console.log('err:'+err)
-
-    if( err instanceof Object )  {
-        res.sendStatus(500,'application/json',{
-            error:true,
-            info:JSON.stringify(err)
-        });
-        return false;
-    }
-    res.sendStatus(500,'application/json',{
-        error:true,
-        info:err
-    });
-    return false;
-}
 
 app.response.sendStatus = function (statusCode, type, message) {
     return this.contentType(type)

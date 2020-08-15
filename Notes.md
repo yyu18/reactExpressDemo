@@ -26,6 +26,7 @@ pure function, no side effects, no change on params,no change to outside variabl
 
 do not use too long if function, return early
 
+make sure each line of the function is under same hierarchy
 # Reference VS Value
 
 [] and {} are reference, pass the memory address reference to the declared variable
@@ -40,8 +41,6 @@ a.push(3)
 
 when a changed, the value on the memory address reference changed. so c also changed.
 
-
-
 const c =1;
 
 c=2//not work, the value change is not allow
@@ -52,7 +51,24 @@ c.push(3) //worked, because memory address did not change, the value on the addr
 
 # Try Catch Throw error
 try{
-    throw new Error('someting wrong')
+    throw new Error('someting wrong') 
 } catch(err) {
-    console.log(err)
+    next(err) 
 }
+
+throw new Error will create new Error object, Express will help to catch it into error handler,only for sync function
+
+next(err) just pass the err into handler
+
+## express middleware error
+
+if error is from sync function, express will catch it to errorhandler automatically
+
+If the async function returns an error (in the form of a rejected promise), and express does not handle that error, must use (next)
+
+jwt.verify(token,process.env.REFRESH_SECRET_KEY, {algorithm: 'HS256'},(err,re)=>{
+
+throw new Error(err) // Express can not handler the err
+
+    console.log('ello')//error handler can not handle the err
+})

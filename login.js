@@ -4,22 +4,8 @@ var cors = require('cors');
 var bodyParser = require('body-parser');
 
 var app = express();
+const { errorHandler } = require('./utils/error');
 const login_register_router = require('./register_login/login_register_router.js');
-
-const errorHandler = function(err,req,res,next) {
-    console.log('err:'+err)
-
-    if( err instanceof Object )  {
-        return res.sendStatus(500,'application/json',{
-            error:true,
-            info:JSON.stringify(err)
-        });
-    }
-    return res.sendStatus(500,'application/json',{
-        error:true,
-        info:err
-    });
-}
 
 app.response.sendStatus = function (statusCode, type, message) {
     return this.contentType(type)

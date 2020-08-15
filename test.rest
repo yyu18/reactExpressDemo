@@ -1,7 +1,7 @@
 ### create profile
 POST http://localhost:5000/profiles/users-profile
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc0MzY3ODEsImV4cCI6MTU5NzQ1ODM4MX0.JV6nQQwCCjqjIpnk7QApFGD3NemOdqTsdEDWCJ2xQ_E
+Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc1MDk0MzgsImV4cCI6MTU5NzUzMTAzOH0.TIGlSjEp9wsNv9ppzz90PfJdQWy8F4dhGexO6LAp4sc
 
 {
     "name": "sample",
@@ -11,7 +11,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ilpod
 ### get the user profile
 GET http://localhost:5000/profiles/users-profile/Hubert-9rQE5FyuxgzAvmZsWgz5
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikh1YmVydCIsImVtYWlsIjoieXl1MThAbGFrZWhlYWR1LmNhIiwiaWF0IjoxNTk3NDI5NTI4LCJleHAiOjE1OTc0NTExMjh9.B63p_Ezg3w4m8oEzYkFcuyisS2KQCqcvsg2j0MAjBLI
 
 
 ### reset password link
@@ -37,12 +36,22 @@ Content-Type: application/json
 }
 
 ### login user
-POST http://localhost:4000/login
+POST http://localhost:4000/users-status
 Content-Type: application/json
 
 {
     "email":"cherylann0110@hotmail.com",
     "password":"123456"
+
 }
 
+### logout user
+DELETE http://localhost:4000/users-status
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc1MDkwNDZ9.-Li8YvccDfTtNW_4JGrZpXAKMJVO2J_nJHaL61pSTCw
 
+
+### new access token
+POST http://localhost:4000/token
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc1MDk0MzJ9.AyQ7x08sCdgPuTtz8aQ0VrQkSADfU57lIvWd09btfTk
