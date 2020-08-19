@@ -1,16 +1,16 @@
 ### create profile
 POST http://localhost:5000/profiles/users-profile
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc2ODQ2NDAsImV4cCI6MTU5NzcwNjI0MH0.O5bNsdnNUzTEm0QvZwSNDw7q9Grk_imC8hy78lPCZWM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpbm8gcWkiLCJlbWFpbCI6ImZpbm8ucWlAZ21haWwuY29tIiwidXNlcklkIjoiZmlub3FpLUZFaUpWZkJYTk85ODZmZ0ZPUHROIiwiaWF0IjoxNTk3ODY0MDA2LCJleHAiOjE1OTc4ODU2MDZ9.nvAzkoYt0BRWw0AfdrV4K_R6ySymI1TOtGMF9f2VWgw
 
 ### get the user profile
 GET http://localhost:5000/profiles/users-profile/ZhuoranQi-pQR9bY4og8aAIQJxvdNe
 Content-Type: application/json
 
 ### update the user profile 
-PUT http://localhost:5000/profiles/users-profile/ZhuoranQi-pQR9bY4og8aAIQJxvdNe
+PUT http://localhost:5000/profiles/users-profile/finoqi-FEiJVfBXNO986fgFOPtN
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc2ODI0NTgsImV4cCI6MTU5NzcwNDA1OH0.Xdi2UkeH1P6NlPbvNkqEpKSmzDyUacrolkA5jM7Nq-s
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpbm8gcWkiLCJlbWFpbCI6ImZpbm8ucWlAZ21haWwuY29tIiwidXNlcklkIjoiZmlub3FpLUZFaUpWZkJYTk85ODZmZ0ZPUHROIiwiaWF0IjoxNTk3ODY0MDA2LCJleHAiOjE1OTc4ODU2MDZ9.nvAzkoYt0BRWw0AfdrV4K_R6ySymI1TOtGMF9f2VWgw
 
 {
     "info":[
@@ -48,8 +48,8 @@ POST http://localhost:4000/users-account
 Content-Type: application/json
 
 {
-    "username":"chery li",
-    "email":"cheryla@hotmail.com",
+    "username":"yihu yu",
+    "email":"yyu18@lakeheadu.ca",
     "password":"123456"
 }
 
@@ -58,7 +58,7 @@ POST http://localhost:4000/users-status
 Content-Type: application/json
 
 {
-    "email":"cherylann0110@hotmail.com",
+    "email":"fino.qi@gmail.com",
     "password":"123456"
 
 }
@@ -66,7 +66,7 @@ Content-Type: application/json
 ### logout user
 DELETE http://localhost:4000/users-status
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc3MDEzNDN9.aJ-G5cGC6tjRy7qYoDP_O1anUox9eATqSi7YL_tjcAY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpbm8gcWkiLCJlbWFpbCI6ImZpbm8ucWlAZ21haWwuY29tIiwidXNlcklkIjoiZmlub3FpLUZFaUpWZkJYTk85ODZmZ0ZPUHROIiwiaWF0IjoxNTk3ODYzODgzfQ.pfr_gYKAgyp-e7J2C4S1_5jXv3fUQy5oJ4BaLtzR_Gc
 
 ### new access token
 POST http://localhost:4000/token
@@ -77,5 +77,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ilpod
 GET http://localhost:4000/users-account/0
 Content-Type: application/json
 
-### message test
-GET http://localhost:6000/message-system/test
+### graphql test
+POST http://localhost:6666/graphql
+Content-Type: application/json
+
+{
+    "query": "{ user(userId:\"yihuyu-pDdgZIkG8A3g4dXemxyy\") {username email userId} }"
+}

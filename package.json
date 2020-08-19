@@ -31,7 +31,7 @@
     "eject": "react-scripts eject",
     "serverDev": "nodemon server.js",
     "authServerDev": "nodemon authServer.js",
-    "messageDev": "nodemon messageServer.js"
+    "graphqlapi": "nodemon graphql_api.js"
   },
   "eslintConfig": {
     "extends": "react-app"

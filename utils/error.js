@@ -23,7 +23,7 @@ class GeneralError extends Error {
   class Forbidden extends GeneralError { }
 
   const errorHandler = (err, req, res, next) => {
-
+console.log(err)
     if (err instanceof GeneralError) {
       return res.status(err.getCode()).json({
         error:true,
