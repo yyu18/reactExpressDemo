@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/usersInfo', 
+mongoose.connect(process.env.MONGODB_URL, 
 {
   useNewUrlParser: true,
   useUnifiedTopology: true 
@@ -9,25 +9,21 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('mongo connected');
 });
+mongoose.set('useCreateIndex', true);
 
 const userSchema = new mongoose.Schema({
-  userId:String,  
-  username:String,
-  email:String,
-  password:String,
-  token:String,
-  resetPasswordToken:String,
-  resetPasswordExpire:Number
+  userId : { type : String, required:true, unique : true},
+  username : { type : String, required : true },
+  email : { type : String, required:true, unique : true},
+  password: { type : String, required:true },
+  token:{ type:String, required:true, default:0 },
+  resetPasswordToken:{type:String, default:''},
+  resetPasswordExpire:{type:Number, default:0}
 });
 
 const profileSchema = new mongoose.Schema({
-  userId:String,
-  myProfile:[{ 
-    id:String,
-    name:String,
-    type:String,
-    content:[String]
-   }]
+  userId:{type:String,unique:true},
+  myProfile:[]
 })
 
 const Users = mongoose.model('Users', userSchema);
@@ -63,13 +59,15 @@ const createProfile = (info,callback) => {
   })
 }
 
-const updateProfile = (info,callback) => {
-  Profiles.update(info,{
-    $set : info
-  },(err,profile)=>{
-    if(err) return callback(err);
-    return callback(null,profile)
-  });
+const updateProfile = (id,info) => {
+  return new Promise((resolve,reject)=>{
+    Profiles.updateOne(id,{
+      $set : info
+    },(err,profile)=>{
+      if(err) return reject(err)
+      return resolve(profile)
+      })
+    });
 }
 
 const retrieveProfile = (info,callback) =>{
@@ -79,7 +77,24 @@ const retrieveProfile = (info,callback) =>{
 })
 }
 
-const deleteProfile = (info,callback) =>{
-  
+const deleteProfile = (info) =>{
+  return new Promise((resolve,reject)=>{
+    Profiles.deleteOne(info,(err,user)=>{
+      console.log(err)
+      console.log(user)
+        if(err) return reject(err)
+        return resolve(user)
+      })
+  })
 }
-module.exports = { Users,updateUser,createUser,retrieveUser,createProfile,updateProfile,retrieveProfile }
+
+const makeid = (length) => {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+module.exports = { makeid,deleteProfile,updateUser,createUser,retrieveUser,createProfile,updateProfile,retrieveProfile }

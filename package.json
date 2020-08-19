@@ -10,6 +10,9 @@
     "create-react-app": "^3.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-graphql": "^0.11.0",
+    "graphql": "^15.3.0",
+    "jest": "^26.4.0",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.25",
@@ -24,10 +27,11 @@
   "scripts": {
     "start": "HOST=0.0.0.0 react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
-    "server": "node server.js",
-    "AuthProxy": "node login.js"
+    "serverDev": "nodemon server.js",
+    "authServerDev": "nodemon authServer.js",
+    "messageDev": "nodemon messageServer.js"
   },
   "eslintConfig": {
     "extends": "react-app"

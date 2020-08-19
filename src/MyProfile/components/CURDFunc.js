@@ -7,6 +7,7 @@
 //declare variable with reference  will save the memorry address reference to it, not value
 
 //make sure all the function here is pure function, no side effects, same argument have same result
+
 export const deleteContentByID = (id,array) =>{
     let newArray = []
     array.map(e=>{

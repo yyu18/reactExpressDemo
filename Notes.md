@@ -1,6 +1,11 @@
 # How to name URI
 ## URI use noun, hierarchy relations
 e.g.
+
+PUT: update all the record in one resource
+
+PATCH: update the single record inside one resource
+
 /messages    first level collections URI
 
 /messages/1  second level resources URI
@@ -18,6 +23,7 @@ instance resource uri ,with :id, specific item
 query param for pagination and filter
 
 # idempotency, pure function
+
 idempotency, run multiple times have the same results as run single time
 
 get, put, delete(idempotency)  / post patch
@@ -50,6 +56,7 @@ const c = [1,2];
 c.push(3) //worked, because memory address did not change, the value on the address changed, const variable do not allow the value change
 
 # Try Catch Throw error
+
 try{
     throw new Error('someting wrong') 
 } catch(err) {
@@ -72,3 +79,25 @@ throw new Error(err) // Express can not handler the err
 
     console.log('ello')//error handler can not handle the err
 })
+
+# TDD VS BDD
+
+## test driver development:
+
+unit test, write test first, then write function, make things right
+
+## behaviour driver development
+
+behaviour development, have behaviour first, then write function, make right things
+
+# difference node and react ES6 
+
+node/module.export,  const require
+
+react es6 / export, export default, import
+
+# async function
+
+callback(err,re)
+
+Promise(resolve,reject)

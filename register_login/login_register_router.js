@@ -2,10 +2,7 @@ const express = require('express');
 const passwordHash = require('password-hash');
 
 const { nodeMailer } = require('./nodeMailer');
-
-const privateKey = process.env.ACCESS_SECRET_KEY
-
-const { updateUser, createUser, retrieveUser } = require('../mongoHandler/dbConnect');
+const { makeid,updateUser, createUser, retrieveUser } = require('../mongoHandler/dbConnect');
 const {  BadRequest,NotFound,Unauthorized,Forbidden } = require('../utils/error')
 const { generateAccessToken,generateRefreshToken,verifyRefreshToken} = require('../utils/JWT_token')
 //router created
@@ -15,11 +12,9 @@ router.get('/password-management/:email',ResetPasswordLink)
 
 router.patch('/password-management/:token',ResetPassword)
 
-router.post('/checkEmail',checkEmail)
+router.get('/users-account/:email',checkEmail)
 
 router.post('/users-account',register)
-
-//router.patch('/users-account/:id',updateUserInfo)
 
 router.post('/users-status',login)
 
@@ -48,15 +43,7 @@ function ResetPassword (req,res,next) {
       })
       })
 }
-const makeid = (length) => {
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-     result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
+
 
 function ResetPasswordLink (req,res,next) {
   let email = req.params.email;
@@ -88,10 +75,10 @@ function ResetPasswordLink (req,res,next) {
 }
 
 function checkEmail(req,res,next){
-  //undefined, null, '', all return true
-  if(!req.body.email) throw new NotFound('Email Is Invalid')
-  let info = { email: req.body.email }
-  retrieveUserByEmail(info,(err,user)=>{
+  let email = req.params.email
+  console.log(email)
+
+  retrieveUser( { email: email },(err,user)=>{
     if(err) return next(err)
     if(user) return next(new Forbidden('Email Is Used'))
     return res.sendStatus(200,'application/json',{
@@ -102,8 +89,7 @@ function checkEmail(req,res,next){
 }
 
 function register (req,res,next)  {
-  console.log(req.body)
-  if(!(req.body.username&&req.body.email&&req.body.password)) throw new NotFound('Email Or Password Is Wrong')
+    if(!(req.body.username&&req.body.email&&req.body.password)) throw new NotFound('Email Or Password Is Required')
 
     let userId = req.body.username.split(' ').join('') + '-' + makeid(20)
     let hashedPassword = passwordHash.generate(req.body.password)
@@ -113,9 +99,6 @@ function register (req,res,next)  {
       username:req.body.username,
       email:req.body.email,
       password: hashedPassword,
-      refreshToken:0,
-      resetPasswordExpire:'',
-      resetPasswordToken:0
     }
 
     createUser(info,(err,user) => {
@@ -128,7 +111,7 @@ function register (req,res,next)  {
 }
 
 function login(req,res,next) {
-    if(!(req.body.email&&req.body.password)) throw new NotFound('Email Or Password Is Wrong')
+    if(!(req.body.email&&req.body.password)) throw new NotFound('Email Or Password Is Required')
     retrieveUser({ email: req.body.email },(err,user)=>{
       if(err) return next(err)
       

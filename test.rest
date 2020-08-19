@@ -1,20 +1,38 @@
 ### create profile
 POST http://localhost:5000/profiles/users-profile
 Content-Type: application/json
-Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc1MDk0MzgsImV4cCI6MTU5NzUzMTAzOH0.TIGlSjEp9wsNv9ppzz90PfJdQWy8F4dhGexO6LAp4sc
-
-{
-    "name": "sample",
-    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
-}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc2ODQ2NDAsImV4cCI6MTU5NzcwNjI0MH0.O5bNsdnNUzTEm0QvZwSNDw7q9Grk_imC8hy78lPCZWM
 
 ### get the user profile
-GET http://localhost:5000/profiles/users-profile/Hubert-9rQE5FyuxgzAvmZsWgz5
+GET http://localhost:5000/profiles/users-profile/ZhuoranQi-pQR9bY4og8aAIQJxvdNe
 Content-Type: application/json
+
+### update the user profile 
+PUT http://localhost:5000/profiles/users-profile/ZhuoranQi-pQR9bY4og8aAIQJxvdNe
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc2ODI0NTgsImV4cCI6MTU5NzcwNDA1OH0.Xdi2UkeH1P6NlPbvNkqEpKSmzDyUacrolkA5jM7Nq-s
+
+{
+    "info":[
+            {
+                "id":"8aAIQJxvdNe",
+                "name":"profile1",
+                "content":[
+                    "aawd","qwdsad","sadfewfew","wefsdf"
+                ],
+                "type":"inputList"
+            }
+        ]
+}
+
+### delete user profile
+DELETE http://localhost:5000/profiles/users-profile/ZhuoranQi-pQR9bY4og8aAIQJxvdNe
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc2ODI0NTgsImV4cCI6MTU5NzcwNDA1OH0.Xdi2UkeH1P6NlPbvNkqEpKSmzDyUacrolkA5jM7Nq-s
 
 
 ### reset password link
-GET http://localhost:4000/password-management/hunt.yuyh@gmail.com
+GET http://localhost:4000/password-management/hunt.yuyh@gmail
 Content-Type: application/json
 
 ### reset password
@@ -30,8 +48,8 @@ POST http://localhost:4000/users-account
 Content-Type: application/json
 
 {
-    "username":"Zhuoran Qi",
-    "email":"cherylann0110@hotmail.com",
+    "username":"chery li",
+    "email":"cheryla@hotmail.com",
     "password":"123456"
 }
 
@@ -48,10 +66,16 @@ Content-Type: application/json
 ### logout user
 DELETE http://localhost:4000/users-status
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc1MDkwNDZ9.-Li8YvccDfTtNW_4JGrZpXAKMJVO2J_nJHaL61pSTCw
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc3MDEzNDN9.aJ-G5cGC6tjRy7qYoDP_O1anUox9eATqSi7YL_tjcAY
 
 ### new access token
 POST http://localhost:4000/token
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc1MDk0MzJ9.AyQ7x08sCdgPuTtz8aQ0VrQkSADfU57lIvWd09btfTk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc2ODI0MDF9.QNGdCBO_V73l1mk3e4szM45_TCoR3KnTSUsBbPAUkcE
+
+### check email 
+GET http://localhost:4000/users-account/0
+Content-Type: application/json
+
+### message test
+GET http://localhost:6000/message-system/test
