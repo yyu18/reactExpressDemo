@@ -21,14 +21,13 @@ router.get('/users-profile/:id',(req,res,next)=>{
     let info = {
         userId : req.params.id
     }
-    retrieveProfile(info,( err, profile) => {
-        if(err) return next(err);
+    retrieveProfile(info).then(profile=>{
         if(!profile) return next(new NotFound('Profile Is Not Exist'))
         return res.sendStatus(200,'application/json',{
             error:false,
             info:profile
         })
-    })
+    }).catch(err=>{return next(err)})
 })
 
 router.put('/users-profile/:id',AuthUser,(req,res,next)=>{

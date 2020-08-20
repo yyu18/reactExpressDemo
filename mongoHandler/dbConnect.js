@@ -70,11 +70,13 @@ const updateProfile = (id,info) => {
     });
 }
 
-const retrieveProfile = (info,callback) =>{
-  Profiles.findOne(info,(err,user)=>{
-    if(err) { return callback(err); }
-    return callback(null,user);
-})
+const retrieveProfile = (info) =>{
+  return new Promise((resolve,reject)=>{
+    Profiles.findOne(info,(err,user)=>{
+      if(err) { return reject(err); }
+      return resolve(user);
+    })
+  })
 }
 
 const deleteProfile = (info) =>{
@@ -97,4 +99,4 @@ const makeid = (length) => {
   }
   return result;
 }
-module.exports = { makeid,deleteProfile,updateUser,createUser,retrieveUser,createProfile,updateProfile,retrieveProfile }
+module.exports = { Users, Profiles,makeid,deleteProfile,updateUser,createUser,retrieveUser,createProfile,updateProfile,retrieveProfile }

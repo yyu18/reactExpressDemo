@@ -1,41 +1,7 @@
 const { GraphQLObjectType,GraphQLID, GraphQLString, GraphQLList,GraphQLNonNull,GraphQLInt, } = require('graphql');
-let movies = [{
-    id: 1,
-    name: "Movie 1",
-    year: 2018,
-    directorId: 1
-},
-{
-    id: 2,
-    name: "Movie 2",
-    year: 2017,
-    directorId: 1
-},
-{
-    id: 3,
-    name: "Movie 3",
-    year: 2016,
-    directorId: 3
-}
-];
-
-let directors = [{
-    id: 1,
-    name: "Director 1",
-    age: 20
-},
-{
-    id: 2,
-    name: "Director 2",
-    age: 30
-},
-{
-    id: 3,
-    name: "Director 3",
-    age: 40
-}
-];
-
+const { retrieveProfile, Profiles,Users } = require('../mongoHandler/dbConnect');
+const { profilePagination } = require('./graphQL_type/profileType')
+const { userType } = require('./graphQL_type/userType')
 const users=[
     {
         "token" : "0",
@@ -75,71 +41,53 @@ const users=[
     }
 ]
 
-const profiles = [
-    {
-        "myProfile" : [
-            {
-                "id" : "8aAIQJxvdNe",
-                "name" : "profile1",
-                "content" : [
-                    "aawd",
-                    "qwdsad",
-                    "sadfewfew",
-                    "wefsdf"
-                ],
-                "type" : "inputList"
-            }
-        ],
-        "userId" : "yihuyu-pDdgZIkG8A3g4dXemxyy",
-    },
-    {
-        "myProfile" : [
-            {
-                "id" : "8aAIQJxvdNe",
-                "name" : "profile1",
-                "content" : [
-                    "aawd",
-                    "qwdsad",
-                    "sadfewfew",
-                    "wefsdf"
-                ],
-                "type" : "inputList"
-            }
-        ],
-        "userId" : "finoqi-FEiJVfBXNO986fgFOPtN",
-    }
-]
-userType = new GraphQLObjectType({
-    name: 'User',
-    fields: {
-        token : { type: GraphQLString },
-        resetPasswordToken : { type: GraphQLString },
-        resetPasswordExpire : { type: GraphQLInt },
-        userId : { type: GraphQLString },
-        username :{ type: GraphQLString },
-        email : { type: GraphQLString },
-        password : { type: GraphQLString }
-    }
-})     
-
-movieType = new GraphQLObjectType({
-    name: 'Movie',
-    fields: {
-        id: { type: GraphQLID },
-        name: { type: GraphQLString },
-        year: { type: GraphQLInt },
-        directorId: { type: GraphQLID }
-    }
-});
 //Define the Query
 const queryType = new GraphQLObjectType({
     name: 'Query',
     fields: ()=>(
         {
-            hello:{
-                type:GraphQLString,
-                resolve:()=>{
-                    return 'hello'
+            profile:{
+                type:profilePagination,
+                args:{
+                    userId:{ type : GraphQLString },
+                    page:{ type : GraphQLInt },
+                    limit:{ type : GraphQLInt}
+                },
+                resolve:async (source,args)=>{
+                    try{
+                        if(args.userId) {
+                            return {
+                                previous:null,
+                                results:[await retrieveProfile({userId:args.userId})],
+                                next:null
+                            }
+                        }
+                        if(!(args.page&&args.limit)) throw new Error('page and limit not define')
+                        const page = parseInt(args.page)
+                        const limit = parseInt(args.limit)
+
+                        const startIndex = (page - 1) * limit
+                        const endIndex = page * limit
+
+                        const results = {}
+                        if (endIndex < await Profiles.countDocuments().exec()) {
+                            results.next = {
+                            page: page + 1,
+                            limit: limit
+                            }
+                        }
+                            
+                        if (startIndex > 0) {
+                            results.previous = {
+                            page: page - 1,
+                            limit: limit
+                            }
+                        }
+
+                        results.results = await Profiles.find().limit(limit).skip(startIndex).exec()
+                        return results
+
+                    } catch(err) {throw new Error(err.message)}
                 }
             },
             user:{
@@ -147,58 +95,16 @@ const queryType = new GraphQLObjectType({
                 args:{
                     userId:{ type:GraphQLString }
                 },
-                resolve: (source,args)=>{
-                    return users.find(e=>{
-                        if(e.userId===args.userId) return e
-                    })
+                resolve: async(source,args)=>{
+                    try{
+                        return await Users.findOne({userId:args.userId})
+                    } catch (err) {
+                        throw new Error(err.message)
+                    }
                 }
             },
-            movie: {
-                type: movieType,
-                args: {
-                    id: { type: GraphQLInt }
-                },
-                resolve: function (source, args) {
-                    return movies.find(e=>{
-                        if(e.id===args.id)  return e   
-                    })
-                }
-            },
-            director: {
-                type: directorType,
-                args: {
-                    id: { type: GraphQLInt }
-                },
-                resolve: function (source, args) {
-                    return directors.find(e=>{
-                        if(e.id===args.id) return e
-                    })
-                }
-            }
         }
-    )
-   
+    )  
 });
-
-directorType = new GraphQLObjectType({
-    name: 'Director',
-    fields: {
-        id: { type: GraphQLID },
-        name: { type: GraphQLString },
-        age: { type: GraphQLInt },
-        movies: {
-            type: new GraphQLList(movieType),
-            resolve:(source, args)=> {
-                return  movies.filter(e=>{
-                    return e.directorId===source.id 
-                })  
-            }
-
-        }
-
-    }
-});
-
-
 
 module.exports = { queryType }

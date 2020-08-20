@@ -101,3 +101,7 @@ react es6 / export, export default, import
 callback(err,re)
 
 Promise(resolve,reject)
+
+# GraphQL Notes
+
+Graphql reslove return type must compared to the type definition
