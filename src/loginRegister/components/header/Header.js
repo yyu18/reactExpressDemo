@@ -1,4 +1,4 @@
-import React,{useMemo,useReducer,useState} from 'react';
+import React,{ useMemo,useReducer,useState } from 'react';
 import {openSearch,closeSearch,openNav,closeNav} from './MenuFunctionController';
 import {Login} from './Login';
 import { Button } from 'react-bootstrap';
@@ -7,6 +7,8 @@ import {FormContext} from '../../../context';
 import reducer from '../../reducer';
 import {Profile} from './profile';
 import Cookies from 'js-cookie';
+
+const logoutURI = 'http://localhost:4000/users-status'
 
 const Header=(props)=>{
     const [RegisterFormInfo,setRegisterForm] = useState({
@@ -28,34 +30,43 @@ const Header=(props)=>{
         },[DispatchUserInfo]
     )*/
     
-    const logout = ()=>{
-        Cookies.remove('token');
-        Cookies.remove('username');
-        Cookies.remove('email');
-        DispatchUser({type:'login',payload:{}});
-        setRegisterForm({
-            username:'',
-            email:'',
-            password:'',
-            confirmPassword:''
-        })
-        window.location.reload(false);
+    const logout = async ()=>{
+        const response = await fetch(logoutURI+'/'+Cookies.get('email'), {
+            method: 'DELETE', // or 'PUT'
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+Cookies.get('refreshToken')
+            }
+          })
+    
+        let data = await response.json();
+        if(!data.error) {
+            Cookies.remove('userId');
+            Cookies.remove('email');
+            Cookies.remove('accessToken');
+            Cookies.remove('refreshToken');
+            DispatchUser({type:'login',payload:{}});
+            setRegisterForm({
+                username:'',
+                email:'',
+                password:'',
+                confirmPassword:''
+            })
+            //window.location.reload(false);
+        }
     }
 
     const value = useMemo(()=> {
         return {
             RegisterFormInfo:RegisterFormInfo,
             setRegisterForm:setRegisterForm,
-            //setLoginUserInfo:UserInfoChange,
+            UserInfo:UserInfo,
             dispatch:DispatchUser
         }
-        },[RegisterFormInfo,setRegisterForm,DispatchUser])
+        },[UserInfo,RegisterFormInfo,setRegisterForm,DispatchUser])
   
-   const token = useMemo(()=>{
-  //''=>false,
-       console.log(UserInfo);
-       return Cookies.get('token');
-   },[UserInfo])
+    let token = Cookies.get('refreshToken');
+
     return( 
         <header>
             <div className="mobile-fix-option"></div>

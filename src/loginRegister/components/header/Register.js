@@ -1,14 +1,13 @@
-import React, {useState,useContext} from 'react';
+import React, {useState,useContext,useRef} from 'react';
 import { Modal,Button,Form } from 'react-bootstrap';
 import {FormContext} from '../../../context';
 import {Validate} from '../../formValidator';
-import Cookies from 'js-cookie';
-var registerURL = 'http://192.168.2.24:4000/register';
+var registerURI = 'http://localhost:4000/users-account';
 
 export const Register = () => {
     const [show, setShow] = useState(false);
     const [formErrors,setErrors] = useState({})
-
+    const btnRef = useRef(null)
     const formContext = useContext(FormContext);
 
     const handleClose = () => {
@@ -26,11 +25,11 @@ export const Register = () => {
     const handleSubmit = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      console.log(formContext.RegisterFormInfo);
       Validate(formContext.RegisterFormInfo).then(errors=>{
         setErrors(errors);
         if(Object.keys(errors).length === 0 ){
-            fetch(registerURL, {
+          btnRef.current.setAttribute("disabled", true);
+            fetch(registerURI, {
               method: 'POST', // or 'PUT'
               headers: {
                   'Content-Type': 'application/json',
@@ -39,13 +38,11 @@ export const Register = () => {
             })
             .then(response => response.json())
             .then(data => {
-                if(data.status==='success'){
-                    Cookies.set('token',data.token);
-                    Cookies.set('username',data.username);
-                    Cookies.set('email',data.email);
-                    formContext.dispatch({type:'register',payload:data})
-                }
+              setErrors({ register:data.info })
+              if(data.error) return btnRef.current.removeAttribute("disabled");
+              return true
             }).catch((error) => {
+                btnRef.current.removeAttribute("disabled");
                 console.error('Error:', error);
             });
         }
@@ -70,7 +67,7 @@ export const Register = () => {
 
             <Form noValidate onSubmit={handleSubmit}>
               <Modal.Body>
-
+           
                 <Form.Group controlId="formUsername">
                     <Form.Label>User Name</Form.Label>
                     <Form.Control required type="text" name="username" placeholder="Enter Username" onChange={
@@ -147,7 +144,12 @@ export const Register = () => {
                              {formErrors.confirmPassword}
                              </Form.Text>
                       }
-             
+                      {
+                          formErrors.register&&
+                          <Form.Text style={{color:'red'}}>
+                          {formErrors.register}
+                          </Form.Text>
+                        }   
                   </Form.Group>
 
 
@@ -156,7 +158,7 @@ export const Register = () => {
                 <Button variant="secondary" onClick={handleClose}>
                   Close
                 </Button>
-                <Button type='submit' variant="primary">Login</Button>
+                <Button ref={btnRef} type='submit' variant="primary">Register</Button>
               </Modal.Footer>
             </Form>
 

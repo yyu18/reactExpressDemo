@@ -12,7 +12,7 @@ const App = ()=>{
                         <Header />
                         <Switch>
                                 <Route exact path={`/order-system`} />
-                                <Route path={`/order-system/myProfile`} component = {MyProfile} /> 
+                                <Route path={`/order-system/myProfile/:userId`} component = {MyProfile} /> 
                                 <Route path={`/order-system/forgot-password`} component={ForgotPassword} />
                                 <Route path={`/order-system/reset-password`} component={ResetPassword} />
                         </Switch>

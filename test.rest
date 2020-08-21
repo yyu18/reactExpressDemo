@@ -10,7 +10,7 @@ Content-Type: application/json
 ### update the user profile 
 PUT http://localhost:5000/profiles/users-profile/finoqi-FEiJVfBXNO986fgFOPtN
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpbm8gcWkiLCJlbWFpbCI6ImZpbm8ucWlAZ21haWwuY29tIiwidXNlcklkIjoiZmlub3FpLUZFaUpWZkJYTk85ODZmZ0ZPUHROIiwiaWF0IjoxNTk3ODY0MDA2LCJleHAiOjE1OTc4ODU2MDZ9.nvAzkoYt0BRWw0AfdrV4K_R6ySymI1TOtGMF9f2VWgw
+Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpbm8gcWkiLCJlbWFpbCI6ImZpbm8ucWlAZ21haWwuY29tIiwidXNlcklkIjoiZmlub3FpLUZFaUpWZkJYTk85ODZmZ0ZPUHROIiwiaWF0IjoxNTk3OTUxOTU1LCJleHAiOjE1OTc5NzM1NTV9.FhGvved7li4EQ0Y__RaeWynJJhMxBMT550YTwHf1_6o
 
 {
     "info":[
@@ -32,11 +32,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ilpod
 
 
 ### reset password link
-GET http://localhost:4000/password-management/hunt.yuyh@gmail
+GET http://localhost:4000/password-management/hunt.yuyh@gmail.com
 Content-Type: application/json
 
 ### reset password
-PATCH http://localhost:4000/password-management/rchFlsuEhmXlWFfqbSrK
+PATCH http://localhost:4000/password-management/812HKYbJCczlooGfakY5
 Content-Type: application/json
 
 {
@@ -49,7 +49,7 @@ Content-Type: application/json
 
 {
     "username":"yihu yu",
-    "email":"yyu18@lakeheadu.ca",
+    "email":"qwe@gmail.com",
     "password":"123456"
 }
 
@@ -64,17 +64,16 @@ Content-Type: application/json
 }
 
 ### logout user
-DELETE http://localhost:4000/users-status
+DELETE http://localhost:4000/users-status/fino.qi@gmail.com
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpbm8gcWkiLCJlbWFpbCI6ImZpbm8ucWlAZ21haWwuY29tIiwidXNlcklkIjoiZmlub3FpLUZFaUpWZkJYTk85ODZmZ0ZPUHROIiwiaWF0IjoxNTk3OTQyNDU2fQ.K_OORnvwKuipvzFd14KYALrtjIRsbYi_vt4AZGVJcRw
 
 ### new access token
 POST http://localhost:4000/token
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc2ODI0MDF9.QNGdCBO_V73l1mk3e4szM45_TCoR3KnTSUsBbPAUkcE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpbm8gcWkiLCJlbWFpbCI6ImZpbm8ucWlAZ21haWwuY29tIiwidXNlcklkIjoiZmlub3FpLUZFaUpWZkJYTk85ODZmZ0ZPUHROIiwiaWF0IjoxNTk3OTUxOTQyfQ.XCBFvmmsqKtF9K-6sp0yR7CvKiC_EbrEaM4uqysZR5A
 
 ### check email 
-GET http://localhost:4000/users-account/0
+GET http://localhost:4000/users-account/hunt.yuyh@gmail.com
 Content-Type: application/json
 
 ### graphql test

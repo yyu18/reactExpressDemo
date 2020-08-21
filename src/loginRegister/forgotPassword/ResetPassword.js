@@ -1,7 +1,7 @@
 import React, { useState,useMemo,useRef } from 'react';
 import { useLocation} from 'react-router-dom'
 import { Button,Form,Container,Row,Col } from 'react-bootstrap';
-var resetPassword = 'http://192.168.2.24:4000/checkResetLink';
+var resetPasswordURI = 'http://localhost:4000/password-management';
 function useQuery() {
     return new URLSearchParams(useLocation().search);
   }
@@ -15,16 +15,12 @@ const ResetPassword = ()=>{
 
     useMemo(()=>{
         if(validLink.error===undefined){
-            if(query.get('token')!==undefined && query.get('token')!==null && query.get('token')!==''){
-                console.log('usememo triggered')
-                fetch(resetPassword, {
-                    method: 'POST',
+            if(query.get('token')){
+                fetch(resetPasswordURI+'/'+query.get('token'), {
+                    method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        token:query.get('token')
-                    }),
+                    }
                   })
                   .then(response => response.json())
                   .then(data => {
@@ -57,14 +53,13 @@ const ResetPassword = ()=>{
         if(Object.keys(errors).length === 0 ){
             btnRef.current.setAttribute("disabled", true);
             try{
-                let response = await fetch(resetPassword, {
-                    method: 'POST', 
+                let response = await fetch(resetPasswordURI+'/'+query.get('token'), {
+                    method: 'PATCH', 
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
                         password:value.password,
-                        token:query.get('token')
                     }),
                   })
                   let data = await response.json();

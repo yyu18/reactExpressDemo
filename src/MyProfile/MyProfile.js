@@ -2,35 +2,34 @@ import React, {useState,useMemo} from 'react';
 import Cookies from 'js-cookie';
 import './MyProfile.css';
 import CheckToken from './CheckToken';
-const checkToken = 'http://192.168.2.24:5000/profiles/users-profile/123';
+const checkToken = 'http://localhost:5000/profiles/users-profile';
 
 const MyProfile = (props) => {
-    const [errors,setErrors] = useState({});
-    /*useMemo(()=>{
-        if(errors.error===undefined){
-            const token = Cookies.get('token');
-        
-            if(!token) { setErrors({ error:true, info:'Please Login' }); return false; }
-            fetch(checkToken, {
-                method: 'POST', // or 'PUT'
+    const [profile,setProfile] = useState({});
+    
+    useMemo(()=>{
+        if(profile.error===undefined){
+            let email = props.match.params.userId
+            fetch(checkToken+'/'+email, {
+                method: 'GET', 
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' +token
                 },
-                body: JSON.stringify(),
-              }).then(response => response.json())
-              .then(data => {
-                  console.log(data);
-                  setErrors(data)
-              }).catch((error) => {
-                  console.error('Error:', error);
-                  setErrors({ error:true, info:'Connection Errors' }); return false;
-              });
+                }).then(response => response.json())
+                .then(data => {
+                    setProfile(data)
+                }).catch((error) => {
+                    console.error('Error:', error)
+                    setProfile({
+                        error:true,
+                        info:'Something Wrong'})
+                });
         }
-    },[errors,setErrors])*/
-
-    return(
-           <CheckToken errors = {errors} />
-    )
+    },[profile,setProfile])
+//<CheckToken profile = {profile.info} />
+    if(profile.error===false){
+        return(<CheckToken profile = {profile} />)
+    }
+    return (<h1>{profile.info}</h1>)
 }
 export default MyProfile

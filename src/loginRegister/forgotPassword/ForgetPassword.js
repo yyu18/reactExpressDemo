@@ -1,6 +1,6 @@
 import React, { useState,useRef } from 'react';
 import { Button,Form,Container,Row,Col } from 'react-bootstrap';
-let forgotPassword = 'http://192.168.2.24:4000/forgotPassword';
+const forgotPasswordURI = ' http://localhost:4000/password-management';
 const ForgetPassword = ()=>{
         const formRef = useRef(null);
         const [errors,setErrors] = useState({});
@@ -18,12 +18,11 @@ const ForgetPassword = ()=>{
                         btnRef.current.setAttribute("disabled", true);
                         try{
                                 console.log('fetch send')
-                                let response = await fetch(forgotPassword, {
-                                        method: 'POST', // or 'PUT'
+                                let response = await fetch(forgotPasswordURI+'/'+value.email, {
+                                        method: 'GET', // or 'PUT'
                                         headers: {
                                             'Content-Type': 'application/json',
-                                        },
-                                        body: JSON.stringify(value),
+                                        }
                                       })
                                 let data = await response.json();
                                 setErrors(data)

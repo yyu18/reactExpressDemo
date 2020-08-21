@@ -18,7 +18,7 @@ router.post('/users-account',register)
 
 router.post('/users-status',login)
 
-router.delete('/users-status',logout)
+router.delete('/users-status/:email',logout)
 
 router.post('/token',newAccessToken)
 module.exports = router;
@@ -31,8 +31,8 @@ function ResetPassword (req,res,next) {
   },(err,user) => {
       if(err) return next(err)
 
-      if(!user) return next(new NotFound('Email Is Invalid'))
-
+      if(!user) return next(new NotFound('Link Is Invalid'))
+      if(!req.body.password)  return res.sendStatus(200,'application/json',{error:false,info:'Link is Valid'})
       let hashedPassword = passwordHash.generate(req.body.password)
       user.password = hashedPassword
       user.save((err,re)=>{
@@ -121,29 +121,28 @@ function login(req,res,next) {
       
       const refreshToken = generateRefreshToken({ username:user.username, email:user.email, userId:user.userId})
       const accessToken = generateAccessToken({ username:user.username, email:user.email, userId:user.userId})
-      updateUser({ email: req.body.email }, {  token:refreshToken }, (err,user)=>{
+      updateUser({ email: req.body.email }, {  token:refreshToken }, (err)=>{
         if(err) return next(err)
-        return res.sendStatus(201,'application/json',{error:false, accessToken:accessToken, refreshToken:refreshToken})
+        return res.sendStatus(201,'application/json',{error:false,info:{
+          userId:user.userId,
+          username:user.username,
+          email:user.email
+        },accessToken:accessToken, refreshToken:refreshToken})
       })
     })
 }
 
 function logout(req,res,next) {
-  if(!(req.headers && req.headers.authorization)) throw new Unauthorized('You Need To Sign In')
-
-  const refreshToken = req.headers.authorization.split(' ')[1]
-  retrieveUser({token:refreshToken},(err,re)=>{
-    if(err) return next(err)
-    if(!re) return next(new NotFound('Invalid Authorization'))
-
-    const result = verifyRefreshToken(refreshToken)
-
-    updateUser({email:result.email},{token:0,resetPasswordExpire:'',resetPasswordToken:0},(err,usr)=>{
+  const email = req.params.email
+    updateUser({email:email},{token:0,resetPasswordExpire:'',resetPasswordToken:0},(err,usr)=>{
       if(err) next(err)
       if(!usr) throw new NotFound('not found')
-      return res.sendStatus(205,'application/json',{error:false,info:'user logout'})
+      return res.sendStatus(200,'application/json',{
+        error:false,
+        info:'user logout'
+      })
     })
-  })
+
 }
 
 function newAccessToken(req,res,next) {

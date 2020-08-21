@@ -30,7 +30,7 @@ get, put, delete(idempotency)  / post patch
 
 pure function, no side effects, no change on params,no change to outside variable, same param return same result.
 
-do not use too long if function, return early
+do not use too long if function, return early,make sure the if only have one hierarchy
 
 make sure each line of the function is under same hierarchy
 # Reference VS Value

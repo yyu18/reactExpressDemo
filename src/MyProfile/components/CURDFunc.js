@@ -12,11 +12,10 @@ export const deleteContentByID = (id,array) =>{
     let newArray = []
     array.map(e=>{
         let newObject = {...e}
-        newArray.push(newObject)
-        return
+        return newArray.push(newObject)
     })
 
-    if(!(newArray&&id!==undefined)) return
+    if(!(newArray&&id!==undefined)) return newArray
     return newArray.filter((e)=>{
         return e.id!==id
     })
@@ -26,11 +25,10 @@ export const changeContentByID = (id, array, newContent) => {
     let newArray = []
     array.map(e=>{
         let newObject = {...e}
-        newArray.push(newObject)
-        return 
+        return newArray.push(newObject)
     })
 
-    if(!(newArray&&id!==undefined)) return
+    if(!(newArray&&id!==undefined)) return newArray
     return newArray.map((e)=>{
         if(e.id!==id) return e
         e.content = newContent
@@ -42,10 +40,10 @@ export const changeNameByID = (id, array, newName) => {
     let newArray = [];
     array.map(e=>{
         let newObject = {...e};
-        newArray.push(newObject);
-        return
+        return newArray.push(newObject);
+        
     })
-    if(!(newArray&&id!==undefined)) return
+    if(!(newArray&&id!==undefined)) return newArray
     return newArray.map((e)=>{
         if(e.id!==id) return e;
         e.name = newName;
@@ -56,10 +54,9 @@ export const changeNameByID = (id, array, newName) => {
 export const deleteContentByIndex = (id,array) =>{
     let newArray = []
     array.map(e=>{
-        newArray.push(e)
-        return
+        return newArray.push(e)
     })
-    if(!(newArray&&id!==undefined)) return []
+    if(!(newArray&&id!==undefined)) return newArray
     return newArray.filter((e,index)=>{
         return index!==id
     })

@@ -1,4 +1,4 @@
-var checkEmail = 'http://192.168.2.24:4000/checkEmail';
+var checkEmail = 'http://localhost:4000/users-account';
 export const loginValidate = (value)=>{
   let keys = Object.keys(value);
   if(keys.length===0) return {};
@@ -8,7 +8,6 @@ export const loginValidate = (value)=>{
   },{})
 }
 export const Validate = async (userInfo)=>{
-  console.log(userInfo)
     let errors = {}
 if(userInfo.email!==undefined){
   if(userInfo.email.length>0){
@@ -16,14 +15,11 @@ if(userInfo.email!==undefined){
     {
       errors.email = 'Email Is Invalidated';
     } else {
-      const response =await fetch(checkEmail, {
-        method: 'POST', // or 'PUT'
+      const response =await fetch(checkEmail+'/'+userInfo.email, {
+        method: 'GET', // or 'PUT'
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          email:userInfo.email
-        })
       })
       const data = await response.json();
       if(data.error){

@@ -3,7 +3,7 @@ import { Modal,Button,Form } from 'react-bootstrap';
 import {FormContext} from '../../../context';
 import {loginValidate} from '../../formValidator';
 import Cookies from 'js-cookie';
-var loginUrl = 'http://192.168.2.24:4000/login';
+var loginUrl = 'http://localhost:4000/users-status';
 let resetPasswordUrl = 'http://192.168.2.24:3000/order-system/forgot-password';
 export const Login = () => {
     const [show, setShow] = useState(false);
@@ -25,9 +25,7 @@ export const Login = () => {
         email:formRef.current['email'].value,
         password:formRef.current['password'].value,
       }
-      console.log(value)
       let errors = loginValidate(value);
-      console.log(errors)
       setErrors(errors);
       if(Object.keys(errors).length!==0) return false;
 
@@ -47,13 +45,14 @@ try{
         btnRef.current.removeAttribute("disabled");
         setErrors(data); return false;}
 
-    if(data.error===false){
-        Cookies.set('token', data.token);
-        Cookies.set('username',data.username);
-        Cookies.set('email',data.email);
+    if(!data.error){
+        Cookies.set('userId',data.info.userId);
+        Cookies.set('email',data.info.email);
+        Cookies.set('accessToken',data.accessToken);
+        Cookies.set('refreshToken',data.refreshToken);
         setShow(false);
         formContext.dispatch({type:'login',payload:data})
-        window.location.reload(false);
+        //window.location.reload(false);
         return true;
     }    
 } catch(err) {
@@ -68,7 +67,7 @@ try{
 
     return (
       <>
-        <Button ref={btnRef} variant="primary" onClick={handleShow}>
+        <Button variant="primary" onClick={handleShow}>
           Login
         </Button>
   
@@ -123,7 +122,7 @@ try{
                 <Button variant="secondary" onClick={handleClose}>
                   Close
                 </Button>
-                <Button type='submit' variant="primary">Login</Button>
+                <Button ref={btnRef} type='submit' variant="primary">Login</Button>
               </Modal.Footer>
             </Form>
 
