@@ -1,4 +1,4 @@
-function pagination(page,limit,model){
+function pagination(page,limit,array){
     const page = parseInt(page)
     const limit = parseInt(limit)
 

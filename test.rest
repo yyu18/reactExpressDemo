@@ -4,13 +4,13 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpbm8gcWkiLCJlbWFpbCI6ImZpbm8ucWlAZ21haWwuY29tIiwidXNlcklkIjoiZmlub3FpLUZFaUpWZkJYTk85ODZmZ0ZPUHROIiwiaWF0IjoxNTk3ODY0MDA2LCJleHAiOjE1OTc4ODU2MDZ9.nvAzkoYt0BRWw0AfdrV4K_R6ySymI1TOtGMF9f2VWgw
 
 ### get the user profile
-GET http://localhost:5000/profiles/users-profile/finoqi-FEiJVfBXNO986fgFOPtN
+GET http://localhost:5000/profiles/users-profile/hubertyu-3LQj7dPm1wwSiFXok55r
 Content-Type: application/json
 
 ### update the user profile 
-PUT http://localhost:5000/profiles/users-profile/finoqi-FEiJVfBXNO986fgFOPtN
+PUT http://localhost:5000/profiles/users-profile/hubertyu-3LQj7dPm1wwSiFXok55r
 Content-Type: application/json
-Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpbm8gcWkiLCJlbWFpbCI6ImZpbm8ucWlAZ21haWwuY29tIiwidXNlcklkIjoiZmlub3FpLUZFaUpWZkJYTk85ODZmZ0ZPUHROIiwiaWF0IjoxNTk3OTUxOTU1LCJleHAiOjE1OTc5NzM1NTV9.FhGvved7li4EQ0Y__RaeWynJJhMxBMT550YTwHf1_6o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imh1YmVydCB5dSIsImVtYWlsIjoiaHVudC55dXloQGdtYWlsLmNvbSIsInVzZXJJZCI6Imh1YmVydHl1LTNMUWo3ZFBtMXd3U2lGWG9rNTVyIiwiaWF0IjoxNTk4MDk5OTI5LCJleHAiOjE1OTgxMjE1Mjl9.vREQk1-SJa0-45GAqzqcP1i7C_qorkuMmv1affY46Ps
 
 {
     "info":[
@@ -18,7 +18,7 @@ Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpbm
                 "id":"8aAIQJxvdNe",
                 "name":"profile1",
                 "content":[
-                    "aawd","qwdsad","sadfewfew","wefsdf"
+                    "aawd","qwdsad","sadfewfew","wesdf"
                 ],
                 "type":"inputList"
             }
@@ -49,7 +49,7 @@ Content-Type: application/json
 
 {
     "username":"yihu yu",
-    "email":"qwe@gmail.com",
+    "email":"qwe123@gmail.com",
     "password":"123456"
 }
 

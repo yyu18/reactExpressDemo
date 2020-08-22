@@ -1,9 +1,15 @@
-var checkEmail = 'http://localhost:4000/users-account';
+var checkEmail = 'http://192.168.2.24:4000/users-account';
 export const loginValidate = (value)=>{
   let keys = Object.keys(value);
   if(keys.length===0) return {};
   return keys.reduce((acc,cur)=>{
       if(!value[cur]) acc[cur] = cur+' is required';
+      if(cur==='email') {
+        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value[cur])) acc[cur] =cur+ ' is invalid'
+      }
+      if(cur==='password') {
+        if(value[cur].length<6) acc[cur] = cur+' length must be greater than 6'
+      }
         return acc
   },{})
 }

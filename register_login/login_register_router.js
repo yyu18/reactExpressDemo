@@ -50,7 +50,7 @@ function ResetPasswordLink (req,res,next) {
   if(!email) throw new BadRequest('email is invalid')
   retrieveUser({email:email},(err,info)=>{
       if(err) return next(err)
-      if(!info) return next(new NotFound('email is invalid'))
+      if(!info) return next(new NotFound('email is unregistered'))
    
       const resetToken = makeid(20)
       updateUser({email:email},{
@@ -89,47 +89,52 @@ function checkEmail(req,res,next){
 }
 
 function register (req,res,next)  {
-    if(!(req.body.username&&req.body.email&&req.body.password)) throw new NotFound('Email Or Password Is Required')
+  if(!(req.body.username&&req.body.email&&req.body.password)) throw new NotFound('Email Or Password Is Required')
 
-    let userId = req.body.username.split(' ').join('') + '-' + makeid(20)
-    let hashedPassword = passwordHash.generate(req.body.password)
+  let userId = req.body.username.split(' ').join('') + '-' + makeid(20)
+  let hashedPassword = passwordHash.generate(req.body.password)
 
-    let info = {
-      userId:userId,
-      username:req.body.username,
-      email:req.body.email,
-      password: hashedPassword,
-    }
+  const refreshToken = generateRefreshToken({ username:req.body.username, email:req.body.email, userId:userId})
+  const accessToken = generateAccessToken({ username:req.body.username, email:req.body.email, userId:userId})
 
-    createUser(info,(err,user) => {
-      if(err) return next(err)
-      return res.sendStatus(201,'application/json',{
-        error:false,
-        info:'User Created'
-      })
-    })
+  let info = {
+    userId:userId,
+    username:req.body.username,
+    email:req.body.email,
+    password: hashedPassword,
+  }
+  
+  createUser(info,(err,user) => {
+    if(err) return next(err)
+    return res.sendStatus(201,'application/json',{error:false,info:{
+      userId:user.userId,
+      username:user.username,
+      email:user.email
+    },accessToken:accessToken, refreshToken:refreshToken}
+    )
+  })
 }
 
 function login(req,res,next) {
-    if(!(req.body.email&&req.body.password)) throw new NotFound('Email Or Password Is Required')
-    retrieveUser({ email: req.body.email },(err,user)=>{
+  if(!(req.body.email&&req.body.password)) throw new NotFound('Email Or Password Is Required')
+  retrieveUser({ email: req.body.email },(err,user)=>{
+    if(err) return next(err)
+    
+    if(!user) return next(new NotFound('Email Or Password Is Wrong'))
+    
+    if(!passwordHash.verify(req.body.password, user.password)) return res.sendStatus(403,'application/json',{error:true,info:'Email Or Password Is Wrong'})
+    
+    const refreshToken = generateRefreshToken({ username:user.username, email:user.email, userId:user.userId})
+    const accessToken = generateAccessToken({ username:user.username, email:user.email, userId:user.userId})
+    updateUser({ email: req.body.email }, {  token:refreshToken }, (err)=>{
       if(err) return next(err)
-      
-      if(!user) return next(new NotFound('Email Or Password Is Wrong'))
-      
-      if(!passwordHash.verify(req.body.password, user.password)) return res.sendStatus(403,'application/json',{error:true,info:'Email Or Password Is Wrong'})
-      
-      const refreshToken = generateRefreshToken({ username:user.username, email:user.email, userId:user.userId})
-      const accessToken = generateAccessToken({ username:user.username, email:user.email, userId:user.userId})
-      updateUser({ email: req.body.email }, {  token:refreshToken }, (err)=>{
-        if(err) return next(err)
-        return res.sendStatus(201,'application/json',{error:false,info:{
-          userId:user.userId,
-          username:user.username,
-          email:user.email
-        },accessToken:accessToken, refreshToken:refreshToken})
-      })
+      return res.sendStatus(201,'application/json',{error:false,info:{
+        userId:user.userId,
+        username:user.username,
+        email:user.email
+      },accessToken:accessToken, refreshToken:refreshToken})
     })
+  })
 }
 
 function logout(req,res,next) {

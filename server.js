@@ -2,13 +2,13 @@ require('dotenv').config()
 var express = require('express');
 var app = express();
 //var https = require("https");
-var cors = require('cors');
+const allowCrossDomain = require('./utils/allowCrossDomain');
 const { errorHandler } = require('./utils/error');
 
 const myProfileRouter = require('./myProfile/my-profile-router.js');
-app.use(express.json());
 
-app.use(cors());
+app.use(express.json());
+app.use(allowCrossDomain)
 //begin https with credential key
          /*var options = {
             key: fs.readFileSync('/etc/nginx/ssl/wildcard.singtao.ca/singtao.ca.key'),

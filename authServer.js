@@ -1,9 +1,8 @@
 require('dotenv').config()
-var express = require('express');
-var cors = require('cors');
-var bodyParser = require('body-parser');
+const express = require('express');
+const allowCrossDomain = require('./utils/allowCrossDomain');
 
-var app = express();
+const app = express();
 const { errorHandler } = require('./utils/error');
 const login_register_router = require('./register_login/login_register_router.js');
 
@@ -13,8 +12,8 @@ app.response.sendStatus = function (statusCode, type, message) {
       .send(message)
 }
 
-app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(allowCrossDomain);
 
 app.listen(4000,'0.0.0.0',function() { console.log('Example app listening on port 4000!');});
 

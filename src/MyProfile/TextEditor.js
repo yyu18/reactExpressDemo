@@ -1,12 +1,41 @@
-import React,{ useContext } from 'react';
+import React,{ useContext,useRef,useState } from 'react';
 import { MyProfileContext } from '../context';
+import Cookies from 'js-cookie';
 import {InputArea, CheckBoxArea, TextArea, DropDownForAddArea} from './components/TextEditorArea';
-
+import { Button } from 'react-bootstrap';
+const updateURI = 'http://192.168.2.24:5000/profiles/users-profile'
 //map, reduce, filter
 const TextEditor = () => {
-    const myProfile = useContext(MyProfileContext);
+    const myProfile = useContext(MyProfileContext)
+    const btnRef = useRef(null)
+    let userId = Cookies.get('userId')
+    let accessToken = Cookies.get('accessToken')
     let state = myProfile.state;
+    const [Feedback,setFeedback] = useState({})
     let rows= [];   
+    const handleUpdate = ()=>{
+        btnRef.current.setAttribute("disabled", true);
+        fetch(updateURI+'/'+userId, {
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer ' + accessToken
+            },
+            body:JSON.stringify({
+                info:state
+            })
+        }).then(response => response.json())
+            .then(data => {
+                btnRef.current.removeAttribute("disabled");
+                setFeedback(data)
+            }).catch((error) => {
+                btnRef.current.removeAttribute("disabled");
+                setFeedback({
+                    error:true,
+                    info:error.message
+                })
+            })
+    }
     state.map((section,index)=>{        
         switch(section.type) {
             case 'textarea':
@@ -19,7 +48,7 @@ const TextEditor = () => {
                 rows.push(<CheckBoxArea key={index+section.type} info={section} />);
                 break;
             default:
-                console.log('no type found');
+                throw new Error('case not handle')
           }
           return true
     })
@@ -27,6 +56,13 @@ const TextEditor = () => {
         <>
             <DropDownForAddArea />
             {rows}
+            <Button ref={btnRef} onClick = {handleUpdate}variant="primary" >Save Profile</Button>
+            {
+                Feedback.error!==undefined&&
+                  <p style={{color:'red'}}>
+                    {Feedback.info}
+                  </p>
+              } 
         </>
     )
 }

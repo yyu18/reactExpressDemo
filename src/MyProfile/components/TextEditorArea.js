@@ -5,11 +5,10 @@ import AddBtn from './addBtn.jpg';
 import { Validator } from '../validator';
 import { InputGroup,FormControl,ListGroup, Dropdown,DropdownButton } from 'react-bootstrap';
 import { deleteContentByIndex, changeContentByID, deleteContentByID, changeNameByID } from './CURDFunc';
-
-const InputAreaList = (props) => {
+import {makeid} from '../../uniqueID'
+export const InputAreaList = (props) => {
     const myProfile = useContext(MyProfileContext);
     const handleDelete = (i) => {
-
         let listValue = deleteContentByIndex(i,props.info.content)
         let newState = changeContentByID(props.info.id, myProfile.state, listValue)
         if(newState) myProfile.setState(newState)
@@ -201,7 +200,7 @@ export const CheckBoxArea = (props) =>{
                 <input type="submit" className="submitBtn" value="Edit" onClick = {EditName}/>
                 {
                     errors.error &&
-                    <p>{errors.info}</p>
+                    <p style={{color:'red'}}>{errors.info}</p>
                 }
             </div>
         </div>
@@ -310,26 +309,55 @@ const delbtn={
 	cursor:"pointer"
 }
 
+export const DropDownList = (props) => {
+
+    const handleDelete=(i)=>{
+        let listValue = deleteContentByIndex(i,props.info)
+        props.setInfo(listValue)
+    }
+
+    let rows = []
+    props.info.map((list,index)=>{
+        return rows.push(<ListGroup.Item key={index}>{list}<i className = "fa fa-trash" onClick = {()=>handleDelete(index)}   ></i></ListGroup.Item>)
+    })
+    return(<>{rows}</>)
+}
+
 export const DropDownForAddArea = () => {
+    const [dropList,setDropList] = useState([])
+    const myProfile = useContext(MyProfileContext);
+
+    const handleArea = () => {
+        dropList.map(e=>{
+            return myProfile.setState([...myProfile.state,{
+                id:makeid(20),
+                name:'',
+                content:[],
+                type:e
+            }])
+        })
+        setDropList([])
+    }
+
     const dropDownClick = (e) => {
-        console.log(e.innerText)
+        setDropList([e.innerText])
     }
     return(
         <section>
             <div className="sectionTitle">
                 <div className="quickFade">
                     <DropdownButton id="dropdown-basic-button" title="Add Area">
-                        <Dropdown.Item onClick={(e)=>dropDownClick(e.currentTarget)} >TextArea</Dropdown.Item>
-                        <Dropdown.Item onClick={(e)=>dropDownClick(e.currentTarget)} >InputArea</Dropdown.Item>
-                        <Dropdown.Item onClick={(e)=>dropDownClick(e.currentTarget)} >CheckBoxArea</Dropdown.Item>
+                        <Dropdown.Item onClick={(e)=>dropDownClick(e.currentTarget)} >textarea</Dropdown.Item>
+                        <Dropdown.Item onClick={(e)=>dropDownClick(e.currentTarget)} >inputList</Dropdown.Item>
+                        <Dropdown.Item onClick={(e)=>dropDownClick(e.currentTarget)} >checkbox</Dropdown.Item>
                     </DropdownButton>
                 </div>
             </div>
             <div className="sectionContent">
                 <ListGroup variant="flush">
-                    <ListGroup.Item >asd<i className = "fa fa-trash"  ></i></ListGroup.Item>
+                   <DropDownList info = {dropList} setInfo = {setDropList} />
                 </ListGroup>
-                <input type="submit" className="submitBtn" value="Add Area" />
+                <input type="submit" className="submitBtn"onClick={handleArea} value="Add Area" />
             </div>
             <div className="clear"></div>
         </section>

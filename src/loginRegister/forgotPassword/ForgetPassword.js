@@ -1,6 +1,7 @@
 import React, { useState,useRef } from 'react';
 import { Button,Form,Container,Row,Col } from 'react-bootstrap';
-const forgotPasswordURI = ' http://localhost:4000/password-management';
+import {loginValidate} from '../formValidator'
+const forgotPasswordURI = ' http://192.168.2.24:4000/password-management';
 const ForgetPassword = ()=>{
         const formRef = useRef(null);
         const [errors,setErrors] = useState({});
@@ -12,7 +13,7 @@ const ForgetPassword = ()=>{
                 let value = {
                         email:formRef.current['email'].value
                 }
-                var errors = validator(value);
+                var errors = loginValidate(value);
                 setErrors(errors);
                 if(Object.keys(errors).length === 0 ){
                         btnRef.current.setAttribute("disabled", true);
@@ -38,18 +39,6 @@ const ForgetPassword = ()=>{
                                 console.log(err);
                         }
                 }
-        }
-
-        const validator = (userInfo) => {
-                let errors = {};
-                if(userInfo.email!==undefined){
-                        if(userInfo.email.length===0){
-                                errors.email = 'Email Is Invalid'
-                        } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userInfo.email)){
-                                errors.email = 'Email Is Invalid';
-                                }
-                }
-                return errors;
         }
         return(
                 <Container >

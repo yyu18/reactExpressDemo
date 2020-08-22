@@ -3,7 +3,9 @@ import { Modal,Button,Form } from 'react-bootstrap';
 import {FormContext} from '../../../context';
 import {loginValidate} from '../../formValidator';
 import Cookies from 'js-cookie';
-var loginUrl = 'http://localhost:4000/users-status';
+
+const domain = '192.168.2.24'
+var loginUrl = 'http://192.168.2.24:4000/users-status';
 let resetPasswordUrl = 'http://192.168.2.24:3000/order-system/forgot-password';
 export const Login = () => {
     const [show, setShow] = useState(false);
@@ -34,34 +36,23 @@ try{
   const response = await fetch(loginUrl, {
     method: 'POST', // or 'PUT'
     headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
     },
     body: JSON.stringify(value),
   })
 
     let data = await response.json();
-
-    if(data.error){
-        btnRef.current.removeAttribute("disabled");
-        setErrors(data); return false;}
-
-    if(!data.error){
-        Cookies.set('userId',data.info.userId);
-        Cookies.set('email',data.info.email);
-        Cookies.set('accessToken',data.accessToken);
-        Cookies.set('refreshToken',data.refreshToken);
-        setShow(false);
-        formContext.dispatch({type:'login',payload:data})
-        //window.location.reload(false);
-        return true;
-    }    
+    setErrors(data)
+    if(data.error) return btnRef.current.removeAttribute("disabled")
+    Cookies.set('userId',data.info.userId,{domain:domain})
+    Cookies.set('email',data.info.email,{domain:domain})
+    Cookies.set('accessToken',data.accessToken,{domain:domain})
+    Cookies.set('refreshToken',data.refreshToken,{domain:domain})
+    setShow(false)
+    return formContext.dispatch({type:'login',payload:data}) 
 } catch(err) {
   btnRef.current.removeAttribute("disabled");
-  console.log(err);
-  setErrors({
-    error:true,
-    info:'Connection Error.'
-  })
+  setErrors({ error:true,info:err.message})
 }
     }
 
@@ -111,7 +102,7 @@ try{
                         <a href={resetPasswordUrl}>Forgot The Password</a>
                   </Form.Group>
                   {
-                formErrors.info &&
+                formErrors.error &&
                   <Form.Text style={{color:'red'}}>
                     {formErrors.info}
                   </Form.Text>

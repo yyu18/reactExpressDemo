@@ -33,12 +33,13 @@ router.get('/users-profile/:id',(req,res,next)=>{
 router.put('/users-profile/:id',AuthUser,(req,res,next)=>{
     const userId = req.params.id
     if(userId!==req.user.userId) return next(new Unauthorized('access not allowed'))
-    
+    if(!req.body.info) return next(new BadRequest('Bad Request'))
     updateProfile({userId:userId},{myProfile:req.body.info})
-    .then(res.sendStatus(201,'application/json',{
-        error:false,
-        info:'user updated'
-    }))
+    .then(
+        res.sendStatus(201,'application/json',{
+            error:false,
+            info:'user profile updated'
+        }))
     .catch(err=>next(err))
 })
 
@@ -53,5 +54,8 @@ router.delete('/users-profile/:id',AuthUser,(req,res,next)=>{
     })).catch(err=>next(err))
 })
 
+router.post('/test',(req,res,next)=>{
+    console.log(req.body)
+})
 
 module.exports = router;

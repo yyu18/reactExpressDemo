@@ -2,13 +2,15 @@ import React, {useState,useContext,useRef} from 'react';
 import { Modal,Button,Form } from 'react-bootstrap';
 import {FormContext} from '../../../context';
 import {Validate} from '../../formValidator';
-var registerURI = 'http://localhost:4000/users-account';
-
+import Cookies from 'js-cookie';
+var registerURI = 'http://192.168.2.24:4000/users-account';
+const domain = '192.168.2.24'
 export const Register = () => {
     const [show, setShow] = useState(false);
     const [formErrors,setErrors] = useState({})
+    const formRef = useRef(null)
     const btnRef = useRef(null)
-    const formContext = useContext(FormContext);
+    const formContext = useContext(FormContext)
 
     const handleClose = () => {
       setShow(false);
@@ -25,25 +27,36 @@ export const Register = () => {
     const handleSubmit = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      Validate(formContext.RegisterFormInfo).then(errors=>{
+      let value = {
+        username:formRef.current['username'].value,
+        email:formRef.current['email'].value,
+        password:formRef.current['password'].value,
+        confirmPassword:formRef.current['confirmPassword'].value
+      }
+      Validate(value).then(errors=>{
         setErrors(errors);
         if(Object.keys(errors).length === 0 ){
           btnRef.current.setAttribute("disabled", true);
             fetch(registerURI, {
-              method: 'POST', // or 'PUT'
+              method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
               },
-              body: JSON.stringify(formContext.RegisterFormInfo),
+              body: JSON.stringify(value),
             })
             .then(response => response.json())
             .then(data => {
-              setErrors({ register:data.info })
+              setErrors(data)
               if(data.error) return btnRef.current.removeAttribute("disabled");
-              return true
-            }).catch((error) => {
+              Cookies.set('userId',data.info.userId,{domain:domain})
+              Cookies.set('email',data.info.email,{domain:domain})
+              Cookies.set('accessToken',data.accessToken,{domain:domain})
+              Cookies.set('refreshToken',data.refreshToken,{domain:domain})
+              setShow(false)
+              return formContext.dispatch({type:'login',payload:data}) 
+            }).catch((err) => {
                 btnRef.current.removeAttribute("disabled");
-                console.error('Error:', error);
+                setErrors({error:true,info:err.message})
             });
         }
       });
@@ -65,7 +78,7 @@ export const Register = () => {
             <Modal.Title>Register The Account</Modal.Title>
           </Modal.Header>
 
-            <Form noValidate onSubmit={handleSubmit}>
+            <Form noValidate ref = {formRef} onSubmit={handleSubmit}>
               <Modal.Body>
            
                 <Form.Group controlId="formUsername">
@@ -145,9 +158,9 @@ export const Register = () => {
                              </Form.Text>
                       }
                       {
-                          formErrors.register&&
+                          formErrors.error&&
                           <Form.Text style={{color:'red'}}>
-                          {formErrors.register}
+                          {formErrors.info}
                           </Form.Text>
                         }   
                   </Form.Group>

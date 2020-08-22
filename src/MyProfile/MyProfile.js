@@ -1,15 +1,42 @@
-import React, {useState,useMemo} from 'react';
-import Cookies from 'js-cookie';
+import React, {useState,useMemo,useRef} from 'react';
+import { Button } from 'react-bootstrap';
 import './MyProfile.css';
-import CheckToken from './CheckToken';
-const checkToken = 'http://localhost:5000/profiles/users-profile';
+import Cookies from 'js-cookie';
+import TextEditor from './TextEditor'
+import { MyProfileContext } from '../context';
+const checkToken = 'http://192.168.2.24:5000/profiles/users-profile';
 
 const MyProfile = (props) => {
-    const [profile,setProfile] = useState({});
-    
+    let accessToken = Cookies.get('accessToken')
+    let email = props.match.params.userId
+    const [profile,setProfile] = useState({})
+    const [state,setState] = useState([])
+    const btnRef = useRef(null)
+//create profile
+    const handleCreate=()=>{
+        btnRef.current.setAttribute("disabled", true);
+        fetch(checkToken, {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+accessToken
+            },
+            }).then(response => response.json())
+            .then(data => {
+                setProfile(data)
+                if(data.error)  return btnRef.current.removeAttribute("disabled")
+                return
+            }).catch((error) => {
+                btnRef.current.removeAttribute("disabled");
+                setProfile({
+                    error:true,
+                    info:error.message
+                })
+            })
+    }
+    //get the profile
     useMemo(()=>{
         if(profile.error===undefined){
-            let email = props.match.params.userId
             fetch(checkToken+'/'+email, {
                 method: 'GET', 
                 headers: {
@@ -17,19 +44,44 @@ const MyProfile = (props) => {
                 },
                 }).then(response => response.json())
                 .then(data => {
-                    setProfile(data)
+                    if(!data.error) setState(data.info.myProfile)
+                    return setProfile(data)
                 }).catch((error) => {
-                    console.error('Error:', error)
-                    setProfile({
-                        error:true,
-                        info:'Something Wrong'})
+                    console.error(error.message)
                 });
         }
-    },[profile,setProfile])
-//<CheckToken profile = {profile.info} />
-    if(profile.error===false){
-        return(<CheckToken profile = {profile} />)
-    }
-    return (<h1>{profile.info}</h1>)
+    },[profile,setProfile,email])
+
+    const value = useMemo(()=> {
+        return {
+            state:state,
+            setState:setState
+        }
+        },[state,setState])
+
+
+//three situation, false, true, undefined
+    if(profile.error===false) return(
+        <div id="cv" className="quickFade">
+            <div id="mainArea">
+                <MyProfileContext.Provider value = {value}>       
+                        <TextEditor />
+                </MyProfileContext.Provider>
+            </div>
+        </div>
+    )
+    
+    if(profile.error&&accessToken) return(<>
+            <div style={{margin:"auto",width:"fit-content"}}>
+                <h1>{profile.info}</h1>
+                
+                <Button variant="primary"ref={btnRef} onClick = {handleCreate}> Create Profile </Button>
+            </div>
+            </>)
+    return (<>
+    <div style={{margin:"auto",width:"fit-content"}}>
+        <h1>{profile.info}</h1>
+    </div>
+    </>)
 }
 export default MyProfile
