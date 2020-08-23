@@ -4,10 +4,10 @@ const userProfile = ()=>{
     <div class="product-box">
         <div class="img-wrapper">
             <div class="front">
-                <a href="product-page(no-sidebar).html"><img src="../assets/images/pro3/default-user-image.png" class="img-fluid blur-up lazyload bg-img" alt=""/></a>
+                <img src="/assets/images/pro3/default-user-image.png" class="img-fluid blur-up lazyload bg-img" alt=""/>
             </div>
             <div class="back">
-                <a href="product-page(no-sidebar).html"><img src="../assets/images/pro3/default-user-image.png" class="img-fluid blur-up lazyload bg-img" alt=""/></a>
+                <img src="/assets/images/pro3/default-user-image.png" class="img-fluid blur-up lazyload bg-img" alt=""/>
             </div>
             <div class="cart-info cart-wrap">
 

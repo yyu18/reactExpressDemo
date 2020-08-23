@@ -1,6 +1,7 @@
 require('dotenv').config()
 var express = require('express');
 var app = express();
+const path = require("path");
 //var https = require("https");
 const allowCrossDomain = require('./utils/allowCrossDomain');
 const { errorHandler } = require('./utils/error');
@@ -23,7 +24,9 @@ app.use(allowCrossDomain)
 //app.listen(5000, "0.0.0.0",function() { console.log('Example app listening on port 5000!'); });
 //end app listen to the external ip
 
-app.listen(5000,'0.0.0.0',function() { console.log('Example app listening on port 5000!');});
+app.listen(5000,'0.0.0.0',function() { 
+    console.log(__dirname)
+    console.log('Example app listening on port 5000!');});
 
 app.response.sendStatus = function (statusCode, type, message) {
     return this.contentType(type)
@@ -31,5 +34,6 @@ app.response.sendStatus = function (statusCode, type, message) {
       .send(message)
 }
 
+app.use('/static/image-profile', express.static(path.join(__dirname, 'uploads')))
 app.use('/profiles',myProfileRouter);
 app.use(errorHandler);

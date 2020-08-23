@@ -1,7 +1,7 @@
 import React,{ useContext,useRef,useState } from 'react';
 import { MyProfileContext } from '../context';
 import Cookies from 'js-cookie';
-import {InputArea, CheckBoxArea, TextArea, DropDownForAddArea} from './components/TextEditorArea';
+import { InputArea, CheckBoxArea, TextArea, DropDownForAddArea,ProfileImage } from './components/TextEditorArea';
 import { Button } from 'react-bootstrap';
 const updateURI = 'http://192.168.2.24:5000/profiles/users-profile'
 //map, reduce, filter
@@ -55,6 +55,7 @@ const TextEditor = () => {
     return(
         <>
             <DropDownForAddArea />
+            <ProfileImage />
             {rows}
             <Button ref={btnRef} onClick = {handleUpdate}variant="primary" >Save Profile</Button>
             {

@@ -3,6 +3,9 @@ var router = express.Router();
 const { AuthUser } = require('./auth');
 const { createProfile, retrieveProfile, updateProfile, deleteProfile } = require('../mongoHandler/dbConnect');
 const {  BadRequest,NotFound,Unauthorized,Forbidden } = require('../utils/error')
+const {uploadProfileImage} = require('../utils/uploadFile')
+
+//create user profile
 router.post('/users-profile',AuthUser,(req,res,next)=>{
     let info = {
         userId:req.user.userId,
@@ -14,6 +17,37 @@ router.post('/users-profile',AuthUser,(req,res,next)=>{
             error:false,
             info:profile
         })
+    })
+})
+
+//patch profile image
+router.post('/users-profile/:id',(req,res,next)=>{
+    return uploadProfileImage(req, res, async (err) => {
+        if(err) next(err)
+
+        let info = {
+            userId : req.params.id
+        }
+        try{
+            let user = await retrieveProfile(info)
+
+            let images = req.files.reduce((acc,cur)=>{
+                acc.push(process.env.PROFILE_SERVER_DOMAIN+'/static/image-profile'+'/'+cur.filename)
+                return acc
+            },[])
+
+            user.image = images
+
+            await user.save()
+            return res.sendStatus(200,'application/json',{
+                error:false,
+                info:user.image
+            })
+            
+        } catch(err) {
+            next(err)
+        }
+
     })
 })
 
@@ -52,10 +86,6 @@ router.delete('/users-profile/:id',AuthUser,(req,res,next)=>{
         error:false,
         info:"user profile deleted"
     })).catch(err=>next(err))
-})
-
-router.post('/test',(req,res,next)=>{
-    console.log(req.body)
 })
 
 module.exports = router;

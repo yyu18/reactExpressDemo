@@ -1,11 +1,14 @@
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext,useRef } from 'react';
 import { MyProfileContext } from '../../context';
 import EditBtn from './editBtn.jpg';
 import AddBtn from './addBtn.jpg';
 import { Validator } from '../validator';
-import { InputGroup,FormControl,ListGroup, Dropdown,DropdownButton } from 'react-bootstrap';
+import { InputGroup,FormControl,ListGroup, Dropdown,DropdownButton,Form,Button } from 'react-bootstrap';
 import { deleteContentByIndex, changeContentByID, deleteContentByID, changeNameByID } from './CURDFunc';
 import {makeid} from '../../uniqueID'
+
+const uploadProfileImageURI = 'http://192.168.2.24:5000/profiles/users-profile'
+
 export const InputAreaList = (props) => {
     const myProfile = useContext(MyProfileContext);
     const handleDelete = (i) => {
@@ -362,4 +365,115 @@ export const DropDownForAddArea = () => {
             <div className="clear"></div>
         </section>
         )
+}
+
+export const ProfileImage = ()=> {
+    const formRef = useRef(null)
+    const [feedback,setFeedback] = useState({})
+
+    const [image,setImage]= useState({
+        
+    })
+
+    const imageValidator = (images)=>{
+        let feedback = {}
+
+        if(images.length>2){ 
+            feedback.image="maximum 2 files"
+            return feedback 
+        }
+
+        if(images.length===0){
+            feedback.image='no file upload'
+            return feedback
+        }
+        const formData = new FormData()
+        for(let i = 0;i<images.length;i++){
+            if (images[i].type !== "image/png" && images[i].type !== "image/jpg" && images[i].type !== "image/jpeg") {
+                feedback.image='image format not allowed'
+                return feedback
+            }
+            
+            if (images[i].size >1000000) {
+                feedback.image = 'file too large'
+                return feedback
+            }
+            
+            formData.append('profileImage',images[i])
+        }
+        
+        feedback.formData = formData
+        return feedback
+    }
+
+    const handleSubmit = async (event) =>{
+        event.preventDefault()
+        event.stopPropagation()
+
+        let images = formRef.current['profileImage'].files
+        let feedback = imageValidator(images)
+        if(feedback.image) return setFeedback({
+            error:true,
+            info:feedback.image
+        })
+
+        try{
+            let response = await fetch(uploadProfileImageURI+'/hubertyu-3LQj7dPm1wwSiFXok55r', {
+                method: 'post',
+                body:feedback.formData
+            })
+            let data = await response.json()
+            if(data.error) return setFeedback({
+                error:true,
+                info:data.info
+            })
+            console.log(data.info)
+            setImage({
+                path:data.info[0]
+            })
+            return setFeedback({
+                error:false,
+                info:'image uploaded'
+            })
+        } catch(err) {  
+            return setFeedback({
+                error:true,
+                info:err.message
+            })}
+    
+    }
+    
+    return (
+        <section>
+        <div className="sectionTitle">
+            <div className="quickFade">
+                {
+                    image.path ?
+                        <img alt="" className="mr-3" src={image.path} style={{width:"70%"}}/>
+                        :
+                        <img alt="" className="mr-3" src="/assets/images/pro3/default-user-image.png" style={{width:"70%"}}/>
+                }
+            </div>
+        </div>
+        <div className="sectionContent">
+            <Form ref={formRef} noValidate onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    <Form.File id="formcheck-api-regular">
+                        <Form.File.Label>Upload Profile Image</Form.File.Label>
+                        <Form.File.Input name = 'profileImage'accept="image/*" multiple />
+                    </Form.File>
+                </div>
+
+                <Button type="submit">Upload</Button>
+                {
+                    feedback.error!==undefined&&
+                    <p style={{color:'red'}}>
+                        {feedback.info}
+                    </p>
+                } 
+            </Form>
+        </div>
+        <div className="clear"></div>
+    </section>
+    )
 }

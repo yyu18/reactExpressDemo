@@ -276,7 +276,7 @@ const Header=(props)=>{
                                         </div>
                                     </li>
                                     <li className="onhover-div mobile-setting">
-                                        <div><img src="../assets/images/icon/setting.png" className="img-fluid blur-up lazyload" alt=""/> <i className="ti-settings"></i></div>
+                                        <div><img src="/assets/images/icon/setting.png" className="img-fluid blur-up lazyload" alt=""/> <i className="ti-settings"></i></div>
                                         <div className="show-div setting">
                                             
                                                 <h6>Language</h6>
@@ -294,7 +294,7 @@ const Header=(props)=>{
                                         </div>
                                     </li>
                                     <li className="onhover-div mobile-cart">
-                                        <div><img src="../assets/images/icon/cart.png" className="img-fluid blur-up lazyload" alt=""/> <i className="ti-shopping-cart"></i></div>
+                                        <div><img src="/assets/images/icon/cart.png" className="img-fluid blur-up lazyload" alt=""/> <i className="ti-shopping-cart"></i></div>
                                         <ul className="show-div shopping-cart">
                                             <li>
                                                 <div className="media">
@@ -364,7 +364,7 @@ const Header=(props)=>{
                                         </ul>
                                     </li>
                                     <li className="onhover-div mobile-cart">
-                                        <div><img src="../assets/images/icon/users.png" className="img-fluid blur-up lazyload" alt=""/> <i className="ti-shopping-cart"></i></div>
+                                        <div><img src="/assets/images/icon/users.png" className="img-fluid blur-up lazyload" alt=""/> <i className="ti-shopping-cart"></i></div>
                                         
                                         <ul className="show-div shopping-cart">
                                             

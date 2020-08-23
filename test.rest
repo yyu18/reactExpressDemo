@@ -30,6 +30,13 @@ DELETE http://localhost:5000/profiles/users-profile/ZhuoranQi-pQR9bY4og8aAIQJxvd
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlpodW9yYW4gUWkiLCJlbWFpbCI6ImNoZXJ5bGFubjAxMTBAaG90bWFpbC5jb20iLCJ1c2VySWQiOiJaaHVvcmFuUWktcFFSOWJZNG9nOGFBSVFKeHZkTmUiLCJpYXQiOjE1OTc2ODI0NTgsImV4cCI6MTU5NzcwNDA1OH0.Xdi2UkeH1P6NlPbvNkqEpKSmzDyUacrolkA5jM7Nq-s
 
+### upload profile image 
+PATCH http://localhost:5000/profiles/users-profile/hubertyu-3LQj7dPm1wwSiFXok55r
+Content-Type: application/json
+
+{
+    "info":"hello world"
+}
 
 ### reset password link
 GET http://localhost:4000/password-management/hunt.yuyh@gmail.com

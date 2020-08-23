@@ -23,7 +23,8 @@ const userSchema = new mongoose.Schema({
 
 const profileSchema = new mongoose.Schema({
   userId:{type:String,unique:true},
-  myProfile:[]
+  myProfile:[],
+  image:[String]
 })
 
 const Users = mongoose.model('Users', userSchema);
