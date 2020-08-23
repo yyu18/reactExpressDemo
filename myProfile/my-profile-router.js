@@ -29,7 +29,7 @@ router.get('/users-profile/:id',(req,res,next)=>{
         })
     }).catch(err=>{return next(err)})
 })
-
+//update user profile
 router.put('/users-profile/:id',AuthUser,(req,res,next)=>{
     const userId = req.params.id
     if(userId!==req.user.userId) return next(new Unauthorized('access not allowed'))

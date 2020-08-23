@@ -28,7 +28,7 @@
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
-    "serverDev": "nodemon server.js",
+    "profileServerDev": "nodemon profileServer.js",
     "authServerDev": "nodemon authServer.js",
     "graphqlapi": "nodemon graphql_api.js"
   },

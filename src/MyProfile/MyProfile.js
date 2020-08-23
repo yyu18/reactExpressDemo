@@ -47,7 +47,10 @@ const MyProfile = (props) => {
                     if(!data.error) setState(data.info.myProfile)
                     return setProfile(data)
                 }).catch((error) => {
-                    console.error(error.message)
+                    return setProfile({
+                        error:'fetch',
+                        info:error.message
+                    })
                 });
         }
     },[profile,setProfile,email])
@@ -71,7 +74,7 @@ const MyProfile = (props) => {
         </div>
     )
     
-    if(profile.error&&accessToken) return(<>
+    if(profile.error===true&&accessToken) return(<>
             <div style={{margin:"auto",width:"fit-content"}}>
                 <h1>{profile.info}</h1>
                 

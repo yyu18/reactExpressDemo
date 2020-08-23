@@ -3131,8 +3131,7 @@ header {
 ==========================*/
 .theme-tab {
   position: relative; }
-  .theme-tab .tab-content {
-    display: none; }
+
     .theme-tab .tab-content[style="display: block;"] .product-box, .theme-tab .tab-content[style="display: block;"] .tab-box {
       -webkit-animation: zoomIn 300ms ease-in-out;
               animation: zoomIn 300ms ease-in-out; }

@@ -85,34 +85,35 @@ const Header=(props)=>{
                     </div>
                 </div>
                 <div className="col-lg-6 text-right">
-                  
+                    <ul className="header-dropdown">
+                        <FormContext.Provider value = {value}>
                         {
-                            token ? 
-                            <ul className="header-dropdown">
-                            <li className="mobile-wishlist"><a href=" ">1<i className="fa fa-heart" aria-hidden="true"></i></a></li>
-                            <li className="onhover-dropdown mobile-account"> <i className="fa fa-user" aria-hidden="true"></i> My Account
-                            <ul className="onhover-show-div">
-                                <FormContext.Provider value = {value}>
-                                        <li> 
-                                            <Profile />
-                                        </li>
-                                        <li>    
-                                            <Button variant="primary" onClick={logout}>
-                                                Logout
-                                            </Button>
-                                        </li>
-                                </FormContext.Provider>
-                            </ul>
-                            </li>
-                            </ul>
+                        token ? 
+                            <>
+                                <li className="mobile-wishlist"><a href=" ">1<i className="fa fa-heart" aria-hidden="true"></i></a></li>
+                                <li className="onhover-dropdown mobile-account"> <i className="fa fa-user" aria-hidden="true"></i> My Account
+                                <ul className="onhover-show-div">
+                                    <li> 
+                                        <Profile />
+                                    </li>
+                                    <li>    
+                                        <Button variant="primary" onClick={logout}>
+                                            Logout
+                                        </Button>
+                                    </li>
+                                    </ul>
+                                    </li>
+                                    </>
                             :
-                            <ul className="header-dropdown">
-                                <FormContext.Provider value = {value}>
+                            <li className="onhover-dropdown mobile-account"> <i className="fa fa-user" aria-hidden="true"></i> My Account
+                                <ul className="onhover-show-div">
                                     <li><Login /></li>
                                     <li><Register /></li>
-                                </FormContext.Provider>
-                        </ul>
+                                </ul>
+                            </li>
                         }
+                            </FormContext.Provider>
+                    </ul>                 
                 </div>
             </div>
         </div>
@@ -124,76 +125,17 @@ const Header=(props)=>{
                 <div className="main-menu">
                     <div className="menu-left">
                         <div className="navbar">
-                            <a href=" " onClick={openNav}>
+                            <a onClick={openNav}>
                                 <div className="bar-style"><i className="fa fa-bars sidebar-bar" aria-hidden="true"></i></div>
                             </a>
                             <div id="mySidenav" className="sidenav">
-                                <a href=" " className="sidebar-overlay" onClick={closeNav}> </a>
+                                <a className="sidebar-overlay" onClick={closeNav}> </a>
                                 <nav>
                                     <div onClick={closeNav}>
                                         <div className="sidebar-back text-left"><i className="fa fa-angle-left pr-2" aria-hidden="true"></i> Back</div>
                                     </div>
                                     <ul id="sub-menu" className="sm pixelstrap sm-vertical">
-                                        <li> <a href=" ">clothing</a>
-                                            <ul className="mega-menu clothing-menu">
-                                                <li>
-                                                    <div className="row m-0">
-                                                        <div className="col-xl-4">
-                                                            <div className="link-section">
-                                                                <h5>women's fashion</h5>
-                                                                <ul>
-                                                                    <li><a href=" ">dresses</a></li>
-                                                                    <li><a href=" ">skirts</a></li>
-                                                                    <li><a href=" ">westarn wear</a></li>
-                                                                    <li><a href=" ">ethic wear</a></li>
-                                                                    <li><a href=" ">sport wear</a></li>
-                                                                </ul>
-                                                                <h5>men's fashion</h5>
-                                                                <ul>
-                                                                    <li><a href=" ">sports wear</a></li>
-                                                                    <li><a href=" ">western wear</a></li>
-                                                                    <li><a href=" ">ethic wear</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-xl-4">
-                                                            <div className="link-section">
-                                                                <h5>accessories</h5>
-                                                                <ul>
-                                                                    <li><a href=" ">fashion jewellery</a></li>
-                                                                    <li><a href=" ">caps and hats</a></li>
-                                                                    <li><a href=" ">precious jewellery</a></li>
-                                                                    <li><a href=" ">necklaces</a></li>
-                                                                    <li><a href=" ">earrings</a></li>
-                                                                    <li><a href=" ">wrist wear</a></li>
-                                                                    <li><a href=" ">ties</a></li>
-                                                                    <li><a href=" ">cufflinks</a></li>
-                                                                    <li><a href=" ">pockets squares</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-xl-4">
-                                                            <a href=" " className="mega-menu-banner"><img src="../assets/images/mega-menu/fashion.jpg" alt="" className="img-fluid blur-up lazyload" /></a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li> <a href=" ">bags</a>
-                                            <ul>
-                                                <li><a href=" ">shopper bags</a></li>
-                                                <li><a href=" ">laptop bags</a></li>
-                                                <li><a href=" ">clutches</a></li>
-                                                <li> <a href=" ">purses</a>
-                                                    <ul>
-                                                        <li><a href=" ">purses</a></li>
-                                                        <li><a href=" ">wallets</a></li>
-                                                        <li><a href=" ">leathers</a></li>
-                                                        <li><a href=" ">satchels</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
+
                                         <li> <a href=" ">footwear</a>
                                             <ul>
                                                 <li><a href=" ">sport shoes</a></li>
@@ -202,54 +144,6 @@ const Header=(props)=>{
                                             </ul>
                                         </li>
                                         <li><a href=" ">watches</a></li>
-                                        <li> <a href=" ">Accessories</a>
-                                            <ul>
-                                                <li><a href=" ">fashion jewellery</a></li>
-                                                <li><a href=" ">caps and hats</a></li>
-                                                <li><a href=" ">precious jewellery</a></li>
-                                                <li> <a href=" ">more..</a>
-                                                    <ul>
-                                                        <li><a href=" ">necklaces</a></li>
-                                                        <li><a href=" ">earrings</a></li>
-                                                        <li><a href=" ">wrist wear</a></li>
-                                                        <li> <a href=" ">accessories</a>
-                                                            <ul>
-                                                                <li><a href=" ">ties</a></li>
-                                                                <li><a href=" ">cufflinks</a></li>
-                                                                <li><a href=" ">pockets squares</a></li>
-                                                                <li><a href=" ">helmets</a></li>
-                                                                <li><a href=" ">scarves</a></li>
-                                                                <li> <a href=" ">more...</a>
-                                                                    <ul>
-                                                                        <li><a href=" ">accessory gift sets</a></li>
-                                                                        <li><a href=" ">travel accessories</a></li>
-                                                                        <li><a href=" ">phone cases</a></li>
-                                                                    </ul>
-                                                                </li>
-                                                            </ul>
-                                                        </li>
-                                                        <li><a href=" ">belts & more</a></li>
-                                                        <li><a href=" ">wearable</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li><a href=" ">house of design</a></li>
-                                        <li> <a href=" ">beauty & personal care</a>
-                                            <ul>
-                                                <li><a href=" ">makeup</a></li>
-                                                <li><a href=" ">skincare</a></li>
-                                                <li><a href=" ">premium beaty</a></li>
-                                                <li> <a href=" ">more</a>
-                                                    <ul>
-                                                        <li><a href=" ">fragrances</a></li>
-                                                        <li><a href=" ">luxury beauty</a></li>
-                                                        <li><a href=" ">hair care</a></li>
-                                                        <li><a href=" ">tools & brushes</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
                                         <li><a href=" ">home & decor</a></li>
                                         <li><a href=" ">kitchen</a></li>
                                     </ul>
@@ -262,10 +156,10 @@ const Header=(props)=>{
                             <nav id="main-nav">
                                 <div className="toggle-nav"><i className="fa fa-bars sidebar-bar"></i></div>
                                 <ul id="main-menu" className="sm pixelstrap sm-horizontal">
+
                                     <li>
                                         <div className="mobile-back text-right">Back<i className="fa fa-angle-right pl-2" aria-hidden="true"></i></div>
                                     </li>
-
 
                                     <li>
                                         <a href=" ">Home</a>
@@ -288,34 +182,12 @@ const Header=(props)=>{
                                         </ul>
                                     </li>
 
-
                                     <li>
                                         <a href=" ">shop</a>
                                         <ul>
                                             <li><a href="category-page.html">left sidebar</a></li>
                                         </ul>
                                     </li>
-                                    <li>
-                                        <a href=" ">product</a>
-                                        <ul>
-                                            <li>
-                                                <a href=" ">sidebar</a>
-                                                <ul>
-                                                    <li><a href="product-page.html">left sidebar</a></li>
-                                                    <li><a href="product-page(no-sidebar).html">no sidebar</a></li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <a href=" ">thumbnail image</a>
-                                                <ul>
-                                                    <li><a href="product-page(right-image).html">right image</a></li>
-                                                    <li><a href="product-page(image-outside).html">image outside <span className="new-tag">new</span></a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="product-page(4-image).html">4 image <span className="new-tag">new</span></a></li>
-                                        </ul>
-                                    </li>
-
 
                                     <li className="mega" id="hover-cls"><a href=" ">features
                                         <div className="lable-nav">new</div>
@@ -376,13 +248,6 @@ const Header=(props)=>{
                                         </ul>
                                     </li>
 
-                                    <li>
-                                        <a href=" ">blog</a>
-                                        <ul>
-                                            <li><a href="blog-page.html">left sidebar</a></li>
-                                        </ul>
-                                    </li>
-
                                 </ul>
                             </nav>
                         </div>
@@ -413,18 +278,19 @@ const Header=(props)=>{
                                     <li className="onhover-div mobile-setting">
                                         <div><img src="../assets/images/icon/setting.png" className="img-fluid blur-up lazyload" alt=""/> <i className="ti-settings"></i></div>
                                         <div className="show-div setting">
-                                            <h6>language</h6>
-                                            <ul>
-                                                <li><a href=" ">english</a></li>
-                                                <li><a href=" ">french</a></li>
-                                            </ul>
-                                            <h6>currency</h6>
-                                            <ul className="list-inline">
-                                                <li><a href=" ">euro</a></li>
-                                                <li><a href=" ">rupees</a></li>
-                                                <li><a href=" ">pound</a></li>
-                                                <li><a href=" ">doller</a></li>
-                                            </ul>
+                                            
+                                                <h6>Language</h6>
+                                                <ul className="list-inline">
+                                                    <li>English</li>
+                                                    <li>Chinese</li>
+                                                </ul>
+                                                <h6>Theme</h6>
+                                                <ul className="list-inline">
+                                                    <li>Dark</li>
+                                                    <li>White</li>
+                                                </ul>
+                                           
+   
                                         </div>
                                     </li>
                                     <li className="onhover-div mobile-cart">
@@ -462,8 +328,68 @@ const Header=(props)=>{
                                             <li>
                                                 <div className="buttons"><a href="cart.html" className="view-cart">view cart</a> <a href=" " className="checkout">checkout</a></div>
                                             </li>
+                                        </ul>  <ul className="show-div shopping-cart">
+                                            <li>
+                                                <div className="media">
+                                                    <a href=" "><img alt="" className="mr-3" src="../assets/images/fashion/product/1.jpg"/></a>
+                                                    <div className="media-body">
+                                                        <a href=" ">
+                                                            <h4>item name</h4>
+                                                        </a>
+                                                        <h4><span>1 x $ 299.00</span></h4>
+                                                    </div>
+                                                </div>
+                                                <div className="close-circle"><a href=" "> <i className="fa fa-times" aria-hidden="true"></i></a></div>
+                                            </li>
+                                            <li>
+                                                <div className="media">
+                                                    <a href=" "><img alt="" className="mr-3" src="../assets/images/fashion/product/2.jpg"/></a>
+                                                    <div className="media-body">
+                                                        <a href=" ">
+                                                            <h4>item name</h4>
+                                                        </a>
+                                                        <h4><span>1 x $ 299.00</span></h4>
+                                                    </div>
+                                                </div>
+                                                <div className="close-circle"><a href=" "> <i className="fa fa-times" aria-hidden="true"></i></a></div>
+                                            </li>
+                                            <li>
+                                                <div className="total">
+                                                    <h5>subtotal : <span>$299.00</span></h5>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div className="buttons"><a href="cart.html" className="view-cart">view cart</a> <a href=" " className="checkout">checkout</a></div>
+                                            </li>
                                         </ul>
                                     </li>
+                                    <li className="onhover-div mobile-cart">
+                                        <div><img src="../assets/images/icon/users.png" className="img-fluid blur-up lazyload" alt=""/> <i className="ti-shopping-cart"></i></div>
+                                        
+                                        <ul className="show-div shopping-cart">
+                                            
+                                            <li>
+                                                <div className="media" >
+                                                    <a href=" "><img alt="" className="mr-3" src="../assets/images/pro3/default-user-image.png"/></a>
+                                                    <div className="media-body">
+                                                        <a href=" ">
+                                                            <h4>Hubert</h4>
+                                                        </a>
+                                                        <h4><span>Software Eng</span></h4>
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                        </ul>  
+                                        
+                                    </li>
+                                
+
+
+
+
+
+
                                 </ul>
                             </div>
                         </div>
