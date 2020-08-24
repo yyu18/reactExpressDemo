@@ -25,11 +25,15 @@ const profileType = new GraphQLObjectType({
             type : userType,
             resolve:async (source)=>{
                 try{
-                    return await Users.findOne({userId:source.userId})
+                    let user = await Users.findOne({userId:source.userId})
+                    return user
                 } catch (err) {
                     throw new Error(err.message)
                 }
             } 
+        },
+        image : {
+            type : GraphQLList(GraphQLString)
         }
     }
 })

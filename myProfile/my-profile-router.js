@@ -4,6 +4,7 @@ const { AuthUser } = require('./auth');
 const { createProfile, retrieveProfile, updateProfile, deleteProfile } = require('../mongoHandler/dbConnect');
 const {  BadRequest,NotFound,Unauthorized,Forbidden } = require('../utils/error')
 const {uploadProfileImage} = require('../utils/uploadFile')
+const sharp = require("sharp");
 
 //create user profile
 router.post('/users-profile',AuthUser,(req,res,next)=>{
@@ -29,6 +30,16 @@ router.post('/users-profile/:id',(req,res,next)=>{
             userId : req.params.id
         }
         try{
+            req.files.map(async file => {
+                const filename = file.filename
+
+                await sharp(file.buffer)
+                  .resize(512, 512)
+                  .toFormat("jpeg")
+                  .jpeg({ quality: 90 })
+                  .toFile(`upload/${filename}`);
+              })
+
             let user = await retrieveProfile(info)
 
             user.image = req.files.reduce((acc,cur)=>{

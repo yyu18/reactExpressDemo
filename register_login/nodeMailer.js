@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 module.exports = {
     nodeMailer: async (email,token)=>{  
       let config = {
-        clientUrl:'http://192.168.2.24:3000/order-system/reset-password',
+        clientUrl:'http://192.168.2.24:3000/reset-password',
         token:token
       }
         var account = {

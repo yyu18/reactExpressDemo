@@ -55,8 +55,8 @@ export const Register = () => {
               setShow(false)
               return formContext.dispatch({type:'login',payload:data}) 
             }).catch((err) => {
-                btnRef.current.removeAttribute("disabled");
-                setErrors({error:true,info:err.message})
+              if(btnRef)  btnRef.current.removeAttribute("disabled")
+              setErrors({error:true,info:err.message})
             });
         }
       });

@@ -4,18 +4,19 @@ import './MyProfile.css';
 import Cookies from 'js-cookie';
 import TextEditor from './TextEditor'
 import { MyProfileContext } from '../context';
-const checkToken = 'http://192.168.2.24:5000/profiles/users-profile';
+const usersProfileURI = 'http://192.168.2.24:5000/profiles/users-profile';
 
 const MyProfile = (props) => {
     let accessToken = Cookies.get('accessToken')
-    let email = props.match.params.userId
+    let userId = props.match.params.userId
     const [profile,setProfile] = useState({})
-    const [state,setState] = useState({})
+    const [state,setState] = useState([])
+    const [image,setImage] = useState([])
     const btnRef = useRef(null)
 //create profile
     const handleCreate=()=>{
         btnRef.current.setAttribute("disabled", true);
-        fetch(checkToken, {
+        fetch(usersProfileURI, {
             method: 'POST', 
             headers: {
                 'Content-Type': 'application/json',
@@ -37,17 +38,17 @@ const MyProfile = (props) => {
     //get the profile
     useMemo(()=>{
         if(profile.error===undefined){
-            fetch(checkToken+'/'+email, {
+            fetch(usersProfileURI+'/'+userId, {
                 method: 'GET', 
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 }).then(response => response.json())
                 .then(data => {
-                    if(!data.error) setState({
-                        data:data.info.myProfile,
-                        image:data.info.image
-                    })
+                    if(!data.error) {   
+                        setState(data.info.myProfile)
+                        setImage(data.info.image)
+                    }
                     return setProfile(data)
                 }).catch((error) => {
                     return setProfile({
@@ -56,16 +57,17 @@ const MyProfile = (props) => {
                     })
                 });
         }
-    },[profile,setProfile,email])
+    },[profile,setProfile,userId,setImage])
 
     const value = useMemo(()=> {
         return {
-            state:state.data,
-            setState:setState,
-            image:state.image
+            state : state,
+            setState : setState,
+            image : image,
+            setImage:setImage,
+            userId : userId
         }
-        },[state,setState])
-
+        },[state,setState,image,setImage,userId])
 
 //three situation, false, true, undefined
     if(profile.error===false) return(

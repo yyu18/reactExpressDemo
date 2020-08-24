@@ -11,7 +11,7 @@ const { errorHandler } = require('./utils/error');
 
 app.use(express.json())
 app.use(allowCrossDomain)
-app.listen(6666,'0.0.0.0',function() { console.log('Example app listening on port 6000!');});
+app.listen(5001,'0.0.0.0',function() { console.log('Example app listening on port 5001!');});
 
 app.response.sendStatus = function (statusCode, type, message) {
     return this.contentType(type)
@@ -20,7 +20,8 @@ app.response.sendStatus = function (statusCode, type, message) {
 }
 
 const schema = new GraphQLSchema({ query: queryType });
-app.use('/graphql',graphqlHTTP({
+
+app.post('/graphql',graphqlHTTP({
   schema: schema,
   graphiql: true,
 }));

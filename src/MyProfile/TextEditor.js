@@ -36,22 +36,25 @@ const TextEditor = () => {
                 })
             })
     }
-    state.map((section,index)=>{        
-        switch(section.type) {
-            case 'textarea':
-                rows.push(<TextArea key={index} info={section} />);
-                break;
-            case "inputList":
-                rows.push(<InputArea key={index+section.type} info={section} />);
-                break;
-            case "checkbox":
-                rows.push(<CheckBoxArea key={index+section.type} info={section} />);
-                break;
-            default:
-                throw new Error('case not handle')
-          }
-          return true
-    })
+    if(state){
+        state.map((section,index)=>{        
+            switch(section.type) {
+                case 'textarea':
+                    rows.push(<TextArea key={index} info={section} />);
+                    break;
+                case "inputList":
+                    rows.push(<InputArea key={index+section.type} info={section} />);
+                    break;
+                case "checkbox":
+                    rows.push(<CheckBoxArea key={index+section.type} info={section} />);
+                    break;
+                default:
+                    throw new Error('case not handle')
+              }
+              return true
+        })
+    }
+
     return(
         <>
             <DropDownForAddArea />

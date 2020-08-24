@@ -3,113 +3,104 @@ import React from 'react';
  const Footer = () =>{
     return (
 
-<footer class="footer-light">
-    <div class="light-layout">
-        <div class="container">
-            <section class="small-section border-section border-top-0">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="subscribe">
+<footer className="footer-light">
+    <div className="light-layout">
+        <div className="container">
+            <section className="small-section border-section border-top-0">
+                <div className="row">
+                    <div className="col-lg-6">
+                        <div className="subscribe">
                             <div>
                                 <h4>KNOW IT ALL FIRST!</h4>
-                                <p>Never Miss Anything From Multikart By Signing Up To Our Newsletter.</p>
+                                <p>from Hubert</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <form action="https://pixelstrap.us19.list-manage.com/subscribe/post?u=5a128856334b598b395f1fc9b&amp;id=082f74cbda" class="form-inline subscribe-form auth-form needs-validation" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form"
+                    <div className="col-lg-6">
+                        <form action="https://pixelstrap.us19.list-manage.com/subscribe/post?u=5a128856334b598b395f1fc9b&amp;id=082f74cbda" className="form-inline subscribe-form auth-form needs-validation" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form"
                               target="_blank">
-                            <div class="form-group mx-sm-3">
-                                <input type="text" class="form-control" name="EMAIL" id="mce-EMAIL" placeholder="Enter your email" required="required" />
+                            <div className="form-group mx-sm-3">
+                                <input type="text" className="form-control" name="EMAIL" id="mce-EMAIL" placeholder="Enter your email" required="required" />
                             </div>
-                            <button type="submit" class="btn btn-solid" id="mc-submit">subscribe</button>
+                            <button type="submit" className="btn btn-solid" id="mc-submit">subscribe</button>
                         </form>
                     </div>
                 </div>
             </section>
         </div>
     </div>
-    <section class="section-b-space light-layout">
-        <div class="container">
-            <div class="row footer-theme partition-f">
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-title footer-mobile-title">
+    <section className="section-b-space light-layout">
+        <div className="container">
+            <div className="row footer-theme partition-f">
+                <div className="col-lg-4 col-md-6">
+                    <div className="footer-title footer-mobile-title">
                         <h4>about</h4>
                     </div>
-                    <div class="footer-contant">
-                        <div class="footer-logo"><img src="../assets/images/icon/logo.png" alt=""/></div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,</p>
-                        <div class="footer-social">
+                    <div className="footer-contant">
+
+                        <p>Hubert is a full stack javascript developer, the preference front end technology include pure React with hooks, react bootstrap. API tech related with graphQL, RESTFul API, built in ExpressJs. backend with node, express and lots of different node package. database using mongo and redis</p>
+                        <div className="footer-social">
                             <ul>
-                                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-rss" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i className="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i className="fa fa-google-plus" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i className="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i className="fa fa-instagram" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i className="fa fa-rss" aria-hidden="true"></i></a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col offset-xl-1">
-                    <div class="sub-title">
-                        <div class="footer-title">
+                <div className="col offset-xl-1">
+                    <div className="sub-title">
+                        <div className="footer-title">
                             <h4>my account</h4>
                         </div>
-                        <div class="footer-contant">
+                        <div className="footer-contant">
                             <ul>
-                                <li><a href="#">mens</a></li>
-                                <li><a href="#">womens</a></li>
-                                <li><a href="#">clothing</a></li>
-                                <li><a href="#">accessories</a></li>
-                                <li><a href="#">featured</a></li>
+                                <li><a href="#">profile</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="sub-title">
-                        <div class="footer-title">
+                <div className="col">
+                    <div className="sub-title">
+                        <div className="footer-title">
                             <h4>why we choose</h4>
                         </div>
-                        <div class="footer-contant">
+                        <div className="footer-contant">
                             <ul>
-                                <li><a href="#">shipping & return</a></li>
-                                <li><a href="#">secure shopping</a></li>
-                                <li><a href="#">gallary</a></li>
-                                <li><a href="#">affiliates</a></li>
-                                <li><a href="#">contacts</a></li>
+                                <li><a href="#">About Me</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="sub-title">
-                        <div class="footer-title">
+
+                <div className="col">
+                    <div className="sub-title">
+                        <div className="footer-title">
                             <h4>store information</h4>
                         </div>
-                        <div class="footer-contant">
-                            <ul class="contact-list">
-                                <li><i class="fa fa-map-marker"></i>Multikart Demo Store, Demo store India 345-659</li>
-                                <li><i class="fa fa-phone"></i>Call Us: 123-456-7898</li>
-                                <li><i class="fa fa-envelope-o"></i>Email Us: <a href="#">Support@Fiot.com</a></li>
-                                <li><i class="fa fa-fax"></i>Fax: 123456</li>
+                        <div className="footer-contant">
+                            <ul className="contact-list">
+                                <li><i className="fa fa-map-marker"></i>Toronto</li>
                             </ul>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
-    <div class="sub-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-6 col-md-6 col-sm-12">
-                    <div class="footer-end">
-                        <p><i class="fa fa-copyright" aria-hidden="true"></i> 2017-18 themeforest powered by pixelstrap</p>
+    <div className="sub-footer">
+        <div className="container">
+            <div className="row">
+                <div className="col-xl-6 col-md-6 col-sm-12">
+                    <div className="footer-end">
+                        <p><i className="fa fa-copyright" aria-hidden="true"></i> this full stack javascript project built in 2020 </p>
                     </div>
                 </div>
-                <div class="col-xl-6 col-md-6 col-sm-12">
-                    <div class="payment-card-bottom">
+                <div className="col-xl-6 col-md-6 col-sm-12">
+                    <div className="payment-card-bottom">
                         <ul>
                             <li>
                                 <a href="#"><img src="../assets/images/icon/visa.png" alt=""/></a>

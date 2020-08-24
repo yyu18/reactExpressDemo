@@ -2,7 +2,7 @@ import React, { useState,useContext,useRef } from 'react';
 import { MyProfileContext } from '../../context';
 import EditBtn from './editBtn.jpg';
 import AddBtn from './addBtn.jpg';
-import { Validator } from '../validator';
+import { Validator,imageValidator } from '../validator';
 import { InputGroup,FormControl,ListGroup, Dropdown,DropdownButton,Form,Button } from 'react-bootstrap';
 import { deleteContentByIndex, changeContentByID, deleteContentByID, changeNameByID } from './CURDFunc';
 import {makeid} from '../../uniqueID'
@@ -237,7 +237,8 @@ export const CheckBoxArea = (props) =>{
 export const TextArea = (props) => {
     const [errors, setErrors] = useState({});
     const myProfile = useContext(MyProfileContext);
-
+    console.log(myProfile.state)
+    console.log(props.info)
     const handleDelete = () => {
         myProfile.setState(
             deleteContentByID(props.info.id,myProfile.state)
@@ -254,8 +255,7 @@ export const TextArea = (props) => {
         const error = Validator(content);
         setErrors(error);
         if(!error.error){ 
-            let newState = changeContentByID(props.info.id, myProfile.state, content)
-            if(newState) myProfile.setState(newState)
+            props.info.content[0]=content
             let textarea = document.getElementById(props.info.id);
             textarea.classList.toggle("hide");         
         }
@@ -294,7 +294,7 @@ export const TextArea = (props) => {
                 <i style={delbtn} className="fa fa-trash" onClick = {handleDelete}></i>
             </div>
             <div id={props.info.id} className="textarea quickFade">
-                <textarea defaultValue={props.info.content}></textarea>
+                <textarea defaultValue={props.info.content[0]}></textarea>
                 <input type="submit" className="submitBtn" value="Edit" onClick = {handleEdit}/>
                 {
                     errors.error &&
@@ -373,42 +373,14 @@ export const ProfileImage = ()=> {
 
     const myProfile = useContext(MyProfileContext);
 
-    const imageValidator = (images)=>{
-        let feedback = {}
-
-        if(images.length>2){ 
-            feedback.image="maximum 2 files"
-            return feedback 
-        }
-
-        if(images.length===0){
-            feedback.image='no file upload'
-            return feedback
-        }
-        const formData = new FormData()
-        for(let i = 0;i<images.length;i++){
-            if (images[i].type !== "image/png" && images[i].type !== "image/jpg" && images[i].type !== "image/jpeg") {
-                feedback.image='image format not allowed'
-                return feedback
-            }
-            
-            if (images[i].size >1000000) {
-                feedback.image = 'file too large'
-                return feedback
-            }
-            
-            formData.append('profileImage',images[i])
-        }
-        
-        feedback.formData = formData
-        return feedback
-    }
+    let userId = myProfile.userId
 
     const handleSubmit = async (event) =>{
         event.preventDefault()
         event.stopPropagation()
 
         let images = formRef.current['profileImage'].files
+        console.log(images)
         let feedback = imageValidator(images)
         if(feedback.image) return setFeedback({
             error:true,
@@ -416,7 +388,7 @@ export const ProfileImage = ()=> {
         })
 
         try{
-            let response = await fetch(uploadProfileImageURI+'/hubertyu-3LQj7dPm1wwSiFXok55r', {
+            let response = await fetch(uploadProfileImageURI+'/' +userId, {
                 method: 'post',
                 body:feedback.formData
             })
@@ -426,7 +398,7 @@ export const ProfileImage = ()=> {
                 info:data.info
             })
             console.log(data.info)
-
+            myProfile.setImage(data.info)
             return setFeedback({
                 error:false,
                 info:'image uploaded'
@@ -436,14 +408,13 @@ export const ProfileImage = ()=> {
                 error:true,
                 info:err.message
             })}
-    
     }
     return (
         <section>
         <div className="sectionTitle">
             <div className="quickFade">
                 {
-                    myProfile.image ?
+                    myProfile.image[0] ?
                         <img alt="" className="mr-3" src={myProfile.image[0]} style={{width:"70%"}}/>
                         :
                         <img alt="" className="mr-3" src="/assets/images/pro3/default-user-image.png" style={{width:"70%"}}/>

@@ -1,3 +1,4 @@
+
 //no side effects: no change on input, and any other things outside the function
 //no super long if function
 //params no more than 3

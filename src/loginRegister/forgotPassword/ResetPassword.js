@@ -68,7 +68,7 @@ const ResetPassword = ()=>{
                     btnRef.current.removeAttribute("disabled");
                   }
             } catch(err) {
-                    btnRef.current.removeAttribute("disabled");
+                if(btnRef)  btnRef.current.removeAttribute("disabled")
                     setErrors({
                         error:true,
                         info:'Something Wrong, Hubert Is Digging Out'

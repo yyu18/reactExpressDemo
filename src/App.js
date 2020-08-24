@@ -12,10 +12,10 @@ const App = ()=>{
                 <Router>
                         <Header />
                         <Switch>
-                                <Route exact path={`/order-system`} component={Profiles}/>
-                                <Route path={`/order-system/myProfile/:userId`} component = {MyProfile} /> 
-                                <Route path={`/order-system/forgot-password`} component={ForgotPassword} />
-                                <Route path={`/order-system/reset-password`} component={ResetPassword} />
+                                <Route exact path={`/`} component={Profiles}/>
+                                <Route path={`/myProfile/:userId`} component = {MyProfile} /> 
+                                <Route path={`/forgot-password`} component={ForgotPassword} />
+                                <Route path={`/reset-password`} component={ResetPassword} />
                         </Switch>
                         <Footer />
                 </Router>

@@ -7,11 +7,11 @@ import {FormContext} from '../../../context';
 import reducer from '../../reducer';
 import {Profile} from './profile';
 import Cookies from 'js-cookie';
-import {  useHistory  } from 'react-router-dom'
+import {  useHistory,Link  } from 'react-router-dom'
 
 const domain = '192.168.2.24'
 const logoutURI = 'http://192.168.2.24:4000/users-status'
-
+const homepage = '/'
 const Header=(props)=>{
     const history = useHistory();
     const [RegisterFormInfo,setRegisterForm] = useState({
@@ -55,7 +55,7 @@ const Header=(props)=>{
                 password:'',
                 confirmPassword:''
             })
-            history.push('/order-system')
+            history.push(homepage)
         }
     }
 
@@ -78,10 +78,12 @@ const Header=(props)=>{
             <div className="row">
                 <div className="col-lg-6">
                     <div className="header-contact">
+                        <Link to='/'>
                         <ul>
                             <li>Welcome to Hubert's Order System Demo</li>
                             <li><i className="fa fa-phone" aria-hidden="true"></i>Call Us: 123 - 456 - 7890</li>
                         </ul>
+                        </Link>
                     </div>
                 </div>
                 <div className="col-lg-6 text-right">
@@ -136,19 +138,20 @@ const Header=(props)=>{
                                     </div>
                                     <ul id="sub-menu" className="sm pixelstrap sm-vertical">
 
-                                        <li> <a href=" ">footwear</a>
+                                        <li> <a href=" ">demo</a>
                                             <ul>
-                                                <li><a href=" ">sport shoes</a></li>
-                                                <li><a href=" ">formal shoes</a></li>
-                                                <li><a href=" ">casual shoes</a></li>
+                                                <li><a href=" ">demo</a></li>
+                                            
                                             </ul>
                                         </li>
-                                        <li><a href=" ">watches</a></li>
-                                        <li><a href=" ">home & decor</a></li>
-                                        <li><a href=" ">kitchen</a></li>
+                                        <li><a href=" ">demo</a></li>
+                                
                                     </ul>
                                 </nav>
                             </div>
+                        </div>
+                        <div class="brand-logo">
+                            <a href=" "><img src="/assets/images/icon/Logo_new.png" className="img-fluid blur-up lazyloaded" alt="" style={{width:"180px"}}/></a>
                         </div>
                     </div>
                     <div className="menu-right pull-right">
@@ -162,34 +165,26 @@ const Header=(props)=>{
                                     </li>
 
                                     <li>
-                                        <a href=" ">Home</a>
+                                        <a href=" ">demo</a>
                                         <ul>
                                             <li>
-                                                <a href=" ">clothing</a>
+                                                <a href=" ">demo</a>
                                                 <ul>
-                                                    <li><a target="_blank" href="index.html">fashion 1</a></li>
-                                                    <li><a target="_blank" href="fashion-2.html">fashion 2</a></li>
+                                                    <li><a target="_blank" href="index.html">demo</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a target="_blank" href="shoes.html">shoes</a></li>
+                                
                                             <li>
-                                                <a href=" ">electronics</a>
+                                                <a href=" ">demo</a>
                                                 <ul>
-                                                    <li><a target="_blank" href="electronic-1.html">electronic 1</a></li>
+                                                    <li><a target="_blank" href="electronic-1.html">demo</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a target="_blank" href="bags.html">bags</a></li>
+                                            <li><a target="_blank" href="bags.html">demo</a></li>
                                         </ul>
                                     </li>
 
-                                    <li>
-                                        <a href=" ">shop</a>
-                                        <ul>
-                                            <li><a href="category-page.html">left sidebar</a></li>
-                                        </ul>
-                                    </li>
-
-                                    <li className="mega" id="hover-cls"><a href=" ">features
+                                    <li className="mega" id="hover-cls"><a href=" ">demo
                                         <div className="lable-nav">new</div>
                                     </a>
                                         <ul className="mega-menu full-mega-menu">
@@ -200,10 +195,10 @@ const Header=(props)=>{
                                                         <div className="col mega-box">
                                                             <div className="link-section">
                                                                 <div className="menu-title">
-                                                                    <h5>theme elements</h5></div>
+                                                                    <h5>demo</h5></div>
                                                                 <div className="menu-content">
                                                                     <ul>
-                                                                        <li><a href="element-image-ratio.html">image size <i className="fa fa-bolt icon-trend" aria-hidden="true"></i></a></li>
+                                                                        <li><a href="element-image-ratio.html">demo<i className="fa fa-bolt icon-trend" aria-hidden="true"></i></a></li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
@@ -212,10 +207,10 @@ const Header=(props)=>{
                                                         <div className="col mega-box">
                                                             <div className="link-section">
                                                                 <div className="menu-title">
-                                                                    <h5>email template   </h5></div>
+                                                                    <h5>demo</h5></div>
                                                                 <div className="menu-content">
                                                                     <ul>
-                                                                        <li><a href="email-order-success.html">order success</a></li>
+                                                                        <li><a href="email-order-success.html">demo</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </div>

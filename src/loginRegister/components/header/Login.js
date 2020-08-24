@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 
 const domain = '192.168.2.24'
 var loginUrl = 'http://192.168.2.24:4000/users-status';
-let resetPasswordUrl = 'http://192.168.2.24:3000/order-system/forgot-password';
+let resetPasswordUrl = 'http://192.168.2.24:3000/forgot-password';
 export const Login = () => {
     const [show, setShow] = useState(false);
     const [formErrors,setErrors] = useState({})
@@ -51,7 +51,7 @@ try{
     setShow(false)
     return formContext.dispatch({type:'login',payload:data}) 
 } catch(err) {
-  btnRef.current.removeAttribute("disabled");
+  if(btnRef)  btnRef.current.removeAttribute("disabled")
   setErrors({ error:true,info:err.message})
 }
     }
