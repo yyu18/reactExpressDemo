@@ -25,7 +25,6 @@ app.use(allowCrossDomain)
 //end app listen to the external ip
 
 app.listen(5000,'0.0.0.0',function() { 
-    console.log(__dirname)
     console.log('Example app listening on port 5000!');});
 
 app.response.sendStatus = function (statusCode, type, message) {

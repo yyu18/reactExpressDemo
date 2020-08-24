@@ -22,7 +22,7 @@ router.post('/users-profile',AuthUser,(req,res,next)=>{
 
 //patch profile image
 router.post('/users-profile/:id',(req,res,next)=>{
-    return uploadProfileImage(req, res, async (err) => {
+    return uploadProfileImage(req, res, async (err,re) => {
         if(err) next(err)
 
         let info = {
@@ -31,12 +31,10 @@ router.post('/users-profile/:id',(req,res,next)=>{
         try{
             let user = await retrieveProfile(info)
 
-            let images = req.files.reduce((acc,cur)=>{
+            user.image = req.files.reduce((acc,cur)=>{
                 acc.push(process.env.PROFILE_SERVER_DOMAIN+'/static/image-profile'+'/'+cur.filename)
                 return acc
             },[])
-
-            user.image = images
 
             await user.save()
             return res.sendStatus(200,'application/json',{
@@ -47,7 +45,6 @@ router.post('/users-profile/:id',(req,res,next)=>{
         } catch(err) {
             next(err)
         }
-
     })
 })
 

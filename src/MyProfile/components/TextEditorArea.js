@@ -371,9 +371,7 @@ export const ProfileImage = ()=> {
     const formRef = useRef(null)
     const [feedback,setFeedback] = useState({})
 
-    const [image,setImage]= useState({
-        
-    })
+    const myProfile = useContext(MyProfileContext);
 
     const imageValidator = (images)=>{
         let feedback = {}
@@ -428,9 +426,7 @@ export const ProfileImage = ()=> {
                 info:data.info
             })
             console.log(data.info)
-            setImage({
-                path:data.info[0]
-            })
+
             return setFeedback({
                 error:false,
                 info:'image uploaded'
@@ -442,14 +438,13 @@ export const ProfileImage = ()=> {
             })}
     
     }
-    
     return (
         <section>
         <div className="sectionTitle">
             <div className="quickFade">
                 {
-                    image.path ?
-                        <img alt="" className="mr-3" src={image.path} style={{width:"70%"}}/>
+                    myProfile.image ?
+                        <img alt="" className="mr-3" src={myProfile.image[0]} style={{width:"70%"}}/>
                         :
                         <img alt="" className="mr-3" src="/assets/images/pro3/default-user-image.png" style={{width:"70%"}}/>
                 }

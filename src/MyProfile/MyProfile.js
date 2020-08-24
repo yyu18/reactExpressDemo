@@ -10,7 +10,7 @@ const MyProfile = (props) => {
     let accessToken = Cookies.get('accessToken')
     let email = props.match.params.userId
     const [profile,setProfile] = useState({})
-    const [state,setState] = useState([])
+    const [state,setState] = useState({})
     const btnRef = useRef(null)
 //create profile
     const handleCreate=()=>{
@@ -44,7 +44,10 @@ const MyProfile = (props) => {
                 },
                 }).then(response => response.json())
                 .then(data => {
-                    if(!data.error) setState(data.info.myProfile)
+                    if(!data.error) setState({
+                        data:data.info.myProfile,
+                        image:data.info.image
+                    })
                     return setProfile(data)
                 }).catch((error) => {
                     return setProfile({
@@ -57,8 +60,9 @@ const MyProfile = (props) => {
 
     const value = useMemo(()=> {
         return {
-            state:state,
-            setState:setState
+            state:state.data,
+            setState:setState,
+            image:state.image
         }
         },[state,setState])
 
