@@ -150,9 +150,11 @@ const Header=(props)=>{
                                 </nav>
                             </div>
                         </div>
-                        <div class="brand-logo">
-                            <a href=" "><img src="/assets/images/icon/Logo_new.png" className="img-fluid blur-up lazyloaded" alt="" style={{width:"180px"}}/></a>
-                        </div>
+                        <Link to='/'>
+                            <div class="brand-logo">
+                                <a href=" "><img src="/assets/images/icon/Logo_new.png" className="img-fluid blur-up lazyloaded" alt="" style={{width:"180px"}}/></a>
+                            </div>
+                        </Link>
                     </div>
                     <div className="menu-right pull-right">
                         <div>

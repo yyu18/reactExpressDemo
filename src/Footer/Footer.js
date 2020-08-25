@@ -37,7 +37,9 @@ import React from 'react';
                         <h4>about</h4>
                     </div>
                     <div className="footer-contant">
-
+                    <div class="brand-logo">
+                            <a href=" "><img src="/assets/images/icon/Logo_new.png" className="img-fluid blur-up lazyloaded" alt="" style={{width:"180px"}}/></a>
+                        </div>
                         <p>Hubert is a full stack javascript developer, the preference front end technology include pure React with hooks, react bootstrap. API tech related with graphQL, RESTFul API, built in ExpressJs. backend with node, express and lots of different node package. database using mongo and redis</p>
                         <div className="footer-social">
                             <ul>

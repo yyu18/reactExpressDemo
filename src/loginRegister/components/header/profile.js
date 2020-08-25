@@ -1,20 +1,20 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import {  useHistory  } from 'react-router-dom'
+import {  useHistory,Link  } from 'react-router-dom'
 import Cookies from 'js-cookie'
 
-let profileURL = '/myProfile'
+let profileURL = 'http://192.168.2.24:3000/myProfile'
 
 export const Profile = () => {
     const history = useHistory();
-    const handleClick = () => {
-        let userId = Cookies.get('userId')
-        history.push(profileURL+'/'+userId);
-    }
+    let userId = Cookies.get('userId')
+    let URL = profileURL+'/'+userId
 
     return (
-        <Button onClick={handleClick} variant="primary">
-            Profile
-        </Button>
+        <a href={URL}>
+            <Button variant="primary">
+                Profile
+            </Button>
+        </a>
     )
 }
