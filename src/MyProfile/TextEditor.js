@@ -8,7 +8,7 @@ const updateURI = 'http://192.168.2.24:5000/profiles/users-profile'
 const TextEditor = () => {
     const myProfile = useContext(MyProfileContext)
     const btnRef = useRef(null)
-    let userId = Cookies.get('userId')
+    let userId = myProfile.userId
     let accessToken = Cookies.get('accessToken')
     let state = myProfile.state;
     const [Feedback,setFeedback] = useState({})
@@ -29,7 +29,7 @@ const TextEditor = () => {
                 btnRef.current.removeAttribute("disabled");
                 setFeedback(data)
             }).catch((error) => {
-                btnRef.current.removeAttribute("disabled");
+                if(btnRef) btnRef.current.removeAttribute("disabled");
                 setFeedback({
                     error:true,
                     info:error.message

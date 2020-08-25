@@ -28,7 +28,7 @@ const MyProfile = (props) => {
                 if(data.error)  return btnRef.current.removeAttribute("disabled")
                 return
             }).catch((error) => {
-                btnRef.current.removeAttribute("disabled");
+                if(btnRef) btnRef.current.removeAttribute("disabled");
                 setProfile({
                     error:true,
                     info:error.message

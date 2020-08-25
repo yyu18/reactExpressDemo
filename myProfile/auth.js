@@ -1,6 +1,5 @@
 const { verifyAccessToken } = require('../utils/JWT_token')
 const AuthUser =  (req,res,next) =>{
-    console.log('test')
         if(!(req.headers && req.headers.authorization)) return res.sendStatus(403,'application/json',{
             error:true,
             info:'You Need To Sign In'
