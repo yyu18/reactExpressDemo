@@ -4,9 +4,9 @@ import {FormContext} from '../../../context';
 import {loginValidate} from '../../formValidator';
 import Cookies from 'js-cookie';
 
-const domain = '192.168.2.24'
-var loginUrl = 'http://192.168.2.24:4000/users-status';
-let resetPasswordUrl = 'http://192.168.2.24:3000/forgot-password';
+const domain = 'localhost'
+var loginUrl = 'http://localhost:4000/users-status';
+let resetPasswordUrl = 'http://localhost:3000/forgot-password';
 export const Login = () => {
     const [show, setShow] = useState(false);
     const [formErrors,setErrors] = useState({})

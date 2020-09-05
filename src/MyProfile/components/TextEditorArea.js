@@ -7,7 +7,7 @@ import { InputGroup,FormControl,ListGroup, Dropdown,DropdownButton,Form,Button }
 import { deleteContentByIndex, changeContentByID, deleteContentByID, changeNameByID } from './CURDFunc';
 import {makeid} from '../../uniqueID'
 
-const uploadProfileImageURI = 'http://192.168.2.24:5000/profiles/users-profile'
+const uploadProfileImageURI = 'http://localhost:5000/profiles/users-profile'
 
 export const InputAreaList = (props) => {
     const myProfile = useContext(MyProfileContext);
@@ -19,7 +19,7 @@ export const InputAreaList = (props) => {
 
     let rows = [];
     props.info.content.map((list,index)=>{
-        rows.push(<ListGroup.Item key = {index+props.info.type}>{list}<i className = "fa fa-trash" onClick = {()=>handleDelete(index)} ></i></ListGroup.Item>)
+        rows.push(<ListGroup.Item key = {index+props.info.type}>{list}<i className = "fa fa-trash   " onClick = {()=>handleDelete(index)} ></i></ListGroup.Item>)
         return true;
     })
     return (<>{rows}</>)
@@ -67,7 +67,7 @@ export const InputArea = (props) => {
         <section>
         <div className="sectionTitle">
             <h1>{props.info.name}</h1>
-            <img src={EditBtn} className="editNameBtn" alt="btn" onClick = {()=>handleClick(props.info.id+props.info.type)}/>
+            <img src={EditBtn} className="editNameBtn   " alt="btn" onClick = {()=>handleClick(props.info.id+props.info.type)}/>
             <div id={props.info.id+props.info.type} className="textarea quickFade">
                 <InputGroup className="mb-3">
                     <FormControl defaultValue={props.info.name}/>
@@ -80,14 +80,14 @@ export const InputArea = (props) => {
             </div>
         </div>
         <div className="sectionContent">
-            <img src={AddBtn} className="addBtn" alt="btn" onClick = {()=>handleClick(props.info.id)}/>
+            <img src={AddBtn} className="addBtn   " alt="btn" onClick = {()=>handleClick(props.info.id)}/>
             <div>
                 <div className = "profile-p">
                 <ListGroup variant="flush">
                     <InputAreaList info={props.info}/>
                 </ListGroup>
                 </div>
-                <i className = "profile-delbtn fa fa-trash" onClick = {handleDelete}></i>
+                <i className = "profile-delbtn fa fa-trash   " onClick = {handleDelete}></i>
             </div>
             <div id={props.info.id} className="textarea quickFade">
             <InputGroup className="mb-3">
@@ -124,7 +124,7 @@ export const CheckBoxAreaList = (props)=>{
                 <InputGroup.Checkbox defaultChecked={e.checked} aria-label="Checkbox for following text input" />
             </InputGroup.Prepend>
             <ListGroup.Item >{e.info}</ListGroup.Item>
-            <i className = "profile-delbtn fa fa-trash" onClick = {()=>handleDelete(index)}></i>
+            <i className = "profile-delbtn fa fa-trash   " onClick = {()=>handleDelete(index)}></i>
         </InputGroup>
         );
         return true;
@@ -195,7 +195,7 @@ export const CheckBoxArea = (props) =>{
         <section>
         <div className="sectionTitle">
             <h1>{props.info.name}</h1>
-            <img src={EditBtn} className="editNameBtn" alt="btn" onClick = {()=>handleClick(props.info.id+props.info.type)}/>
+            <img src={EditBtn} className="editNameBtn   " alt="btn" onClick = {()=>handleClick(props.info.id+props.info.type)}/>
             <div id={props.info.id+props.info.type} className="textarea quickFade">
                 <InputGroup className="mb-3">
                     <FormControl defaultValue={props.info.name}/>
@@ -208,12 +208,12 @@ export const CheckBoxArea = (props) =>{
             </div>
         </div>
         <div className="sectionContent">
-            <img src={AddBtn} className="addBtn" alt="btn" onClick = {()=>handleClick(props.info.id)}/>
+            <img src={AddBtn} className="addBtn   " alt="btn" onClick = {()=>handleClick(props.info.id)}/>
             <div>
                 <div className = "profile-p">
                     <CheckBoxAreaList info={props.info} />
                 </div>
-                <i className = "profile-delbtn fa fa-trash" onClick = {handleDelete}></i>
+                <i className = "profile-delbtn fa fa-trash   " onClick = {handleDelete}></i>
             </div>
             <div id={props.info.id} className="textarea quickFade">
             <InputGroup className="mb-3">
@@ -233,12 +233,10 @@ export const CheckBoxArea = (props) =>{
         )
 }
 
-
 export const TextArea = (props) => {
     const [errors, setErrors] = useState({});
     const myProfile = useContext(MyProfileContext);
-    console.log(myProfile.state)
-    console.log(props.info)
+
     const handleDelete = () => {
         myProfile.setState(
             deleteContentByID(props.info.id,myProfile.state)
@@ -275,7 +273,7 @@ export const TextArea = (props) => {
         <section>
         <div className="sectionTitle">
             <h1>{props.info.name}</h1>
-            <img src={EditBtn} className="editNameBtn" alt="btn" onClick={() => handleClick(props.info.id+props.info.type)}/>
+            <img src={EditBtn} className="editNameBtn   " alt="btn" onClick={() => handleClick(props.info.id+props.info.type)}/>
             <div id={props.info.id+props.info.type} className="textarea quickFade">
                 <InputGroup className="mb-3">
                     <FormControl defaultValue={props.info.name}/>
@@ -288,10 +286,10 @@ export const TextArea = (props) => {
             </div>
         </div>
         <div className="sectionContent">
-            <img src={AddBtn} className="addBtn" alt="btn" onClick = {() => handleClick(props.info.id)}/>
+            <img src={AddBtn} className="addBtn   " alt="btn" onClick = {() => handleClick(props.info.id)}/>
             <div>
                 <p className = "profile-p">{props.info.content}</p>
-                <i style={delbtn} className="fa fa-trash" onClick = {handleDelete}></i>
+                <i style={delbtn} className="fa fa-trash   " onClick = {handleDelete}></i>
             </div>
             <div id={props.info.id} className="textarea quickFade">
                 <textarea defaultValue={props.info.content[0]}></textarea>
@@ -321,7 +319,7 @@ export const DropDownList = (props) => {
 
     let rows = []
     props.info.map((list,index)=>{
-        return rows.push(<ListGroup.Item key={index}>{list}<i className = "fa fa-trash" onClick = {()=>handleDelete(index)}   ></i></ListGroup.Item>)
+        return rows.push(<ListGroup.Item key={index}>{list}<i className = "fa fa-trash   " onClick = {()=>handleDelete(index)}   ></i></ListGroup.Item>)
     })
     return(<>{rows}</>)
 }
@@ -346,7 +344,7 @@ export const DropDownForAddArea = () => {
         setDropList([e.innerText])
     }
     return(
-        <section>
+        <section className = "  ">
             <div className="sectionTitle">
                 <div className="quickFade">
                     <DropdownButton id="dropdown-basic-button" title="Add Area">
@@ -374,6 +372,7 @@ export const ProfileImage = ()=> {
     const myProfile = useContext(MyProfileContext);
 
     let userId = myProfile.userId
+    let accessToken = myProfile.accessToken
 
     const handleSubmit = async (event) =>{
         event.preventDefault()
@@ -389,7 +388,7 @@ export const ProfileImage = ()=> {
 
         try{
             let response = await fetch(uploadProfileImageURI+'/' +userId, {
-                method: 'post',
+                method: 'POST',
                 body:feedback.formData
             })
             let data = await response.json()
@@ -422,7 +421,7 @@ export const ProfileImage = ()=> {
             </div>
         </div>
         <div className="sectionContent">
-            <Form ref={formRef} noValidate onSubmit={handleSubmit}>
+            <Form ref={formRef} noValidate onSubmit={handleSubmit} className = "  ">
                 <div className="mb-3">
                     <Form.File id="formcheck-api-regular">
                         <Form.File.Label>Upload Profile Image</Form.File.Label>

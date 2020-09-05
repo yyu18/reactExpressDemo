@@ -1,4 +1,4 @@
-var checkEmail = 'http://192.168.2.24:4000/users-account';
+var checkEmail = 'http://localhost:4000/users-account';
 export const loginValidate = (value)=>{
   let keys = Object.keys(value);
   if(keys.length===0) return {};

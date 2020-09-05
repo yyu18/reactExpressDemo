@@ -9,8 +9,8 @@ import {Profile} from './profile';
 import Cookies from 'js-cookie';
 import {  useHistory,Link  } from 'react-router-dom'
 
-const domain = '192.168.2.24'
-const logoutURI = 'http://192.168.2.24:4000/users-status'
+const domain = 'localhost'
+const logoutURI = 'http://localhost:4000/users-status'
 const homepage = '/'
 const Header=(props)=>{
     const history = useHistory();
@@ -151,8 +151,8 @@ const Header=(props)=>{
                             </div>
                         </div>
                         <Link to='/'>
-                            <div class="brand-logo">
-                                <a href=" "><img src="/assets/images/icon/Logo_new.png" className="img-fluid blur-up lazyloaded" alt="" style={{width:"180px"}}/></a>
+                            <div className="brand-logo">
+                                <img src="/assets/images/icon/Logo_new.png" className="img-fluid blur-up lazyloaded" alt="" style={{width:"180px"}}/>
                             </div>
                         </Link>
                     </div>

@@ -4,7 +4,7 @@ import './MyProfile.css';
 import Cookies from 'js-cookie';
 import TextEditor from './TextEditor'
 import { MyProfileContext } from '../context';
-const usersProfileURI = 'http://192.168.2.24:5000/profiles/users-profile';
+const usersProfileURI = 'http://localhost:5000/profiles/users-profile';
 
 const MyProfile = (props) => {
     let accessToken = Cookies.get('accessToken')
@@ -65,7 +65,8 @@ const MyProfile = (props) => {
             setState : setState,
             image : image,
             setImage:setImage,
-            userId : userId
+            userId : userId,
+            accessToken:accessToken
         }
         },[state,setState,image,setImage,userId])
 
@@ -87,10 +88,12 @@ const MyProfile = (props) => {
                 <Button variant="primary"ref={btnRef} onClick = {handleCreate}> Create Profile </Button>
             </div>
             </>)
-    return (<>
-    <div style={{margin:"auto",width:"fit-content"}}>
-        <h1>{profile.info}</h1>
-    </div>
-    </>)
+    return (
+        <>
+            <div style={{margin:"auto",width:"fit-content"}}>
+                <h1>{profile.info}</h1>
+            </div>
+        </>
+    )
 }
 export default MyProfile

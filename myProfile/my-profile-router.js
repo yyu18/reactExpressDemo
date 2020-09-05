@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { AuthUser } = require('./auth');
+const { AuthUser, AuthUserId } = require('./auth');
 const { createProfile, retrieveProfile, updateProfile, deleteProfile } = require('../mongoHandler/dbConnect');
 const {  BadRequest,NotFound,Unauthorized,Forbidden } = require('../utils/error')
 const {uploadProfileImage,resizeImage} = require('../utils/uploadFile')
@@ -33,7 +33,7 @@ router.post('/users-profile/:id',(req,res,next)=>{
                 let user = await retrieveProfile(info)
 
                 user.image = req.files.reduce((acc,cur)=>{
-                    acc.push(process.env.PROFILE_SERVER_DOMAIN+'/static/image-profile'+'/'+cur.filename)
+                    acc.push(process.env.LOCALHOST_DOMAIN+':5000/static/image-profile'+'/'+cur.filename)
                     return acc
                 },[])
 
@@ -61,11 +61,9 @@ router.get('/users-profile/:id',(req,res,next)=>{
     }).catch(err=>{return next(err)})
 })
 //update user profile
-router.put('/users-profile/:id',AuthUser,(req,res,next)=>{
-    let userId = req.params.id
-    if(userId!==req.user.userId) return next(new Unauthorized('access not allowed'))
-    if(!req.body.info) return next(new BadRequest('Bad Request'))
-    updateProfile({userId:userId},{myProfile:req.body.info})
+router.put('/users-profile/:id',AuthUser,AuthUserId,(req,res,next)=>{
+    if(!req.body.info) return res.sendStatus(200,'application/json',{error:false,info:"validated"})
+    updateProfile({ userId:req.user.userId },{myProfile:req.body.info})
     .then(
         res.sendStatus(201,'application/json',{
             error:false,

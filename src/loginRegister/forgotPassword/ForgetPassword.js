@@ -1,7 +1,7 @@
 import React, { useState,useRef } from 'react';
 import { Button,Form,Container,Row,Col } from 'react-bootstrap';
 import {loginValidate} from '../formValidator'
-const forgotPasswordURI = ' http://192.168.2.24:4000/password-management';
+const forgotPasswordURI = ' http://localhost:4000/password-management';
 const ForgetPassword = ()=>{
         const formRef = useRef(null);
         const [errors,setErrors] = useState({});

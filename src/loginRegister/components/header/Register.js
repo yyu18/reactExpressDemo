@@ -3,8 +3,8 @@ import { Modal,Button,Form } from 'react-bootstrap';
 import {FormContext} from '../../../context';
 import {Validate} from '../../formValidator';
 import Cookies from 'js-cookie';
-var registerURI = 'http://192.168.2.24:4000/users-account';
-const domain = '192.168.2.24'
+var registerURI = 'http://localhost:4000/users-account';
+const domain = 'localhost'
 export const Register = () => {
     const [show, setShow] = useState(false);
     const [formErrors,setErrors] = useState({})

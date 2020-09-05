@@ -1,7 +1,7 @@
 import React, { useState,useMemo,useRef } from 'react';
 import { useLocation} from 'react-router-dom'
 import { Button,Form,Container,Row,Col } from 'react-bootstrap';
-var resetPasswordURI = 'http://192.168.2.24:4000/password-management';
+var resetPasswordURI = 'http://localhost:4000/password-management';
 function useQuery() {
     return new URLSearchParams(useLocation().search);
   }

@@ -92,7 +92,7 @@ behaviour development, have behaviour first, then write function, make right thi
 
 # difference node and react ES6 
 
-node/module.export,  const require
+node /module.export,  const require
 
 react es6 / export, export default, import
 

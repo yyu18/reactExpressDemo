@@ -1,7 +1,7 @@
 import React,{useMemo,useState} from 'react';
 import {UserProfile} from './userProfile'
 const Profiles = ()=>{
-    const graphQLURI = 'http://192.168.2.24:5001/graphql'
+    const graphQLURI = 'http://localhost:5001/graphql'
     const [Feedback,setFeedback] = useState({})
     let rows = []
     useMemo(async ()=>{
