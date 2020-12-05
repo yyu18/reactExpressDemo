@@ -4,6 +4,7 @@ const passwordHash = require('password-hash');
 const { nodeMailer } = require('./nodeMailer');
 const { makeid,updateUser, createUser, retrieveUser } = require('../mongoHandler/dbConnect');
 const {  BadRequest,NotFound,Unauthorized,Forbidden } = require('../utils/error')
+const { UserAccount  } = require('../utils/userAccount')
 const { generateAccessToken,generateRefreshToken,verifyRefreshToken} = require('../utils/JWT_token')
 //router created
 const router = express.Router();
@@ -87,24 +88,28 @@ function checkEmail(req,res,next){
     })
   })
 }
-
+const { JWTGenerate } = require('../utils/JWT_token')
 function register (req,res,next)  {
   if(!(req.body.username&&req.body.email&&req.body.password)) throw new NotFound('Email Or Password Is Required')
 
   let userId = req.body.username.split(' ').join('') + '-' + makeid(20)
   let hashedPassword = passwordHash.generate(req.body.password)
 
-  const refreshToken = generateRefreshToken({ username:req.body.username, email:req.body.email, userId:userId})
+  //const refreshToken = generateRefreshToken({ username:req.body.username, email:req.body.email, userId:userId})
   const accessToken = generateAccessToken({ username:req.body.username, email:req.body.email, userId:userId})
-
-  let info = {
-    userId:userId,
-    username:req.body.username,
-    email:req.body.email,
-    password: hashedPassword,
-  }
+  let jwt = new JWTGenerate({ username:req.body.username, email:req.body.email, userId:userId})
+  const refreshToken = jwt.generateRefreshToken()
+  console.log(refreshToken)
+  // let info = {
+  //   userId:userId,
+  //   username:req.body.username,
+  //   email:req.body.email,
+  //   password: hashedPassword,
+  // }
   
-  createUser(info,(err,user) => {
+  let user = new UserAccount(userId, req.body.username, req.body.email, hashedPassword)
+
+  createUser(user.info,(err,user) => {
     if(err) return next(err)
     return res.sendStatus(201,'application/json',{error:false,info:{
       userId:user.userId,

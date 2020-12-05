@@ -14,4 +14,30 @@ function verifyRefreshToken(token) {
 function verifyAccessToken(token) {
     return jwt.verify(token,process.env.ACCESS_SECRET_KEY, {algorithm: 'HS256'})
 }
-module.exports={verifyAccessToken, generateAccessToken,generateRefreshToken,verifyRefreshToken}
+
+class JWTGenerate {
+    constructor(user){
+        this.user = user
+    }
+    generateAccessToken(){
+        return jwt.sign(this.user,process.env.ACCESS_SECRET_KEY,{expiresIn:'6h',algorithm: 'HS256'})
+      }
+    
+    generateRefreshToken(){
+        return jwt.sign(this.user,process.env.REFRESH_SECRET_KEY, {algorithm: 'HS256'})
+    }
+}
+
+class JWTVerify{
+    constructor(token){
+        this.token = token
+    }  
+    verifyRefreshToken() {
+        return jwt.verify(this.token,process.env.REFRESH_SECRET_KEY, {algorithm: 'HS256'})
+    }
+    
+    verifyAccessToken() {
+        return jwt.verify(this.token,process.env.ACCESS_SECRET_KEY, {algorithm: 'HS256'})
+    }
+}
+module.exports={JWTGenerate, JWTVerify, verifyAccessToken, generateAccessToken,generateRefreshToken,verifyRefreshToken}
