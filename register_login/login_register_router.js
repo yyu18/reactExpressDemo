@@ -96,9 +96,10 @@ function register (req,res,next)  {
   let hashedPassword = passwordHash.generate(req.body.password)
 
   //const refreshToken = generateRefreshToken({ username:req.body.username, email:req.body.email, userId:userId})
-  const accessToken = generateAccessToken({ username:req.body.username, email:req.body.email, userId:userId})
+  //const accessToken = generateAccessToken({ username:req.body.username, email:req.body.email, userId:userId})
   let jwt = new JWTGenerate({ username:req.body.username, email:req.body.email, userId:userId})
   const refreshToken = jwt.generateRefreshToken()
+  const accessToken = jwt.generateAccessToken()
   console.log(refreshToken)
   // let info = {
   //   userId:userId,
