@@ -100,4 +100,72 @@ const makeid = (length) => {
   }
   return result;
 }
-module.exports = { Users, Profiles,makeid,deleteProfile,updateUser,createUser,retrieveUser,createProfile,updateProfile,retrieveProfile }
+
+//resume mock data api
+const resumeMockSchema = new mongoose.Schema({
+  userId:{type:Number,unique:true},
+  info:{
+    name:{ type:String },
+    email:{ type:String },
+    tel:{ type:Number },
+    role:{ type: String }
+  },
+  profile:[
+    {
+      id:{ type:Number },
+      myProfile: { type:String },
+      status: { type:Boolean }
+    }
+  ],
+  workExp: [
+    {
+    id:{ type:Number },
+    title:{ type:String },
+    date:{ type:String},
+    address:{ type:String },
+    description: [String],
+    status:{ type: Boolean }
+    }
+  ],
+
+  compSkill:[
+    {
+      id:{ type:Number },
+      technology:{ type:String },
+      level:{ type:Number },
+      status:{ type:Boolean }
+    }
+  ],
+
+    eduExp:[
+      {
+      id:{ type:Number },
+      title:{type:String},
+      date:{type:String},
+      school:{type:String},
+      description:[String]
+      }
+    ]
+})
+
+const Resumes = mongoose.model('resumes', resumeMockSchema);
+
+const getResume = (resume) =>{
+  return new Promise((resolve,reject)=>{
+    Resumes.find(resume,(err,user)=>{
+      console.log(err)
+      console.log(user)
+        if(err) return reject(err)
+        return resolve(user)
+      })
+  })
+}
+
+const createResume = (resume,callback) => {
+  Resumes.create(resume,(err,resume) => {
+    if(err) return callback(err);
+    return callback(null,resume)
+  })
+} 
+
+module.exports = { getResume, createResume , Users, Profiles,makeid,deleteProfile,updateUser,createUser,retrieveUser,createProfile,updateProfile,retrieveProfile }

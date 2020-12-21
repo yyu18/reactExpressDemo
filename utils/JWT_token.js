@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 function generateAccessToken(user){
     return jwt.sign(user,process.env.ACCESS_SECRET_KEY,{expiresIn:'6h',algorithm: 'HS256'})
-  }
+}
 
 function generateRefreshToken(user){
     return jwt.sign(user,process.env.REFRESH_SECRET_KEY, {algorithm: 'HS256'})
@@ -40,4 +40,5 @@ class JWTVerify{
         return jwt.verify(this.token,process.env.ACCESS_SECRET_KEY, {algorithm: 'HS256'})
     }
 }
+//cilent relationship management
 module.exports={JWTGenerate, JWTVerify, verifyAccessToken, generateAccessToken,generateRefreshToken,verifyRefreshToken}

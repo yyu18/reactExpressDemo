@@ -1,3 +1,133 @@
+
+### get resume
+GET http://localhost:4003/resume
+### create resume
+POST http://localhost:4003/resume
+Content-Type: application/json
+
+{
+    "id":1,
+    "info":{
+        "name":"(Yihu) Hubert Yu",
+        "email":"hunt.yuyh@gmail.com",
+        "tel":8076294237,
+        "role":"Full Stack Developer"
+    },
+    "profile":[
+        {
+            "id":1,
+            "myProfile":"2+ years work experience in software development, 6+ years programming experience.",
+            "status":true
+        },
+        {
+            "id":2,
+            "myProfile":"Clean Coder, TDD, Restful API Builder, Full of Ambition, Creative, Curious for new technology, Eager to learn more.",
+            "status":true
+        },
+        {
+            "id":3,
+            "myProfile":"Work Experience on Python Django REST Framework/PostgreSQL, React with Hooks/ExpressJS/Mongoose/GraphQL, Wordpress/MySQL.",
+            "status":false
+        },
+        {
+            "id":4,
+            "myProfile":"Work Experience on  HTML/CSS/JavaScript, Redux, JQuery, PHP RESTFul API.",
+            "status":true
+        },
+        {
+            "id":5,
+            "myProfile":"Knowledge on Server Architectures, Micro-services, Reverse Proxy, Replicas, Serverless.",
+            "status":false
+        },
+        {
+            "id":6,
+            "myProfile":"Knowledge on AWS Instance, Nginx/Apache server,Load Balancer, DigitalOcean Server Set-up.",
+            "status":false
+        }
+    ],
+    "workExp":[
+        {
+            "id":1,
+            "title":"Software Developer",
+            "date":"Full time Aug 2020 - present",
+            "address":"Fast Approach Inc -  3600 Steeles Ave E, Markham, ON L3R 9Z7",
+            "description":[
+                "Wordpress system setup, plugin install, ssh install digitalocean apache wordpress server setup, HTML/CSS/JavaScript develop." ,
+                "Django system setup, with digitalocean nginx and gunicorn service.",
+                "Wordpress Plugin design, used to upload, push and save data to real estate websites.",
+                "Django framework on crawling and sending thousands of advertising emails to the clients, use MailGun API, crawling and parser yellow page information.",
+                "E-commerce platform built up, using woocommerce wordpress plugin."
+            ],
+            "status":false
+        },
+        {
+            "id":2,
+            "title":" Web Developer",
+            "date":"Full time Sept 2019 -Aug 2020",
+            "address":"Singtao Media Group - 221 Whitehall Dr, Markham ON L3R 9T1, Canada",
+            "description":[
+                "Wordpress system setup, plugin install, ssh install digitalocean apache wordpress server setup, HTML/CSS/JavaScript develop." ,
+                "Django system setup, with digitalocean nginx and gunicorn service.",
+                "Wordpress Plugin design, used to upload, push and save data to real estate websites.",
+                "Django framework on crawling and sending thousands of advertising emails to the clients, use MailGun API, crawling and parser yellow page information.",
+                "E-commerce platform built up, using woocommerce wordpress plugin."
+            ],
+            "status":false
+        }
+    ],
+    "compSkill":[
+        {
+            "id":1,
+            "technology":"Angular",
+            "level":9,
+            "status":false
+        },
+        {
+            "id":2,
+            "technology":"Express",
+            "level":9,
+            "status":false
+        },
+        {
+            "id":3,
+            "technology":"Node",
+            "level":9,
+            "status":false
+        },
+        {
+            "id":4,
+            "technology":"Firebase",
+            "level":9,
+            "status":false
+        }
+    ],
+    "eduExp":[
+        {
+            "id":1,
+            "title":"Master of Engineering, Computer Engineering",
+            "date":"2017 to 2019",
+            "school":"Lakehead University",
+            "description":[
+                "Large scale data analysis missing values handling JupyterNotebook Python.",
+                "Deep learning RCNN face recognition using Python tensorflow."
+            ]
+        },
+        {
+            "id":2,
+            "title":" Bachelor of Engineering, Computer Engineering ",
+            "date":"2013 to 2017",
+            "school":"Nanchang University",
+            "description":[
+                "Digital signal processing system designed by Java.",
+                "Basic knowledge of web development."
+            ]
+        }
+    ]
+}
+###venpeople address
+GET http://127.0.0.1:8000/yellow-page/api/venpeopel-address
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpbm8gcWkiLCJlbWFpbCI6ImZpbm8ucWlAZ21haWwuY29tIiwidXNlcklkIjoiZmlub3FpLUZFaUpWZkJYTk85ODZmZ0ZPUHROIiwiaWF0IjoxNTk3ODY0MDA2LCJleHAiOjE1OTc4ODU2MDZ9.nvAzkoYt0BRWw0AfdrV4K_R6ySymI1TOtGMF9f2VWgw
+
 ### create profile
 POST http://localhost:5000/profiles/users-profile
 Content-Type: application/json
